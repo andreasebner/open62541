@@ -110,6 +110,17 @@
 #endif
 
 #include <stdlib.h>
+#ifdef UA_ENABLE_PUBSUB_CUSTOM_PUBLISH_MALLOC
+
+extern void * (*globalMalloc)(size_t size);
+extern void (*globalFree)(void *ptr);
+extern void * (*globalCalloc)(size_t nelem, size_t elsize);
+extern void * (*globalRealloc)(void *ptr, size_t size);
+# define UA_free(ptr) globalFree(ptr)
+# define UA_malloc(size) globalMalloc(size)
+# define UA_calloc(num, size) globalCalloc(num, size)
+# define UA_realloc(ptr, size) globalRealloc(ptr, size)
+#else
 #ifndef UA_free
 #define UA_free free
 #endif
@@ -121,6 +132,8 @@
 #endif
 #ifndef UA_realloc
 #define UA_realloc realloc
+#endif
+
 #endif
 
 #include <stdio.h>

@@ -231,6 +231,10 @@ option(UA_ENABLE_PUBSUB_CUSTOM_PUBLISH_INTERRUPT
         "Use a custom implementation for the publish/subscribe (experimental)" ON)
 mark_as_advanced(UA_ENABLE_PUBSUB_CUSTOM_PUBLISH_INTERRUPT)
 
+option(UA_ENABLE_PUBSUB_CUSTOM_PUBLISH_MALLOC
+        "Use a custom malloc for the publisher interrupt (experimental)" OFF)
+mark_as_advanced(UA_ENABLE_PUBSUB_CUSTOM_PUBLISH_MALLOC)
+
 option(UA_ENABLE_PUBSUB_CUSTOM_PUBLISH_INTERRUPT_TSN
         "Use a custom implementation for the publish/subscribe with TSN (experimental)" OFF)
 mark_as_advanced(UA_ENABLE_PUBSUB_CUSTOM_PUBLISH_INTERRUPT_TSN)
@@ -423,12 +427,12 @@ if(NOT UA_COMPILE_AS_CXX AND (CMAKE_COMPILER_IS_GNUCC OR "x${CMAKE_C_COMPILER_ID
     if (NOT MINGW)
         if(UA_ENABLE_HARDENING)
             check_cc_flag("-fstack-protector-strong") # more performant stack protector, available since gcc 4.9
-            check_cc_flag("-fstack-clash-protection") # increased reliability of stack overflow detection, available since gcc 8    
+            check_cc_flag("-fstack-clash-protection") # increased reliability of stack overflow detection, available since gcc 8
             check_cc_flag_untested("-mcet -fcf-protection") # future use (control flow integrity protection)
         endif()
 
         # IPO requires too much memory for unit tests
-        # GCC docu recommends to compile all files with the same options, therefore ignore it completely 
+        # GCC docu recommends to compile all files with the same options, therefore ignore it completely
         if(NOT UA_BUILD_UNIT_TESTS)
             # needed to check if IPO is supported (check needs cmake > 3.9)
             if("${CMAKE_VERSION}" VERSION_GREATER 3.9)
@@ -441,7 +445,7 @@ if(NOT UA_COMPILE_AS_CXX AND (CMAKE_COMPILER_IS_GNUCC OR "x${CMAKE_C_COMPILER_ID
             endif()
         endif()
     endif()
-	
+
     if(UA_ENABLE_AMALGAMATION)
         add_definitions(-Wno-unused-function)
     endif()
@@ -466,7 +470,7 @@ if(NOT UA_COMPILE_AS_CXX AND (CMAKE_COMPILER_IS_GNUCC OR "x${CMAKE_C_COMPILER_ID
     endif()
 
     if(UA_ENABLE_HARDENING AND (CMAKE_BUILD_TYPE STREQUAL "Release") OR (CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo"))
-        check_cc_flag("-D_FORTIFY_SOURCE=2") # run-time buffer overflow detection (needs at least -O1)    
+        check_cc_flag("-D_FORTIFY_SOURCE=2") # run-time buffer overflow detection (needs at least -O1)
     endif()
 
     # Strip release builds
@@ -576,6 +580,7 @@ set(exported_headers ${exported_headers}
                      ${PROJECT_SOURCE_DIR}/include/ua_client_highlevel_async.h)
 
 set(internal_headers ${PROJECT_SOURCE_DIR}/deps/open62541_queue.h
+                     ${PROJECT_SOURCE_DIR}/plugins/ua_bufmalloc.h
                      ${PROJECT_SOURCE_DIR}/deps/ziptree.h
                      ${PROJECT_SOURCE_DIR}/deps/pcg_basic.h
                      ${PROJECT_SOURCE_DIR}/deps/libc_time.h
@@ -646,6 +651,7 @@ set(lib_sources ${PROJECT_SOURCE_DIR}/src/ua_types.c
                 ${PROJECT_SOURCE_DIR}/src/client/ua_client_worker.c
 
                 # dependencies
+                ${PROJECT_SOURCE_DIR}/plugins/ua_bufmalloc.c
                 ${PROJECT_SOURCE_DIR}/deps/libc_time.c
                 ${PROJECT_SOURCE_DIR}/deps/pcg_basic.c
                 ${PROJECT_SOURCE_DIR}/deps/base64.c)
@@ -1238,8 +1244,8 @@ set(UA_install_tools_files "tools/generate_datatypes.py"
     "tools/generate_nodeid_header.py"
     "tools/generate_statuscode_descriptions.py")
 
-install(DIRECTORY ${UA_install_tools_dirs} 
-    DESTINATION ${open62541_install_tools_dir} 
+install(DIRECTORY ${UA_install_tools_dirs}
+    DESTINATION ${open62541_install_tools_dir}
     USE_SOURCE_PERMISSIONS
     FILES_MATCHING
     PATTERN "*"
@@ -1257,7 +1263,7 @@ if(NOT UA_ENABLE_AMALGAMATION)
                   ${ua_architecture_headers}
             DESTINATION ${open62541_install_include_dir})
 else()
-    # Export amalgamated header open62541.h which is generated due to build of 
+    # Export amalgamated header open62541.h which is generated due to build of
     # open62541-object
     install(FILES ${PROJECT_BINARY_DIR}/open62541.h DESTINATION include)
 endif()
