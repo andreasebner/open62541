@@ -256,7 +256,7 @@ typedef struct {
     UA_String name;
     UA_Boolean enabled;
     UA_UInt16 writerGroupId;
-    UA_Double publishingInterval;
+    UA_Duration publishingInterval;
     UA_Double keepAliveTime;
     UA_Byte priority;
     UA_MessageSecurityMode securityMode;
@@ -284,6 +284,10 @@ UA_Server_addWriterGroup(UA_Server *server, const UA_NodeId connection,
 UA_StatusCode
 UA_Server_getWriterGroupConfig(UA_Server *server, const UA_NodeId writerGroup,
                                UA_WriterGroupConfig *config);
+
+UA_StatusCode
+UA_Server_updateWriterGroupConfig(UA_Server *server, UA_NodeId writerGroupIdentifier,
+                                  const UA_WriterGroupConfig *config);
 
 UA_StatusCode
 UA_Server_removeWriterGroup(UA_Server *server, const UA_NodeId writerGroup);
