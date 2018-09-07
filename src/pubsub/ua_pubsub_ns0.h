@@ -42,6 +42,21 @@ addPublishedDataItemsRepresentation(UA_Server *server, UA_PublishedDataSet *publ
 UA_StatusCode
 removePublishedDataSetRepresentation(UA_Server *server, UA_PublishedDataSet *publishedDataSet);
 
+UA_StatusCode
+addVariablesRepresentation(UA_Server *server, UA_DataSetField *dataSetField);
+
+UA_StatusCode
+removeVariablesRepresentation(UA_Server *server, UA_DataSetField *dataSetField);
+
+UA_StatusCode
+addReaderGroupRepresentation(UA_Server *server);
+
+UA_StatusCode
+addDataSetReaderRepresentation(UA_Server *server);
+
+UA_StatusCode
+removeDataSetReaderRepresentation(UA_Server *server);
+
 #endif /* UA_ENABLE_PUBSUB_INFORMATIONMODEL */
 
 _UA_END_DECLS
