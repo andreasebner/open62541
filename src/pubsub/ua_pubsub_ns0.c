@@ -9,7 +9,6 @@
 #include "src_generated/ua_types_generated.h"
 #include "ua_server_pubsub.h"
 #include "ua_types.h"
-#include "ua_types.h"
 #include "ua_pubsub_ns0.h"
 #include "ua_pubsub.h"
 #include "src_generated/ua_types_generated_encoding_binary.h"
@@ -243,9 +242,10 @@ addPubSubConnectionRepresentation(UA_Server *server, UA_PubSubConnection *connec
     retVal |= UA_Server_addReference(server, connection->identifier,
                                      UA_NODEID_NUMERIC(0, UA_NS0ID_HASCOMPONENT),
                                      UA_EXPANDEDNODEID_NUMERIC(0, UA_NS0ID_PUBSUBCONNECTIONTYPE_ADDWRITERGROUP), true);
-    retVal |= UA_Server_addReference(server, connection->identifier,
-                                     UA_NODEID_NUMERIC(0, UA_NS0ID_HASCOMPONENT),
-                                     UA_EXPANDEDNODEID_NUMERIC(0, UA_NS0ID_PUBSUBCONNECTIONTYPE_ADDREADERGROUP), true);
+    //TODO addReadGroup functionality
+    //retVal |= UA_Server_addReference(server, connection->identifier,
+    //                                 UA_NODEID_NUMERIC(0, UA_NS0ID_HASCOMPONENT),
+    //                                 UA_EXPANDEDNODEID_NUMERIC(0, UA_NS0ID_PUBSUBCONNECTIONTYPE_ADDREADERGROUP), true);
     retVal |= UA_Server_addReference(server, connection->identifier,
                                      UA_NODEID_NUMERIC(0, UA_NS0ID_HASCOMPONENT),
                                      UA_EXPANDEDNODEID_NUMERIC(0, UA_NS0ID_PUBSUBCONNECTIONTYPE_REMOVEGROUP), true);
@@ -265,28 +265,29 @@ addPubSubConnectionAction(UA_Server *server,
     UA_NetworkAddressUrlDataType networkAddressUrlDataType;
     memset(&networkAddressUrlDataType, 0, sizeof(networkAddressUrlDataType));
     UA_ExtensionObject eo = pubSubConnectionDataType.address;
-    if(eo.encoding == UA_EXTENSIONOBJECT_ENCODED_BYTESTRING){
-        size_t offset = 0;
-        UA_NetworkAddressUrlDataType_decodeBinary(&eo.content.encoded.body, &offset, &networkAddressUrlDataType);
-        if(networkAddressUrlDataType.url.length > 512)
-            return UA_STATUSCODE_BADOUTOFMEMORY;
-        UA_STACKARRAY(char, buffer, sizeof(char) * networkAddressUrlDataType.url.length +1);
-        memcpy(buffer, networkAddressUrlDataType.url.data, networkAddressUrlDataType.url.length);
-        buffer[networkAddressUrlDataType.url.length] = '\0';
-        printf("%s\n", buffer);
+    if(eo.encoding == UA_EXTENSIONOBJECT_DECODED){
+        if((eo.content.decoded.type == &UA_TYPES[UA_TYPES_NETWORKADDRESSURLDATATYPE])){
+            if(UA_NetworkAddressUrlDataType_copy((UA_NetworkAddressUrlDataType *) eo.content.decoded.data,
+                                                 &networkAddressUrlDataType) != UA_STATUSCODE_GOOD){
+                return UA_STATUSCODE_BADOUTOFMEMORY;
+            };
+        }
     }
-
     UA_PubSubConnectionConfig connectionConfig;
     memset(&connectionConfig, 0, sizeof(UA_PubSubConnectionConfig));
-    connectionConfig.transportProfileUri = UA_STRING("http://opcfoundation.org/UA-Profile/Transport/pubsub-udp-uadp");
+    connectionConfig.transportProfileUri = pubSubConnectionDataType.transportProfileUri;
     connectionConfig.name = pubSubConnectionDataType.name;
     UA_Variant_setScalar(&connectionConfig.address, &networkAddressUrlDataType,
                          &UA_TYPES[UA_TYPES_NETWORKADDRESSURLDATATYPE]);
     if(pubSubConnectionDataType.publisherId.type == &UA_TYPES[UA_TYPES_UINT32]){
         connectionConfig.publisherId.numeric = * ((UA_UInt32 *) pubSubConnectionDataType.publisherId.data);
-    } else {
+    } else if (pubSubConnectionDataType.publisherId.type == &UA_TYPES[UA_TYPES_STRING]){
         connectionConfig.publisherIdType = UA_PUBSUB_PUBLISHERID_STRING;
-        connectionConfig.publisherId.string = * ((UA_String *) pubSubConnectionDataType.publisherId.data);
+        UA_String_copy((UA_String *) pubSubConnectionDataType.publisherId.data, &connectionConfig.publisherId.string);
+    } else {
+        UA_LOG_WARNING(server->config.logger, UA_LOGCATEGORY_SERVER, "Unsupported PublisherId Type used.");
+        //TODO what's the best default behaviour here?
+        connectionConfig.publisherId.numeric = 0;
     }
     //call API function and create the connection
     UA_NodeId connectionId;
