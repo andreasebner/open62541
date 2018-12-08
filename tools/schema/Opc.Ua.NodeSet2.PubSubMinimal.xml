@@ -535,6 +535,167 @@
       <Field Name="DataSetWriters" DataType="i=15597" ValueRank="1" />
     </Definition>
   </UADataType>
+    <UADataType NodeId="i=15645" BrowseName="UadpWriterGroupMessageDataType">
+        <DisplayName>UadpWriterGroupMessageDataType</DisplayName>
+        <References>
+            <Reference ReferenceType="HasSubtype" IsForward="false">i=15616</Reference>
+        </References>
+        <Definition Name="UadpWriterGroupMessageDataType">
+            <Field Name="GroupVersion" DataType="i=7" />
+            <Field Name="DataSetOrdering" DataType="i=20408" />
+            <Field Name="NetworkMessageContentMask" DataType="i=15642" />
+            <Field Name="SamplingOffset" DataType="i=290" />
+            <Field Name="PublishingOffset" DataType="i=290" ValueRank="1" />
+        </Definition>
+    </UADataType>
+    <UADataType NodeId="i=20408" BrowseName="DataSetOrderingType">
+        <DisplayName>DataSetOrderingType</DisplayName>
+        <References>
+            <Reference ReferenceType="HasProperty">i=15641</Reference>
+            <Reference ReferenceType="HasSubtype" IsForward="false">i=29</Reference>
+        </References>
+        <Definition Name="DataSetOrderingType">
+            <Field Name="Undefined" Value="0" />
+            <Field Name="AscendingWriterId" Value="1" />
+            <Field Name="AscendingWriterIdSingle" Value="2" />
+        </Definition>
+    </UADataType>
+    <UAVariable NodeId="i=15641" BrowseName="EnumStrings" ParentNodeId="i=20408" DataType="LocalizedText" ValueRank="1">
+        <DisplayName>EnumStrings</DisplayName>
+        <References>
+            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+            <Reference ReferenceType="HasProperty" IsForward="false">i=20408</Reference>
+        </References>
+        <Value>
+            <ListOfLocalizedText xmlns="http://opcfoundation.org/UA/2008/02/Types.xsd">
+                <LocalizedText>
+                    <Locale>
+                    </Locale>
+                    <Text>Undefined</Text>
+                </LocalizedText>
+                <LocalizedText>
+                    <Locale>
+                    </Locale>
+                    <Text>AscendingWriterId</Text>
+                </LocalizedText>
+                <LocalizedText>
+                    <Locale>
+                    </Locale>
+                    <Text>AscendingWriterIdSingle</Text>
+                </LocalizedText>
+            </ListOfLocalizedText>
+        </Value>
+    </UAVariable>
+    <UADataType NodeId="i=15642" BrowseName="UadpNetworkMessageContentMask">
+        <DisplayName>UadpNetworkMessageContentMask</DisplayName>
+        <References>
+            <Reference ReferenceType="HasProperty">i=15643</Reference>
+            <Reference ReferenceType="HasSubtype" IsForward="false">i=7</Reference>
+        </References>
+        <Definition Name="UadpNetworkMessageContentMask" IsOptionSet="true">
+            <Field Name="PublisherId" Value="0" />
+            <Field Name="GroupHeader" Value="1" />
+            <Field Name="WriterGroupId" Value="2" />
+            <Field Name="GroupVersion" Value="3" />
+            <Field Name="NetworkMessageNumber" Value="4" />
+            <Field Name="SequenceNumber" Value="5" />
+            <Field Name="PayloadHeader" Value="6" />
+            <Field Name="Timestamp" Value="7" />
+            <Field Name="PicoSeconds" Value="8" />
+            <Field Name="DataSetClassId" Value="9" />
+            <Field Name="PromotedFields" Value="10" />
+        </Definition>
+    </UADataType>
+    <UAVariable NodeId="i=15643" BrowseName="OptionSetValues" ParentNodeId="i=15642" DataType="LocalizedText" ValueRank="1">
+        <DisplayName>OptionSetValues</DisplayName>
+        <References>
+            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+            <Reference ReferenceType="HasProperty" IsForward="false">i=15642</Reference>
+        </References>
+        <Value>
+            <ListOfLocalizedText xmlns="http://opcfoundation.org/UA/2008/02/Types.xsd">
+                <LocalizedText>
+                    <Locale>
+                    </Locale>
+                    <Text>PublisherId</Text>
+                </LocalizedText>
+                <LocalizedText>
+                    <Locale>
+                    </Locale>
+                    <Text>GroupHeader</Text>
+                </LocalizedText>
+                <LocalizedText>
+                    <Locale>
+                    </Locale>
+                    <Text>WriterGroupId</Text>
+                </LocalizedText>
+                <LocalizedText>
+                    <Locale>
+                    </Locale>
+                    <Text>GroupVersion</Text>
+                </LocalizedText>
+                <LocalizedText>
+                    <Locale>
+                    </Locale>
+                    <Text>NetworkMessageNumber</Text>
+                </LocalizedText>
+                <LocalizedText>
+                    <Locale>
+                    </Locale>
+                    <Text>SequenceNumber</Text>
+                </LocalizedText>
+                <LocalizedText>
+                    <Locale>
+                    </Locale>
+                    <Text>PayloadHeader</Text>
+                </LocalizedText>
+                <LocalizedText>
+                    <Locale>
+                    </Locale>
+                    <Text>Timestamp</Text>
+                </LocalizedText>
+                <LocalizedText>
+                    <Locale>
+                    </Locale>
+                    <Text>PicoSeconds</Text>
+                </LocalizedText>
+                <LocalizedText>
+                    <Locale>
+                    </Locale>
+                    <Text>DataSetClassId</Text>
+                </LocalizedText>
+                <LocalizedText>
+                    <Locale>
+                    </Locale>
+                    <Text>PromotedFields</Text>
+                </LocalizedText>
+            </ListOfLocalizedText>
+        </Value>
+    </UAVariable>
+    <UADataType NodeId="i=15605" BrowseName="DataSetWriterMessageDataType" IsAbstract="true">
+        <DisplayName>DataSetWriterMessageDataType</DisplayName>
+        <References>
+            <Reference ReferenceType="HasSubtype" IsForward="false">i=22</Reference>
+        </References>
+    </UADataType>
+    <UADataType NodeId="i=15611" BrowseName="WriterGroupTransportDataType" IsAbstract="true">
+        <DisplayName>WriterGroupTransportDataType</DisplayName>
+        <References>
+            <Reference ReferenceType="HasSubtype" IsForward="false">i=22</Reference>
+        </References>
+    </UADataType>
+    <UADataType NodeId="i=15532" BrowseName="DatagramWriterGroupTransportDataType">
+        <DisplayName>DatagramWriterGroupTransportDataType</DisplayName>
+        <References>
+            <Reference ReferenceType="HasSubtype" IsForward="false">i=15611</Reference>
+        </References>
+        <Definition Name="DatagramWriterGroupTransportDataType">
+            <Field Name="MessageRepeatCount" DataType="i=3" />
+            <Field Name="MessageRepeatDelay" DataType="i=290" />
+        </Definition>
+    </UADataType>
   <UADataType NodeId="i=15578" BrowseName="PublishedDataSetDataType">
     <DisplayName>PublishedDataSetDataType</DisplayName>
     <References>
@@ -607,7 +768,98 @@
       </ListOfLocalizedText>
     </Value>
   </UAVariable>
-
+    <UADataType NodeId="i=15646" BrowseName="UadpDataSetMessageContentMask">
+        <DisplayName>UadpDataSetMessageContentMask</DisplayName>
+        <References>
+            <Reference ReferenceType="HasProperty">i=15647</Reference>
+            <Reference ReferenceType="HasSubtype" IsForward="false">i=7</Reference>
+        </References>
+        <Definition Name="UadpDataSetMessageContentMask" IsOptionSet="true">
+            <Field Name="Timestamp" Value="0" />
+            <Field Name="PicoSeconds" Value="1" />
+            <Field Name="Status" Value="2" />
+            <Field Name="MajorVersion" Value="3" />
+            <Field Name="MinorVersion" Value="4" />
+            <Field Name="SequenceNumber" Value="5" />
+        </Definition>
+    </UADataType>
+    <UAVariable NodeId="i=15647" BrowseName="OptionSetValues" ParentNodeId="i=15646" DataType="LocalizedText" ValueRank="1">
+        <DisplayName>OptionSetValues</DisplayName>
+        <References>
+            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+            <Reference ReferenceType="HasProperty" IsForward="false">i=15646</Reference>
+        </References>
+        <Value>
+            <ListOfLocalizedText xmlns="http://opcfoundation.org/UA/2008/02/Types.xsd">
+                <LocalizedText>
+                    <Locale>
+                    </Locale>
+                    <Text>Timestamp</Text>
+                </LocalizedText>
+                <LocalizedText>
+                    <Locale>
+                    </Locale>
+                    <Text>PicoSeconds</Text>
+                </LocalizedText>
+                <LocalizedText>
+                    <Locale>
+                    </Locale>
+                    <Text>Status</Text>
+                </LocalizedText>
+                <LocalizedText>
+                    <Locale>
+                    </Locale>
+                    <Text>MajorVersion</Text>
+                </LocalizedText>
+                <LocalizedText>
+                    <Locale>
+                    </Locale>
+                    <Text>MinorVersion</Text>
+                </LocalizedText>
+                <LocalizedText>
+                    <Locale>
+                    </Locale>
+                    <Text>SequenceNumber</Text>
+                </LocalizedText>
+            </ListOfLocalizedText>
+        </Value>
+    </UAVariable>
+    <UADataType NodeId="i=15652" BrowseName="UadpDataSetWriterMessageDataType">
+        <DisplayName>UadpDataSetWriterMessageDataType</DisplayName>
+        <References>
+            <Reference ReferenceType="HasSubtype" IsForward="false">i=15605</Reference>
+        </References>
+        <Definition Name="UadpDataSetWriterMessageDataType">
+            <Field Name="DataSetMessageContentMask" DataType="i=15646" />
+            <Field Name="ConfiguredSize" DataType="i=5" />
+            <Field Name="NetworkMessageNumber" DataType="i=5" />
+            <Field Name="DataSetOffset" DataType="i=5" />
+        </Definition>
+    </UADataType>
+    <UADataType NodeId="i=15653" BrowseName="UadpDataSetReaderMessageDataType">
+        <DisplayName>UadpDataSetReaderMessageDataType</DisplayName>
+        <References>
+            <Reference ReferenceType="HasSubtype" IsForward="false">i=15629</Reference>
+        </References>
+        <Definition Name="UadpDataSetReaderMessageDataType">
+            <Field Name="GroupVersion" DataType="i=20998" />
+            <Field Name="NetworkMessageNumber" DataType="i=5" />
+            <Field Name="DataSetOffset" DataType="i=5" />
+            <Field Name="DataSetClassId" DataType="i=14" />
+            <Field Name="NetworkMessageContentMask" DataType="i=15642" />
+            <Field Name="DataSetMessageContentMask" DataType="i=15646" />
+            <Field Name="PublishingInterval" DataType="i=290" />
+            <Field Name="ReceiveOffset" DataType="i=290" />
+            <Field Name="ProcessingOffset" DataType="i=290" />
+        </Definition>
+    </UADataType>
+    <UADataType NodeId="i=15629" BrowseName="DataSetReaderMessageDataType" IsAbstract="true">
+        <DisplayName>DataSetReaderMessageDataType</DisplayName>
+        <References>
+            <Reference ReferenceType="HasSubtype" IsForward="false">i=22</Reference>
+        </References>
+    </UADataType>
   <UAObjectType NodeId="i=14534" BrowseName="PublishedDataItemsType">
       <DisplayName>PublishedDataItemsType</DisplayName>
       <References>
@@ -859,6 +1111,12 @@
       <Reference ReferenceType="HasTypeDefinition">i=77</Reference>
     </References>
   </UAObject>
+    <UADataType NodeId="i=15616" BrowseName="WriterGroupMessageDataType" IsAbstract="true">
+        <DisplayName>WriterGroupMessageDataType</DisplayName>
+        <References>
+            <Reference ReferenceType="HasSubtype" IsForward="false">i=22</Reference>
+        </References>
+    </UADataType>
   <UADataType NodeId="i=15617" BrowseName="PubSubConnectionDataType">
     <DisplayName>PubSubConnectionDataType</DisplayName>
     <References>
@@ -871,8 +1129,9 @@
       <Field Name="TransportProfileUri" DataType="i=12" />
       <Field Name="Address" DataType="i=22" />
       <Field Name="ConnectionProperties" DataType="i=14533" ValueRank="1" />
+      <Field Name="WriterGroups" DataType="i=15480" ValueRank="1" />
       <!--      <Field Name="TransportSettings" DataType="i=22" />
-            <Field Name="WriterGroups" DataType="i=15480" ValueRank="1" />
+
             <Field Name="ReaderGroups" DataType="i=15520" ValueRank="1" />-->
     </Definition>
   </UADataType>
@@ -1015,19 +1274,108 @@
     <References>
       <Reference ReferenceType="HasTypeDefinition">i=17725</Reference>
 
-      <!--      <Reference ReferenceType="HasProperty">i=17311</Reference>
-            <Reference ReferenceType="HasProperty">i=17204</Reference>
-            <Reference ReferenceType="HasProperty">i=17486</Reference>
-            <Reference ReferenceType="HasComponent">i=17314</Reference>
-            <Reference ReferenceType="HasProperty">i=17214</Reference>
-            <Reference ReferenceType="HasProperty">i=17318</Reference>
-            <Reference ReferenceType="HasProperty">i=17319</Reference>
-            <Reference ReferenceType="HasProperty">i=17321</Reference>
-            <Reference ReferenceType="HasProperty">i=17322</Reference>
-            <Reference ReferenceType="HasModellingRule">i=11508</Reference>
-            <Reference ReferenceType="HasComponent" IsForward="false">i=14209</Reference>-->
+        <!--<Reference ReferenceType="HasProperty">i=17311</Reference>-->
+        <Reference ReferenceType="HasProperty">i=17204</Reference>
+        <Reference ReferenceType="HasProperty">i=17486</Reference>
+        <Reference ReferenceType="HasComponent">i=17314</Reference>
+        <Reference ReferenceType="HasProperty">i=17214</Reference>
+        <Reference ReferenceType="HasProperty">i=17318</Reference>
+        <Reference ReferenceType="HasProperty">i=17319</Reference>
+        <Reference ReferenceType="HasProperty">i=17321</Reference>
+        <Reference ReferenceType="HasProperty">i=17322</Reference>
+        <Reference ReferenceType="HasModellingRule">i=11508</Reference>
+        <Reference ReferenceType="HasComponent" IsForward="false">i=14209</Reference>
     </References>
   </UAObject>
+    <!--<UAVariable NodeId="i=17311" BrowseName="SecurityMode" ParentNodeId="i=17310" DataType="i=302">
+        <DisplayName>SecurityMode</DisplayName>
+        <References>
+            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+            <Reference ReferenceType="HasProperty" IsForward="false">i=17310</Reference>
+        </References>
+    </UAVariable>-->
+    <UAVariable NodeId="i=17204" BrowseName="MaxNetworkMessageSize" ParentNodeId="i=17310" DataType="UInt32">
+        <DisplayName>MaxNetworkMessageSize</DisplayName>
+        <References>
+            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+            <Reference ReferenceType="HasProperty" IsForward="false">i=17310</Reference>
+        </References>
+    </UAVariable>
+    <UAVariable NodeId="i=17486" BrowseName="GroupProperties" ParentNodeId="i=17310" DataType="i=14533" ValueRank="1">
+        <DisplayName>GroupProperties</DisplayName>
+        <References>
+            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+            <Reference ReferenceType="HasProperty" IsForward="false">i=17310</Reference>
+        </References>
+    </UAVariable>
+    <UAObject NodeId="i=17314" BrowseName="Status" ParentNodeId="i=17310">
+        <DisplayName>Status</DisplayName>
+        <References>
+            <Reference ReferenceType="HasComponent">i=17315</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=14643</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+            <Reference ReferenceType="HasComponent" IsForward="false">i=17310</Reference>
+        </References>
+    </UAObject>
+    <UAVariable NodeId="i=17315" BrowseName="State" ParentNodeId="i=17314" DataType="i=14647">
+        <DisplayName>State</DisplayName>
+        <References>
+            <Reference ReferenceType="HasTypeDefinition">i=63</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+            <Reference ReferenceType="HasComponent" IsForward="false">i=17314</Reference>
+        </References>
+    </UAVariable>
+    <UAVariable NodeId="i=17214" BrowseName="WriterGroupId" ParentNodeId="i=17310" DataType="UInt16">
+        <DisplayName>WriterGroupId</DisplayName>
+        <References>
+            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+            <Reference ReferenceType="HasProperty" IsForward="false">i=17310</Reference>
+        </References>
+    </UAVariable>
+    <UAVariable NodeId="i=17318" BrowseName="PublishingInterval" ParentNodeId="i=17310" DataType="i=290">
+        <DisplayName>PublishingInterval</DisplayName>
+        <References>
+            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+            <Reference ReferenceType="HasProperty" IsForward="false">i=17310</Reference>
+        </References>
+    </UAVariable>
+    <UAVariable NodeId="i=17319" BrowseName="KeepAliveTime" ParentNodeId="i=17310" DataType="i=290">
+        <DisplayName>KeepAliveTime</DisplayName>
+        <References>
+            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+            <Reference ReferenceType="HasProperty" IsForward="false">i=17310</Reference>
+        </References>
+    </UAVariable>
+    <UAVariable NodeId="i=17321" BrowseName="Priority" ParentNodeId="i=17310" DataType="Byte">
+        <DisplayName>Priority</DisplayName>
+        <References>
+            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+            <Reference ReferenceType="HasProperty" IsForward="false">i=17310</Reference>
+        </References>
+    </UAVariable>
+    <UAVariable NodeId="i=17322" BrowseName="LocaleIds" ParentNodeId="i=17310" DataType="i=295" ValueRank="1">
+        <DisplayName>LocaleIds</DisplayName>
+        <References>
+            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+            <Reference ReferenceType="HasProperty" IsForward="false">i=17310</Reference>
+        </References>
+    </UAVariable>
+    <UAVariable NodeId="i=17558" BrowseName="HeaderLayoutUri" ParentNodeId="i=17310" DataType="String">
+        <DisplayName>HeaderLayoutUri</DisplayName>
+        <References>
+            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+            <Reference ReferenceType="HasProperty" IsForward="false">i=17310</Reference>
+        </References>
+    </UAVariable>
   <UAObject NodeId="i=14600" BrowseName="Status" ParentNodeId="i=14209">
     <DisplayName>Status</DisplayName>
     <References>
@@ -1850,4 +2198,61 @@
       <Reference ReferenceType="HasProperty" IsForward="false">i=17292</Reference>
     </References>
   </UAVariable>
+    <UAObjectType NodeId="i=21133" BrowseName="DatagramWriterGroupTransportType">
+        <DisplayName>DatagramWriterGroupTransportType</DisplayName>
+        <References>
+            <Reference ReferenceType="HasProperty">i=21134</Reference>
+            <Reference ReferenceType="HasProperty">i=21135</Reference>
+            <Reference ReferenceType="HasSubtype" IsForward="false">i=17997</Reference>
+        </References>
+    </UAObjectType>
+    <UAVariable NodeId="i=21134" BrowseName="MessageRepeatCount" ParentNodeId="i=21133" DataType="Byte">
+        <DisplayName>MessageRepeatCount</DisplayName>
+        <References>
+            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+            <Reference ReferenceType="HasModellingRule">i=80</Reference>
+            <Reference ReferenceType="HasProperty" IsForward="false">i=21133</Reference>
+        </References>
+    </UAVariable>
+    <UAVariable NodeId="i=21135" BrowseName="MessageRepeatDelay" ParentNodeId="i=21133" DataType="i=290">
+        <DisplayName>MessageRepeatDelay</DisplayName>
+        <References>
+            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+            <Reference ReferenceType="HasModellingRule">i=80</Reference>
+            <Reference ReferenceType="HasProperty" IsForward="false">i=21133</Reference>
+        </References>
+    </UAVariable>
+    <UAObjectType NodeId="i=15064" BrowseName="DatagramConnectionTransportType">
+        <DisplayName>DatagramConnectionTransportType</DisplayName>
+        <References>
+            <Reference ReferenceType="HasComponent">i=15072</Reference>
+            <Reference ReferenceType="HasSubtype" IsForward="false">i=17721</Reference>
+        </References>
+    </UAObjectType>
+    <UAObject NodeId="i=15072" BrowseName="DiscoveryAddress" ParentNodeId="i=15064">
+        <DisplayName>DiscoveryAddress</DisplayName>
+        <References>
+            <Reference ReferenceType="HasComponent">i=15154</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=21145</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+            <Reference ReferenceType="HasComponent" IsForward="false">i=15064</Reference>
+        </References>
+    </UAObject>
+    <UAVariable NodeId="i=15154" BrowseName="NetworkInterface" ParentNodeId="i=15072" DataType="String">
+        <DisplayName>NetworkInterface</DisplayName>
+        <References>
+            <Reference ReferenceType="HasProperty">i=17579</Reference>
+            <Reference ReferenceType="HasTypeDefinition">i=16309</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+            <Reference ReferenceType="HasComponent" IsForward="false">i=15072</Reference>
+        </References>
+    </UAVariable>
+    <UAVariable NodeId="i=17579" BrowseName="Selections" ParentNodeId="i=15154" ValueRank="1">
+        <DisplayName>Selections</DisplayName>
+        <References>
+            <Reference ReferenceType="HasTypeDefinition">i=68</Reference>
+            <Reference ReferenceType="HasModellingRule">i=78</Reference>
+            <Reference ReferenceType="HasProperty" IsForward="false">i=15154</Reference>
+        </References>
+    </UAVariable>
 </UANodeSet>

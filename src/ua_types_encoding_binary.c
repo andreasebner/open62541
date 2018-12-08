@@ -306,6 +306,8 @@ DECODE_BINARY(UInt64) {
 #else
 
 #include <math.h>
+#include <string.h>
+#include <stdio.h>
 
 #pragma message "No native IEEE 754 format detected. Use slow generic encoding."
 
@@ -1502,6 +1504,13 @@ decodeBinaryInternal(void *dst, const UA_DataType *type, Ctx *ctx) {
     /* Loop over members */
     for(size_t i = 0; i < membersSize && ret == UA_STATUSCODE_GOOD; ++i) {
         const UA_DataTypeMember *member = &type->members[i];
+        if(strcmp(type->typeName, "WriterGroupDataType") == 0 && (strcmp(member->memberName, "TransportSettings") == 0 || strcmp(member->memberName, "MessageSettings") == 0)){
+            printf("WriterGroupDecode Transport|Message Settings");
+            //continue;
+        }
+        if(strcmp(type->typeName, "PubSubConnectionDataType") == 0 && (strcmp(member->memberName, "TransportSettings") == 0 || strcmp(member->memberName, "MessageSettings") == 0)) {
+            printf("PubSubConnectionDecode");
+        }
         const UA_DataType *membertype = &typelists[!member->namespaceZero][member->memberTypeIndex];
         ptr += member->padding;
 
