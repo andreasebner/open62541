@@ -117,12 +117,8 @@ UA_PubSubChannelUDPMC_open(const UA_PubSubConnectionConfig *connectionConfig) {
         struct in_addr imr_interface;
         UA_inet_pton(AF_INET, addressAsChar, &imr_interface);
         if((UA_ntohl(imr_interface.s_addr) & 0xF0000000) != 0xE0000000){
-            UA_LOG_ERROR(UA_Log_Stdout, UA_LOGCATEGORY_SERVER,
-                         "PubSub Connection creation failed. No multicast address.");
-            UA_freeaddrinfo(requestResult);
-            UA_free(channelDataUDPMC);
-            UA_free(newChannel);
-            return NULL;
+            UA_LOG_WARNING(UA_Log_Stdout, UA_LOGCATEGORY_SERVER,
+                         "PubSub Connection no multicast address");
         }
     } else {
         //TODO check if ipv6 addrr is multicast address.
