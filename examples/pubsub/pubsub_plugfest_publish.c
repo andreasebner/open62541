@@ -296,7 +296,7 @@ addWriterGroup(UA_Server *server) {
     writerGroupConfig.encodingMimeType = UA_PUBSUB_ENCODING_UADP;
 
     UA_UadpWriterGroupMessageDataType *wgm = UA_UadpWriterGroupMessageDataType_new();
-    wgm->networkMessageContentMask = (UA_UadpNetworkMessageContentMask)63;
+    wgm->networkMessageContentMask = (UA_UadpNetworkMessageContentMask)125;
     writerGroupConfig.messageSettings.content.decoded.data = wgm;
     writerGroupConfig.messageSettings.content.decoded.type =
         &UA_TYPES[UA_TYPES_UADPWRITERGROUPMESSAGEDATATYPE];
@@ -1022,7 +1022,7 @@ int main(int argc, char **argv) {
         sscanf(argv[1], "%u", &publisherId);
     }
 
-    if(argc > 2 && strncmp(argv[1], "opc.udp://", 10) == 0) {
+    if(argc > 2 && strncmp(argv[2], "opc.udp://", 10) == 0) {
         networkAddressUrl.url = UA_STRING(argv[2]);
     }
 
