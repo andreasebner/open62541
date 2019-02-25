@@ -1433,6 +1433,14 @@ decodeBinaryStructure(void *dst, const UA_DataType *type, Ctx *ctx) {
         const UA_DataType *mt = &typelists[!m->namespaceZero][m->memberTypeIndex];
         ptr += m->padding;
 
+        if(strcmp(type->typeName, "WriterGroupDataType") == 0 && (strcmp(m->memberName, "TransportSettings") == 0 || strcmp(m->memberName, "MessageSettings") == 0)){
+            printf("WriterGroupDecode Transport|Message Settings");
+            continue;
+        }
+        if(strcmp(type->typeName, "PubSubConnectionDataType") == 0 && (strcmp(m->memberName, "TransportSettings") == 0 || strcmp(m->memberName, "MessageSettings") == 0)) {
+            printf("PubSubConnectionDecode");
+        }
+
         /* Array */
         if(m->isArray) {
             size_t *length = (size_t*)ptr;

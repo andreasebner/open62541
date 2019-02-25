@@ -134,6 +134,19 @@ onRead(UA_Server *server, const UA_NodeId *sessionId, void *sessionContext,
                 case UA_NS0ID_WRITERGROUPTYPE_PUBLISHINGINTERVAL:
                     UA_Variant_setScalar(&value, &writerGroup->config.publishingInterval, &UA_TYPES[UA_TYPES_DURATION]);
                     break;
+
+                case UA_NS0ID_WRITERGROUPTYPE_MESSAGESETTINGS:
+                    if((writerGroup->config.messageSettings.encoding != UA_EXTENSIONOBJECT_DECODED &&
+                        writerGroup->config.messageSettings.encoding != UA_EXTENSIONOBJECT_DECODED_NODELETE) ||
+                       writerGroup->config.messageSettings.content.decoded.type !=
+                       &UA_TYPES[UA_TYPES_UADPWRITERGROUPMESSAGEDATATYPE])
+                        break;
+                    UA_UadpWriterGroupMessageDataType *wgm = (UA_UadpWriterGroupMessageDataType*)
+                            writerGroup->config.messageSettings.content.decoded.data;
+
+                    UA_Variant_setScalarCopy(&value, &wgm->networkMessageContentMask,
+                                             &UA_TYPES[UA_TYPES_UADPNETWORKMESSAGECONTENTMASK]);
+                    break;
                 default:
                     UA_LOG_WARNING(&server->config.logger, UA_LOGCATEGORY_SERVER,
                                    "Read error! Unknown property.");
@@ -195,6 +208,23 @@ onWrite(UA_Server *server, const UA_NodeId *sessionId, void *sessionContext,
                     UA_Server_updateWriterGroupConfig(server, writerGroup->identifier, &writerGroupConfig);
                     UA_Variant_setScalar(&value, data->value.data, &UA_TYPES[UA_TYPES_DURATION]);
                     UA_WriterGroupConfig_deleteMembers(&writerGroupConfig);
+                    break;
+                case UA_NS0ID_WRITERGROUPTYPE_MESSAGESETTINGS:
+                    if((writerGroup->config.messageSettings.encoding != UA_EXTENSIONOBJECT_DECODED &&
+                        writerGroup->config.messageSettings.encoding != UA_EXTENSIONOBJECT_DECODED_NODELETE) ||
+                       writerGroup->config.messageSettings.content.decoded.type !=
+                       &UA_TYPES[UA_TYPES_UADPWRITERGROUPMESSAGEDATATYPE])
+                        break;
+                    UA_UadpWriterGroupMessageDataType *wgm = (UA_UadpWriterGroupMessageDataType*)
+                            writerGroup->config.messageSettings.content.decoded.data;
+
+                    if(!data->value.type)
+                        break;
+                    if(data->value.type->typeKind != UA_DATATYPEKIND_ENUM &&
+                       data->value.type->typeKind != UA_DATATYPEKIND_INT32)
+                        break;
+
+                    wgm->networkMessageContentMask = *(UA_UadpNetworkMessageContentMask*) data->value.data;
                     break;
                 default:
                     UA_LOG_WARNING(&server->config.logger, UA_LOGCATEGORY_SERVER,
@@ -600,6 +630,7 @@ removePublishedDataSetAction(UA_Server *server,
 /*               WriterGroup                  */
 /**********************************************/
 
+/*
 static UA_StatusCode
 readContentMask(UA_Server *server, const UA_NodeId *sessionId,
                 void *sessionContext, const UA_NodeId *nodeId,
@@ -642,7 +673,8 @@ writeContentMask(UA_Server *server, const UA_NodeId *sessionId,
 
     wgm->networkMessageContentMask = *(UA_UadpNetworkMessageContentMask*)value->value.data;
     return UA_STATUSCODE_GOOD;
-}
+}*/
+
 
 UA_StatusCode
 addWriterGroupRepresentation(UA_Server *server, UA_WriterGroup *writerGroup){
@@ -700,21 +732,33 @@ addWriterGroupRepresentation(UA_Server *server, UA_WriterGroup *writerGroup){
     UA_NodeId messageSettingsId = findSingleChildNode(server, UA_QUALIFIEDNAME(0, "MessageSettings"),
                                                        UA_NODEID_NUMERIC(0, UA_NS0ID_HASCOMPONENT),
                                                        UA_NODEID_NUMERIC(0, writerGroup->identifier.identifier.numeric));
-    UA_NodeId contentMaskId = findSingleChildNode(server,
+    /*UA_NodeId contentMaskId = findSingleChildNode(server,
                                                   UA_QUALIFIEDNAME(0, "NetworkMessageContentMask"),
                                                   UA_NODEID_NUMERIC(0, UA_NS0ID_HASPROPERTY),
                                                   messageSettingsId);
+    */
 
     /* Set the callback */
+    /*
     UA_DataSource ds;
     ds.read = readContentMask;
     ds.write = writeContentMask;
     UA_Server_setVariableNode_dataSource(server, contentMaskId, ds);
     UA_Server_setNodeContext(server, contentMaskId, writerGroup);
+    */
 
     /* Make writable */
-    UA_Server_writeAccessLevel(server, contentMaskId, UA_ACCESSLEVELMASK_WRITE | UA_ACCESSLEVELMASK_READ);
+    //UA_Server_writeAccessLevel(server, contentMaskId, UA_ACCESSLEVELMASK_WRITE | UA_ACCESSLEVELMASK_READ);
     //                           UA_ACCESSLEVELTYPE_CURRENTREAD | UA_ACCESSLEVELTYPE_CURRENTWRITE);
+
+    UA_NodePropertyContext * messageSettingsContext = (UA_NodePropertyContext *) UA_malloc(sizeof(UA_NodePropertyContext));
+    messageSettingsContext->parentNodeId = writerGroup->identifier;
+    messageSettingsContext->parentCalssifier = UA_NS0ID_WRITERGROUPTYPE;
+    messageSettingsContext->elementClassiefier = UA_NS0ID_WRITERGROUPTYPE_MESSAGESETTINGS;
+    valueCallback.onRead = onRead;
+    valueCallback.onWrite = onWrite;
+    retVal |= addVariableValueSource(server, valueCallback, messageSettingsId, messageSettingsContext);
+    UA_Server_writeAccessLevel(server, publishingIntervalNode, (UA_ACCESSLEVELMASK_READ ^ UA_ACCESSLEVELMASK_WRITE));
 
     return retVal;
 }
@@ -737,6 +781,8 @@ addWriterGroupAction(UA_Server *server,
     writerGroupConfig.writerGroupId = writerGroupDataType->writerGroupId;
     writerGroupConfig.enabled = writerGroupDataType->enabled;
     writerGroupConfig.priority = writerGroupDataType->priority;
+    writerGroupConfig.transportSettings = writerGroupDataType->transportSettings;
+    writerGroupConfig.messageSettings = writerGroupDataType->messageSettings;
     //TODO remove hard coded UADP
     writerGroupConfig.encodingMimeType = UA_PUBSUB_ENCODING_UADP;
     //ToDo transfer all arguments to internal WGConfiguration
@@ -884,13 +930,19 @@ writerGroupTypeDestructor(UA_Server *server,
                           const UA_NodeId *typeId, void *typeContext,
                           const UA_NodeId *nodeId, void **nodeContext) {
     UA_LOG_INFO(&server->config.logger, UA_LOGCATEGORY_USERLAND, "WriterGroup destructor called!");
-    UA_NodeId intervalNode;
+    UA_NodeId intervalNode, messageSettingsNode;
     intervalNode = findSingleChildNode(server, UA_QUALIFIEDNAME(0, "PublishingInterval"),
                                        UA_NODEID_NUMERIC(0, UA_NS0ID_HASPROPERTY), *nodeId);
-    UA_NodePropertyContext *internalConnectionContext;
-    UA_Server_getNodeContext(server, intervalNode, (void **) &internalConnectionContext);
-    if(!UA_NodeId_equal(&UA_NODEID_NULL , &intervalNode)){
-        UA_free(internalConnectionContext);
+    messageSettingsNode = findSingleChildNode(server, UA_QUALIFIEDNAME(0, "MessageSettings"),
+                                              UA_NODEID_NUMERIC(0, UA_NS0ID_HASCOMPONENT), *nodeId);
+    UA_NodePropertyContext *internalContext;
+    UA_Server_getNodeContext(server, intervalNode, (void **) &internalContext);
+    if (!UA_NodeId_equal(&UA_NODEID_NULL, &intervalNode)) {
+        UA_free(internalContext);
+    }
+    UA_Server_getNodeContext(server, messageSettingsNode, (void **) &internalContext);
+    if (!UA_NodeId_equal(&UA_NODEID_NULL, &messageSettingsNode)) {
+        UA_free(internalContext);
     }
 }
 
