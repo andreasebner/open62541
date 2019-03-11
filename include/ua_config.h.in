@@ -31,6 +31,10 @@
 #cmakedefine UA_ENABLE_PUBSUB_DELTAFRAMES
 #cmakedefine UA_ENABLE_PUBSUB_INFORMATIONMODEL
 #cmakedefine UA_ENABLE_PUBSUB_INFORMATIONMODEL_METHODS
+/* For custom interrupt based publisher implementation */
+#cmakedefine UA_ENABLE_PUBSUB_CUSTOM_PUBLISH_INTERRUPT
+/* For custom interrupt based publisher implementation with TSN */
+#cmakedefine UA_ENABLE_PUBSUB_CUSTOM_PUBLISH_INTERRUPT_TSN
 #cmakedefine UA_ENABLE_DA
 #cmakedefine UA_ENABLE_ENCRYPTION
 #cmakedefine UA_ENABLE_HISTORIZING
