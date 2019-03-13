@@ -689,7 +689,7 @@ int main(void)
     for (pubLoopVariable = 0; pubLoopVariable < measurementsPublisher;
          pubLoopVariable++)
     {
-        fprintf(fpPublisher, "%llu,%ld.%09ld\n",
+        fprintf(fpPublisher, "%lu,%ld.%09ld\n",
                 publishCounterValue[pubLoopVariable],
                 publishTimestamp[pubLoopVariable].tv_sec,
                 publishTimestamp[pubLoopVariable].tv_nsec);
@@ -701,7 +701,7 @@ int main(void)
     for (subLoopVariable = 0; subLoopVariable < measurementsSubscriber;
          subLoopVariable++)
     {
-        fprintf(fpSubscriber, "%llu,%ld.%09ld\n",
+        fprintf(fpSubscriber, "%lu,%ld.%09ld\n",
                 subscribeCounterValue[subLoopVariable],
                 subscribeTimestamp[subLoopVariable].tv_sec,
                 subscribeTimestamp[subLoopVariable].tv_nsec);
