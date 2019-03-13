@@ -289,10 +289,10 @@ UA_PubSubManager_addRepeatedCallback(UA_Server *server,
         return UA_STATUSCODE_BADINTERNALERROR;
     }
 
-    timerspec.it_interval.tv_sec        = SECONDS_AS_NANO_SECONDS / pubIntervalNs;
-    timerspec.it_interval.tv_nsec       = pubIntervalNs % SECONDS_AS_NANO_SECONDS;
-    timerspec.it_value.tv_sec           = SECONDS_AS_NANO_SECONDS / pubIntervalNs;
-    timerspec.it_value.tv_nsec          = pubIntervalNs % SECONDS_AS_NANO_SECONDS;
+    timerspec.it_interval.tv_sec        = (long int) (SECONDS_AS_NANO_SECONDS / pubIntervalNs);
+    timerspec.it_interval.tv_nsec       = (long int) (pubIntervalNs % SECONDS_AS_NANO_SECONDS);
+    timerspec.it_value.tv_sec           = (long int) (SECONDS_AS_NANO_SECONDS / pubIntervalNs);
+    timerspec.it_value.tv_nsec          = (long int) (pubIntervalNs % SECONDS_AS_NANO_SECONDS);
     resultTimerCreate                   = timer_settime(pubEventTimer, 0,
                                                         &timerspec, NULL);
     if (resultTimerCreate != 0)
@@ -316,10 +316,10 @@ UA_PubSubManager_changeRepeatedCallbackInterval(UA_Server *server,
     struct itimerspec timerspec;
     int               resultTimerCreate = 0;
     pubIntervalNs                       = (UA_Int64) (interval_ms * MILLI_AS_NANO_SECONDS);
-    timerspec.it_interval.tv_sec        = SECONDS_AS_NANO_SECONDS / pubIntervalNs;
-    timerspec.it_interval.tv_nsec       = pubIntervalNs % SECONDS_AS_NANO_SECONDS;
-    timerspec.it_value.tv_sec           = SECONDS_AS_NANO_SECONDS / pubIntervalNs;
-    timerspec.it_value.tv_nsec          = pubIntervalNs % SECONDS_AS_NANO_SECONDS;
+    timerspec.it_interval.tv_sec        = (long int) (SECONDS_AS_NANO_SECONDS / pubIntervalNs);
+    timerspec.it_interval.tv_nsec       = (long int) (pubIntervalNs % SECONDS_AS_NANO_SECONDS);
+    timerspec.it_value.tv_sec           = (long int) (SECONDS_AS_NANO_SECONDS / pubIntervalNs);
+    timerspec.it_value.tv_nsec          = (long int) (pubIntervalNs % SECONDS_AS_NANO_SECONDS);
     resultTimerCreate                   = timer_settime(pubEventTimer, 0,
                                                         &timerspec, NULL);
     if (resultTimerCreate != 0)
@@ -689,7 +689,7 @@ int main(void)
     for (pubLoopVariable = 0; pubLoopVariable < measurementsPublisher;
          pubLoopVariable++)
     {
-        fprintf(fpPublisher, "%ld,%ld.%09ld\n",
+        fprintf(fpPublisher, "%llu,%ld.%09ld\n",
                 publishCounterValue[pubLoopVariable],
                 publishTimestamp[pubLoopVariable].tv_sec,
                 publishTimestamp[pubLoopVariable].tv_nsec);
@@ -701,7 +701,7 @@ int main(void)
     for (subLoopVariable = 0; subLoopVariable < measurementsSubscriber;
          subLoopVariable++)
     {
-        fprintf(fpSubscriber, "%ld,%ld.%09ld\n",
+        fprintf(fpSubscriber, "%llu,%ld.%09ld\n",
                 subscribeCounterValue[subLoopVariable],
                 subscribeTimestamp[subLoopVariable].tv_sec,
                 subscribeTimestamp[subLoopVariable].tv_nsec);
