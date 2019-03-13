@@ -1332,13 +1332,32 @@ UA_WriterGroup_publishCallback(UA_Server *server, UA_WriterGroup *writerGroup) {
         UA_DataSetMessage_free(&dsmStore[i]);
 }
 
+void
+UA_WriterGroup_publishCallbackIRQ(UA_Server *server, UA_WriterGroup *writerGroup){
+    //TODO Implement IRQ save publish
+    UA_WriterGroup_publishCallback(server, writerGroup);
+}
+
 /* Add new publishCallback. The first execution is triggered directly after
  * creation. */
 UA_StatusCode
 UA_WriterGroup_addPublishCallback(UA_Server *server, UA_WriterGroup *writerGroup) {
+#ifndef UA_ENABLE_PUBSUB_CUSTOM_PUBLISH_INTERRUPT
     UA_StatusCode retval =
             UA_PubSubManager_addRepeatedCallback(server,
                                                  (UA_ServerCallback) UA_WriterGroup_publishCallback,
+                                                 writerGroup, writerGroup->config.publishingInterval,
+                                                 &writerGroup->publishCallbackId);
+    if(retval == UA_STATUSCODE_GOOD)
+        writerGroup->publishCallbackIsRegistered = true;
+
+    /* Run once after creation */
+    UA_WriterGroup_publishCallback(server, writerGroup);
+    return retval;
+#endif
+    UA_StatusCode retval =
+            UA_PubSubManager_addRepeatedCallback(server,
+                                                 (UA_ServerCallback) UA_WriterGroup_publishCallbackIRQ,
                                                  writerGroup, writerGroup->config.publishingInterval,
                                                  &writerGroup->publishCallbackId);
     if(retval == UA_STATUSCODE_GOOD)
