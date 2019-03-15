@@ -53,8 +53,8 @@
 #define                      NEXT_CYCLE_START_TIME    3
 #define                      FIVE_MICRO_SECOND        5
 #define                      MICRO_AS_NANO_SECONDS    1000
-#define                      MILLI_AS_NANO_SECONDS    1000 * 1000
-#define                      SECONDS_AS_NANO_SECONDS  1000 * 1000 * 1000
+#define                      MILLI_AS_NANO_SECONDS    (1000 * 1000)
+#define                      SECONDS_AS_NANO_SECONDS  (1000 * 1000 * 1000)
 #define                      SECONDS_FIELD            1
 #define                      TX_TIME_ONE              1
 #define                      TX_TIME_ZERO             0
@@ -289,12 +289,11 @@ UA_PubSubManager_addRepeatedCallback(UA_Server *server,
         return UA_STATUSCODE_BADINTERNALERROR;
     }
 
-    timerspec.it_interval.tv_sec        = (long int) (SECONDS_AS_NANO_SECONDS / pubIntervalNs);
+    timerspec.it_interval.tv_sec        = (long int) (pubIntervalNs / (SECONDS_AS_NANO_SECONDS));
     timerspec.it_interval.tv_nsec       = (long int) (pubIntervalNs % SECONDS_AS_NANO_SECONDS);
-    timerspec.it_value.tv_sec           = (long int) (SECONDS_AS_NANO_SECONDS / pubIntervalNs);
+    timerspec.it_value.tv_sec           = (long int) (pubIntervalNs / (SECONDS_AS_NANO_SECONDS));
     timerspec.it_value.tv_nsec          = (long int) (pubIntervalNs % SECONDS_AS_NANO_SECONDS);
-    resultTimerCreate                   = timer_settime(pubEventTimer, 0,
-                                                        &timerspec, NULL);
+    resultTimerCreate                   = timer_settime(pubEventTimer, 0, &timerspec, NULL);
     if (resultTimerCreate != 0)
     {
         UA_LOG_WARNING(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
@@ -320,8 +319,7 @@ UA_PubSubManager_changeRepeatedCallbackInterval(UA_Server *server,
     timerspec.it_interval.tv_nsec       = (long int) (pubIntervalNs % SECONDS_AS_NANO_SECONDS);
     timerspec.it_value.tv_sec           = (long int) (SECONDS_AS_NANO_SECONDS / pubIntervalNs);
     timerspec.it_value.tv_nsec          = (long int) (pubIntervalNs % SECONDS_AS_NANO_SECONDS);
-    resultTimerCreate                   = timer_settime(pubEventTimer, 0,
-                                                        &timerspec, NULL);
+    resultTimerCreate                   = timer_settime(pubEventTimer, 0, &timerspec, NULL);
     if (resultTimerCreate != 0)
     {
         UA_LOG_WARNING(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,

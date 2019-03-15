@@ -232,7 +232,7 @@ option(UA_ENABLE_PUBSUB_CUSTOM_PUBLISH_INTERRUPT
 mark_as_advanced(UA_ENABLE_PUBSUB_CUSTOM_PUBLISH_INTERRUPT)
 
 option(UA_ENABLE_PUBSUB_CUSTOM_PUBLISH_MALLOC
-        "Use a custom malloc for the publisher interrupt (experimental)" OFF)
+        "Use a custom malloc for the publisher interrupt (experimental)" ON)
 mark_as_advanced(UA_ENABLE_PUBSUB_CUSTOM_PUBLISH_MALLOC)
 
 option(UA_ENABLE_PUBSUB_CUSTOM_PUBLISH_INTERRUPT_TSN
