@@ -315,9 +315,9 @@ UA_PubSubManager_changeRepeatedCallbackInterval(UA_Server *server,
     struct itimerspec timerspec;
     int               resultTimerCreate = 0;
     pubIntervalNs                       = (UA_Int64) (interval_ms * MILLI_AS_NANO_SECONDS);
-    timerspec.it_interval.tv_sec        = (long int) (SECONDS_AS_NANO_SECONDS / pubIntervalNs);
+    timerspec.it_interval.tv_sec        = (long int) (pubIntervalNs % SECONDS_AS_NANO_SECONDS);
     timerspec.it_interval.tv_nsec       = (long int) (pubIntervalNs % SECONDS_AS_NANO_SECONDS);
-    timerspec.it_value.tv_sec           = (long int) (SECONDS_AS_NANO_SECONDS / pubIntervalNs);
+    timerspec.it_value.tv_sec           = (long int) (pubIntervalNs / (SECONDS_AS_NANO_SECONDS));
     timerspec.it_value.tv_nsec          = (long int) (pubIntervalNs % SECONDS_AS_NANO_SECONDS);
     resultTimerCreate                   = timer_settime(pubEventTimer, 0, &timerspec, NULL);
     if (resultTimerCreate != 0)

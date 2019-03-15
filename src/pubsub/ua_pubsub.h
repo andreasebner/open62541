@@ -145,8 +145,6 @@ UA_StatusCode
 UA_WriterGroup_addPublishCallback(UA_Server *server, UA_WriterGroup *writerGroup);
 void
 UA_WriterGroup_publishCallback(UA_Server *server, UA_WriterGroup *writerGroup);
-void
-UA_WriterGroup_publishCallbackIRQ(UA_Server *server, UA_WriterGroup *writerGroup);
 
 #endif /* UA_ENABLE_PUBSUB */
 

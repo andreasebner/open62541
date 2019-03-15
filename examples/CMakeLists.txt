@@ -209,7 +209,7 @@ endif()
 
 if(UA_ENABLE_PUBSUB)
     if(UA_ENABLE_PUBSUB_CUSTOM_PUBLISH_INTERRUPT)
-        add_library(ua_pubsub_custom_manager ${CMAKE_SOURCE_DIR}/src/pubsub/ua_pubsub_custom_manager.c)
+        add_library(ua_pubsub_custom_manager ${CMAKE_SOURCE_DIR}/plugins/pubsub/ua_pubsub_jobs_systemirq.c)
     endif()
 endif()
 
@@ -233,6 +233,7 @@ if(UA_ENABLE_PUBSUB)
         endif()
 
         add_executable(custom_interrupt_publisher pubsub/pubsub_interrupt_publisher.c)
+        add_executable(pubsub_interrupt_publish pubsub/pubsub_interrupt_publish.c ${CMAKE_SOURCE_DIR}/plugins/pubsub/ua_pubsub_jobs_systemirq.c)
         #target_link_libraries (custom_interrupt_publisher custom_pubsub)
 
         add_executable(custom_interrupt_loopback pubsub/pubsub_interrupt_loopback.c)
@@ -247,6 +248,7 @@ if(UA_ENABLE_PUBSUB)
         set_target_properties(custom_interrupt_publisher PROPERTIES FOLDER "open62541/examples")
         set_target_properties(custom_interrupt_loopback PROPERTIES FOLDER "open62541/examples")
         set_target_properties(custom_interrupt_loopback_st PROPERTIES FOLDER "open62541/examples")
+        set_target_properties(pubsub_interrupt_publish PROPERTIES FOLDER "open62541/examples")
 
         #todo remove development cmake targets
         #set_target_properties(custom_interrupt_test PROPERTIES FOLDER "open62541/examples")
@@ -255,12 +257,14 @@ if(UA_ENABLE_PUBSUB)
         set_target_properties(custom_interrupt_publisher PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
         set_target_properties(custom_interrupt_loopback PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
         set_target_properties(custom_interrupt_loopback_st PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+        set_target_properties(pubsub_interrupt_publish PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 
         target_link_libraries(custom_interrupt_publisher open62541 ${open62541_LIBRARIES} rt pthread)
         #target_link_libraries(custom_interrupt_publisher open62541 ${open62541_LIBRARIES} rt pthread mbedtls mbedx509 mbedcrypto) original line with crypto
         target_link_libraries(custom_interrupt_loopback open62541 ${open62541_LIBRARIES} rt pthread)
         #target_link_libraries(custom_interrupt_loopback open62541 ${open62541_LIBRARIES} rt pthread mbedtls mbedx509 mbedcrypto)
         target_link_libraries(custom_interrupt_loopback_st open62541 ${open62541_LIBRARIES} rt pthread)
+        target_link_libraries(pubsub_interrupt_publish open62541 ${open62541_LIBRARIES} rt pthread)
 
         #todo remove development cmake targets
         #target_link_libraries(custom_interrupt_test open62541 ${open62541_LIBRARIES} rt pthread)
