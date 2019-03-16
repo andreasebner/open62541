@@ -29,6 +29,7 @@
 /* For thread operations */
 #include <pthread.h>
 #include <ua_log_stdout.h>
+#include <inttypes.h>
 
 #include "ua_config_default.h"
 #include "ua_network_pubsub_udp.h"
@@ -698,32 +699,24 @@ int main(void)
 #if defined(PUBLISHER)
     /* Write the published data in the publisher_T1.csv file */
     size_t pubLoopVariable               = 0;
-    printf("sizeof1: %zu\n", sizeof(publishCounterValue[pubLoopVariable]));
-    /*
     for (pubLoopVariable = 0; pubLoopVariable < measurementsPublisher;
-         pubLoopVariable++)
-    {
-        fprintf(fpPublisher, "%lu,%ld.%09ld\n",
+         pubLoopVariable++) {
+        fprintf(fpPublisher, "%" PRIu64 ",%ld.%09ld\n",
                 publishCounterValue[pubLoopVariable],
                 publishTimestamp[pubLoopVariable].tv_sec,
                 publishTimestamp[pubLoopVariable].tv_nsec);
     }
-     */
 #endif
 #if defined(SUBSCRIBER)
     /* Write the subscribed data in the subscriber_T4.csv file */
     size_t subLoopVariable               = 0;
-    printf("sizeof1: %zu\n", sizeof(publishCounterValue[subLoopVariable]));
-    /*
     for (subLoopVariable = 0; subLoopVariable < measurementsSubscriber;
-         subLoopVariable++)
-    {
-        fprintf(fpSubscriber, "%lu,%ld.%09ld\n",
+         subLoopVariable++) {
+        fprintf(fpSubscriber, "%" PRIu64 ",%ld.%09ld\n",
                 subscribeCounterValue[subLoopVariable],
                 subscribeTimestamp[subLoopVariable].tv_sec,
                 subscribeTimestamp[subLoopVariable].tv_nsec);
     }
-     */
 #endif
     /* Delete the server created */
     UA_Server_delete(server);
