@@ -78,7 +78,7 @@
  * change multicast address as 224.0.0.22 in line number 75 and ip address in
  * line number 76 in plugins/ua_network_pubsub_udp_custom_interrupt.c
  */
-#define                      PUBLISHER_IP_ADDRESS     "192.168.0.179"
+#define                      PUBLISHER_IP_ADDRESS     "192.168.2.6"
 #define                      DATA_SET_WRITER_ID       62541
 #define                      KEY_FRAME_COUNT          10
 /* Variable for next cycle start time */
@@ -113,7 +113,7 @@ static void addServerNodes(UA_Server* server);
 #if defined(PUBLISHER)
 /* File to store the data and timestamps for different traffic */
 FILE*                        fpPublisher;
-char*                        filePublishedData      = "publisher_T5.csv";
+char*                        filePublishedData      = "publisher_T1.csv";
 
 /* Thread for publisher */
 pthread_t                    tidPublisher;
@@ -128,6 +128,7 @@ struct sched_param           schedParamPublisher;
 /* Array to store timestamp */
 struct timespec              publishTimestamp[MAX_MEASUREMENTS];
 struct timespec              dataModificationTime;
+
 static void
 updateMeasurementsPublisher(struct timespec start_time,
                             UA_UInt64 counterValue);
@@ -141,7 +142,7 @@ UA_NodeId                    connectionIdentSubscriber;
 
 /* File to store the data and timestamps for different traffic */
 FILE*                        fpSubscriber;
-char*                        fileSubscribedData     = "subscriber_T4.csv";
+char*                        fileSubscribedData     = "subscriber_T8.csv";
 
 /* Thread for subscriber */
 pthread_t                    tidSubscriber;
@@ -230,6 +231,7 @@ struct sigaction  signalAction;
 /* Singal handler */
 static void handler(int sig, siginfo_t* si, void* uc)
 {
+
     if (si->si_value.sival_ptr != &pubEventTimer)
     {
         UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "stray signal");
@@ -237,18 +239,24 @@ static void handler(int sig, siginfo_t* si, void* uc)
     } else {
         //TODO make the write IRQ save
         UA_NodeId currentNodeIdPublisher;
-        currentNodeIdPublisher = UA_NODEID_STRING(1, "PublisherCounter");
+        UA_NodeId currentNodeIdSubscriber;
+        counterDataPublisher++;
         clock_gettime(CLOCKID, &dataModificationTime);
-        UA_Variant_setScalar(&countPointerPublisher, &counterDataSubscriber,
+        UA_Variant_setScalar(&countPointerPublisher, &counterDataPublisher,
                              &UA_TYPES[UA_TYPES_UINT64]);
+        currentNodeIdPublisher                     =
+                UA_NODEID_STRING(1, "PublisherCounter");
         UA_Server_writeValue(pubServer, currentNodeIdPublisher,
                              countPointerPublisher);
+        UA_Variant_setScalar(&countPointerSubscriber, &counterDataSubscriber,
+                             &UA_TYPES[UA_TYPES_UINT64]);
+        currentNodeIdSubscriber                    =
+                UA_NODEID_STRING(1, "SubscriberCounter");
+        UA_Server_writeValue(pubServer, currentNodeIdSubscriber,
+                             countPointerSubscriber);
         pubCallback(pubServer, pubData);
-        if (counterDataSubscriber > COUNTER_ZERO)
-        {
-            updateMeasurementsPublisher(dataModificationTime,
-                                        counterDataSubscriber);
-        }
+        updateMeasurementsPublisher(dataModificationTime,
+                                    counterDataPublisher);
     }
 }
 
@@ -416,7 +424,7 @@ addPubSubConfiguration(UA_Server* server) {
  * **Published data handling**
  *
  * The published data is updated in the array using this function
- */
+*/
 static void
 updateMeasurementsPublisher(struct timespec start_time,
                             UA_UInt64 counterValue)
@@ -425,6 +433,7 @@ updateMeasurementsPublisher(struct timespec start_time,
     publishCounterValue[measurementsPublisher]     = counterValue;
     measurementsPublisher++;
 }
+
 #endif
 
 #if defined(SUBSCRIBER)
@@ -689,6 +698,8 @@ int main(void)
 #if defined(PUBLISHER)
     /* Write the published data in the publisher_T1.csv file */
     size_t pubLoopVariable               = 0;
+    printf("sizeof1: %zu\n", sizeof(publishCounterValue[pubLoopVariable]));
+    /*
     for (pubLoopVariable = 0; pubLoopVariable < measurementsPublisher;
          pubLoopVariable++)
     {
@@ -697,10 +708,13 @@ int main(void)
                 publishTimestamp[pubLoopVariable].tv_sec,
                 publishTimestamp[pubLoopVariable].tv_nsec);
     }
+     */
 #endif
 #if defined(SUBSCRIBER)
     /* Write the subscribed data in the subscriber_T4.csv file */
     size_t subLoopVariable               = 0;
+    printf("sizeof1: %zu\n", sizeof(publishCounterValue[subLoopVariable]));
+    /*
     for (subLoopVariable = 0; subLoopVariable < measurementsSubscriber;
          subLoopVariable++)
     {
@@ -709,6 +723,7 @@ int main(void)
                 subscribeTimestamp[subLoopVariable].tv_sec,
                 subscribeTimestamp[subLoopVariable].tv_nsec);
     }
+     */
 #endif
     /* Delete the server created */
     UA_Server_delete(server);

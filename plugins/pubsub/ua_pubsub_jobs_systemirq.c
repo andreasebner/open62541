@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright (c) 2017-2018 Fraunhofer IOSB (Author: Andreas Ebner)
+ * Copyright (c) 2017-2019 Fraunhofer IOSB (Author: Andreas Ebner)
  * Copyright (c) 2018-2019 Kalycito Infotech Private Limited
  */
 
@@ -22,13 +22,14 @@
 #define                      SIG                      SIGUSR1
 
 /* For one publish callback only... */
-UA_Server*            pubServer;
-void*                 pubData;
-struct sigevent       pubEvent;
-timer_t               pubEventTimer;
-struct sigaction      signalAction;
-UA_ServerCallback     pubCallback;
+UA_Server*              pubServer;
+void*                   pubData;
+struct sigevent         pubEvent;
+timer_t                 pubEventTimer;
+struct sigaction        signalAction;
+UA_ServerCallback       pubCallback;
 
+//extern struct timespec  dataModificationTime;
 
 /* Singal handler */
 static void handler(int sig, siginfo_t* si, void* uc)
@@ -41,7 +42,7 @@ static void handler(int sig, siginfo_t* si, void* uc)
         //TODO make the write IRQ save
         //UA_NodeId currentNodeIdPublisher;
         //currentNodeIdPublisher = UA_NODEID_STRING(1, "PublisherCounter");
-        //clock_gettime(CLOCKID, &dataModificationTime);
+//        clock_gettime(CLOCKID, &dataModificationTime);
         //UA_Variant_setScalar(&countPointerPublisher, &counterDataSubscriber,
         //                     &UA_TYPES[UA_TYPES_UINT64]);
         //UA_Server_writeValue(pubServer, currentNodeIdPublisher,
@@ -49,8 +50,7 @@ static void handler(int sig, siginfo_t* si, void* uc)
         pubCallback(pubServer, pubData);
         //if (counterDataSubscriber > COUNTER_ZERO)
         //{
-        //    updateMeasurementsPublisher(dataModificationTime,
-        //                                counterDataSubscriber);
+        //updateMeasurementsPublisher(dataModificationTime, counterDataSubscriber);
         //}
     }
 }

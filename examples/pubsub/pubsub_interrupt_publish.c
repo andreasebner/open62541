@@ -133,7 +133,7 @@ updateMeasurementsPublisher(struct timespec start_time,
     publishCounterValue[measurementsPublisher]     = counterValue;
     measurementsPublisher++;
 }
- */
+*/
 
 /**
  * **Creation of nodes**
