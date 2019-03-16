@@ -79,7 +79,7 @@
  * change multicast address as 224.0.0.22 in line number 75 and ip address in
  * line number 76 in plugins/ua_network_pubsub_udp_custom_interrupt.c
  */
-#define                      PUBLISHER_IP_ADDRESS     "192.168.0.179"
+#define                      PUBLISHER_IP_ADDRESS     "192.168.2.5"
 #define                      DATA_SET_WRITER_ID       62541
 #define                      KEY_FRAME_COUNT          10
 /* Variable for next cycle start time */
@@ -368,7 +368,7 @@ addPubSubConfiguration(UA_Server* server) {
     connectionConfig.enabled = UA_TRUE;
     UA_NetworkAddressUrlDataType networkAddressUrl = {UA_STRING
                                                               (PUBLISHER_IP_ADDRESS),
-                                                      UA_STRING("opc.udp://224.0.0.22:4840/")};
+                                                      UA_STRING("opc.udp://224.0.0.23:4840/")};
     UA_Variant_setScalar(&connectionConfig.address, &networkAddressUrl,
                          &UA_TYPES[UA_TYPES_NETWORKADDRESSURLDATATYPE]);
     connectionConfig.publisherId.numeric = UA_UInt32_random();
@@ -612,7 +612,7 @@ addPubSubSubscriberConfiguration(UA_Server * server){
             ("http://opcfoundation.org/UA-Profile/Transport/pubsub-udp-uadp");
     connectionConfig.enabled                       = UA_TRUE;
     UA_NetworkAddressUrlDataType networkAddressUrl = {UA_STRING
-                                                              (PUBLISHER_IP_ADDRESS), UA_STRING("opc.udp://224.0.0.32:4840/")};
+                                                              (PUBLISHER_IP_ADDRESS), UA_STRING("opc.udp://224.0.0.22:4840/")};
     UA_Variant_setScalar(&connectionConfig.address, &networkAddressUrl,
                          &UA_TYPES[UA_TYPES_NETWORKADDRESSURLDATATYPE]);
     connectionConfig.publisherId.numeric           = UA_UInt32_random();

@@ -621,7 +621,7 @@ addPubSubSubscriberConfiguration(UA_Server * server){
             ("http://opcfoundation.org/UA-Profile/Transport/pubsub-udp-uadp");
     connectionConfig.enabled                       = UA_TRUE;
     UA_NetworkAddressUrlDataType networkAddressUrl = {UA_STRING
-                                                              (PUBLISHER_IP_ADDRESS), UA_STRING("opc.udp://224.0.0.32:4840/")};
+                                                              (PUBLISHER_IP_ADDRESS), UA_STRING("opc.udp://224.0.0.23:4840/")};
     UA_Variant_setScalar(&connectionConfig.address, &networkAddressUrl,
                          &UA_TYPES[UA_TYPES_NETWORKADDRESSURLDATATYPE]);
     connectionConfig.publisherId.numeric           = UA_UInt32_random();
