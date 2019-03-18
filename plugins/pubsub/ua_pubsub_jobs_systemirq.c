@@ -15,7 +15,7 @@
 /* conditional compilation */
 #ifdef UA_ENABLE_PUBSUB_CUSTOM_PUBLISH_INTERRUPT
 
-#define                      MICRO_AS_NANO_SECONDS    1000
+#define                      MAX_MEASUREMENTS         10000000
 #define                      MILLI_AS_NANO_SECONDS    (1000 * 1000)
 #define                      SECONDS_AS_NANO_SECONDS  (1000 * 1000 * 1000)
 #define                      CLOCKID                  CLOCK_REALTIME
@@ -28,8 +28,31 @@ struct sigevent         pubEvent;
 timer_t                 pubEventTimer;
 struct sigaction        signalAction;
 UA_ServerCallback       pubCallback;
+UA_Int64                pubIntervalNs;
 
-//extern struct timespec  dataModificationTime;
+/* Array to store published counter data */
+extern size_t                       publisherMeasurementsCounter;
+extern UA_Int64                     currentPublishCycleTime[MAX_MEASUREMENTS];
+extern UA_UInt64                    publishCounterValue[MAX_MEASUREMENTS];
+extern struct timespec              calculatedCycleStartTime[MAX_MEASUREMENTS];
+extern struct timespec              realCycleStartTime[MAX_MEASUREMENTS];
+extern struct timespec              publishFinishedTimestamp[MAX_MEASUREMENTS];
+
+/**
+ * **Nanosecond field handling**
+ *
+ * The nanoSecondFieldConversion function is used to adjust the nanosecond field value.
+ */
+static void nanoSecondFieldConversion(struct timespec *timeSpecValue)
+{
+    /* Check if ns field is greater than '1 ns less than 1sec' */
+    while (timeSpecValue->tv_nsec > (SECONDS_AS_NANO_SECONDS - 1))
+    {
+        /* Move to next second and remove it from ns field */
+        timeSpecValue->tv_sec                     += 1;
+        timeSpecValue->tv_nsec                    -= SECONDS_AS_NANO_SECONDS;
+    }
+}
 
 /* Singal handler */
 static void handler(int sig, siginfo_t* si, void* uc)
@@ -39,19 +62,21 @@ static void handler(int sig, siginfo_t* si, void* uc)
         UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "stray signal");
         return;
     } else {
-        //TODO make the write IRQ save
-        //UA_NodeId currentNodeIdPublisher;
-        //currentNodeIdPublisher = UA_NODEID_STRING(1, "PublisherCounter");
-//        clock_gettime(CLOCKID, &dataModificationTime);
-        //UA_Variant_setScalar(&countPointerPublisher, &counterDataSubscriber,
-        //                     &UA_TYPES[UA_TYPES_UINT64]);
-        //UA_Server_writeValue(pubServer, currentNodeIdPublisher,
-        //                     countPointerPublisher);
+        //save current configured publish interval
+        currentPublishCycleTime[publisherMeasurementsCounter] = pubIntervalNs;
+        //save the calculated starting time
+        calculatedCycleStartTime[publisherMeasurementsCounter].tv_nsec += calculatedCycleStartTime[publisherMeasurementsCounter-1].tv_nsec + pubIntervalNs;
+        nanoSecondFieldConversion(&calculatedCycleStartTime[publisherMeasurementsCounter]);
+        //save publish start time
+        clock_gettime(CLOCKID, &realCycleStartTime[publisherMeasurementsCounter]);
         pubCallback(pubServer, pubData);
-        //if (counterDataSubscriber > COUNTER_ZERO)
-        //{
-        //updateMeasurementsPublisher(dataModificationTime, counterDataSubscriber);
-        //}
+        //save publish finished time
+        clock_gettime(CLOCKID, &publishFinishedTimestamp[publisherMeasurementsCounter]);
+        if(publisherMeasurementsCounter < MAX_MEASUREMENTS){
+            //value is currently set to the counter variable
+            publishCounterValue[publisherMeasurementsCounter] = publisherMeasurementsCounter;
+            publisherMeasurementsCounter++;
+        }
     }
 }
 
@@ -70,8 +95,7 @@ UA_PubSubManager_addRepeatedCallback(UA_Server *server,
     pubServer                           = server;
     pubCallback                         = callback;
     pubData                             = data;
-    UA_Int64 pubIntervalNs              = (UA_Int64) (interval_ms * MILLI_AS_NANO_SECONDS);
-    //pubIntervalNs                     = interval * MILLI_SECONDS;
+    pubIntervalNs                       = (UA_Int64) (interval_ms * MILLI_AS_NANO_SECONDS);
 
     /* Handle the signal */
     signalAction.sa_flags               = SA_SIGINFO;
@@ -97,6 +121,10 @@ UA_PubSubManager_addRepeatedCallback(UA_Server *server,
     timerspec.it_value.tv_sec           = (long int) (pubIntervalNs / (SECONDS_AS_NANO_SECONDS));
     timerspec.it_value.tv_nsec          = (long int) (pubIntervalNs % SECONDS_AS_NANO_SECONDS);
     resultTimerCreate                   = timer_settime(pubEventTimer, 0, &timerspec, NULL);
+    clock_gettime(CLOCKID, &calculatedCycleStartTime[publisherMeasurementsCounter]);
+    calculatedCycleStartTime[publisherMeasurementsCounter].tv_nsec += pubIntervalNs;
+    nanoSecondFieldConversion(&calculatedCycleStartTime[publisherMeasurementsCounter]);
+
     if (resultTimerCreate != 0)
     {
         UA_LOG_WARNING(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
@@ -104,8 +132,6 @@ UA_PubSubManager_addRepeatedCallback(UA_Server *server,
         timer_delete(pubEventTimer);
         return UA_STATUSCODE_BADINTERNALERROR;
     }
-
-    //clock_gettime(CLOCKID, &pubStartTime);
     return UA_STATUSCODE_GOOD;
 }
 
@@ -117,7 +143,7 @@ UA_PubSubManager_changeRepeatedCallbackInterval(UA_Server *server,
 {
     struct itimerspec timerspec;
     int               resultTimerCreate = 0;
-    UA_Int64 pubIntervalNs              = (UA_Int64) (interval_ms * MILLI_AS_NANO_SECONDS);
+    pubIntervalNs                       = (UA_Int64) (interval_ms * MILLI_AS_NANO_SECONDS);
     timerspec.it_interval.tv_sec        = (long int) (pubIntervalNs % SECONDS_AS_NANO_SECONDS);
     timerspec.it_interval.tv_nsec       = (long int) (pubIntervalNs % SECONDS_AS_NANO_SECONDS);
     timerspec.it_value.tv_sec           = (long int) (pubIntervalNs / (SECONDS_AS_NANO_SECONDS));

@@ -212,7 +212,7 @@ endif()
 option(UA_ENABLE_PUBSUB_DELTAFRAMES "Enable sending of delta frames with only the changes" OFF)
 mark_as_advanced(UA_ENABLE_PUBSUB_DELTAFRAMES)
 
-option(UA_ENABLE_PUBSUB_INFORMATIONMODEL "Enable PubSub information model twin" OFF)
+option(UA_ENABLE_PUBSUB_INFORMATIONMODEL "Enable PubSub information model twin" ON)
 mark_as_advanced(UA_ENABLE_PUBSUB_INFORMATIONMODEL)
 option(UA_ENABLE_PUBSUB_INFORMATIONMODEL_METHODS "Enable PubSub informationmodel methods" OFF)
 mark_as_advanced(UA_ENABLE_PUBSUB_INFORMATIONMODEL_METHODS)

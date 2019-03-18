@@ -484,7 +484,8 @@ void subscribe(void)
         /* Workaround! Reset buffer length. Receive can set the length
          * to zero. Then the buffer is not deleted because no memory
          * allocation is assumed.
-         * TODO: Return an error code in 'receive' instead of setting the
+         * TODO: Return an error code in 'receive' instead of se
+tting the
          *  buf length to zero. */
         buffer.length                    = BUFFER_LENGTH;
         UA_ByteString_deleteMembers(&buffer);
