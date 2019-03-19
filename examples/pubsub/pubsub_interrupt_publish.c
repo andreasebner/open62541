@@ -19,7 +19,7 @@
 #define                      MAX_MEASUREMENTS         10000000
 #define                      PUBLISHER_IP_ADDRESS     "192.168.0.179"
 #define                      DATA_SET_WRITER_ID       62541
-UA_Boolean                   running                = UA_TRUE;
+UA_Boolean                   running                  = UA_TRUE;
 
 /* Variables corresponding to PubSub connection creation,
  * published data set and writer group */

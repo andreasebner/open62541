@@ -65,8 +65,13 @@ static void handler(int sig, siginfo_t* si, void* uc)
         //save current configured publish interval
         currentPublishCycleTime[publisherMeasurementsCounter] = pubIntervalNs;
         //save the calculated starting time
-        calculatedCycleStartTime[publisherMeasurementsCounter].tv_nsec += calculatedCycleStartTime[publisherMeasurementsCounter-1].tv_nsec + pubIntervalNs;
-        nanoSecondFieldConversion(&calculatedCycleStartTime[publisherMeasurementsCounter]);
+        if(publisherMeasurementsCounter != 0) {
+            calculatedCycleStartTime[publisherMeasurementsCounter].tv_nsec +=
+                    calculatedCycleStartTime[publisherMeasurementsCounter - 1].tv_nsec + pubIntervalNs;
+            calculatedCycleStartTime[publisherMeasurementsCounter].tv_sec =
+                    calculatedCycleStartTime[publisherMeasurementsCounter - 1].tv_sec;
+            nanoSecondFieldConversion(&calculatedCycleStartTime[publisherMeasurementsCounter]);
+        }
         //save publish start time
         clock_gettime(CLOCKID, &realCycleStartTime[publisherMeasurementsCounter]);
         pubCallback(pubServer, pubData);
