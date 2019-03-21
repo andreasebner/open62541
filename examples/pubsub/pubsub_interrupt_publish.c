@@ -28,6 +28,7 @@ UA_NodeId                    counterNodePublisher;
 FILE*                        fpPublisher;
 char*                        filePublishedData      = "publisher_measurement.csv";
 /* Arrays to store measurement data */
+UA_UInt32 measurementCycles = MAX_MEASUREMENTS;
 size_t                       publisherMeasurementsCounter  = 0;
 UA_Int64                     currentPublishCycleTime[MAX_MEASUREMENTS];
 struct timespec              calculatedCycleStartTime[MAX_MEASUREMENTS];
@@ -107,11 +108,12 @@ static void addServerNodes(UA_Server* server)
     UA_NodeId             rttUseCaseID;
     UA_NodeId             newNodeId;
     UA_VariableAttributes publisherAttr;
+    UA_VariableAttributes cyclesAttr;
     UA_UInt64             publishValue   = 0;
     UA_ObjectAttributes   rttUseCasettr  = UA_ObjectAttributes_default;
     rttUseCasettr.displayName            = UA_LOCALIZEDTEXT("en-US",
                                                             "RTT Use case");
-    UA_Server_addObjectNode(server, UA_NODEID_NULL,
+    UA_Server_addObjectNode(server, UA_NODEID_STRING(1, "rtt"),
                             UA_NODEID_NUMERIC(0, UA_NS0ID_OBJECTSFOLDER),
                             UA_NODEID_NUMERIC(0, UA_NS0ID_ORGANIZES),
                             UA_QUALIFIEDNAME(1, "RTT Use case"), UA_NODEID_NUMERIC(0, UA_NS0ID_BASEOBJECTTYPE),
@@ -129,6 +131,17 @@ static void addServerNodes(UA_Server* server)
                               UA_NODEID_NUMERIC(0, UA_NS0ID_HASCOMPONENT),
                               UA_QUALIFIEDNAME(1, "Publisher Counter"),
                               UA_NODEID_NUMERIC(0, UA_NS0ID_BASEDATAVARIABLETYPE), publisherAttr, NULL,
+                              NULL);
+    cyclesAttr                        = UA_VariableAttributes_default;
+    UA_Variant_setScalar(&cyclesAttr.value, &measurementCycles,
+                         &UA_TYPES[UA_TYPES_UINT64]);
+    cyclesAttr.displayName            = UA_LOCALIZEDTEXT("en-US",
+                                                            "Measurement Cycles");
+    cyclesAttr.accessLevel = UA_ACCESSLEVELMASK_READ | UA_ACCESSLEVELMASK_WRITE;
+    UA_Server_addVariableNode(server, UA_NODEID_STRING(1, "cycles"), rttUseCaseID,
+                              UA_NODEID_NUMERIC(0, UA_NS0ID_HASCOMPONENT),
+                              UA_QUALIFIEDNAME(1, "Measurement Cycles"),
+                              UA_NODEID_NUMERIC(0, UA_NS0ID_BASEDATAVARIABLETYPE), cyclesAttr, NULL,
                               NULL);
 }
 

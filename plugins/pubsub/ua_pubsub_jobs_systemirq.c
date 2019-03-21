@@ -7,6 +7,7 @@
  */
 
 #include <time.h>
+#include <inttypes.h>
 #include "ua_pubsub_ns0.h"
 #include "ua_pubsub_manager.h"
 #include "ua_log_stdout.h"
@@ -31,12 +32,15 @@ UA_ServerCallback       pubCallback;
 UA_Int64                pubIntervalNs;
 
 /* Array to store published counter data */
+extern UA_UInt32                    measurementCycles;
 extern size_t                       publisherMeasurementsCounter;
 extern UA_Int64                     currentPublishCycleTime[MAX_MEASUREMENTS];
 extern UA_UInt64                    publishCounterValue[MAX_MEASUREMENTS];
 extern struct timespec              calculatedCycleStartTime[MAX_MEASUREMENTS];
 extern struct timespec              realCycleStartTime[MAX_MEASUREMENTS];
 extern struct timespec              publishFinishedTimestamp[MAX_MEASUREMENTS];
+extern FILE*                        fpPublisher;
+char*                               filePublishedData;
 
 /**
  * **Nanosecond field handling**
@@ -62,25 +66,51 @@ static void handler(int sig, siginfo_t* si, void* uc)
         UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "stray signal");
         return;
     } else {
-        //save current configured publish interval
-        currentPublishCycleTime[publisherMeasurementsCounter] = pubIntervalNs;
-        //save the calculated starting time
-        if(publisherMeasurementsCounter != 0) {
-            calculatedCycleStartTime[publisherMeasurementsCounter].tv_nsec +=
-                    calculatedCycleStartTime[publisherMeasurementsCounter - 1].tv_nsec + pubIntervalNs;
-            calculatedCycleStartTime[publisherMeasurementsCounter].tv_sec =
-                    calculatedCycleStartTime[publisherMeasurementsCounter - 1].tv_sec;
-            nanoSecondFieldConversion(&calculatedCycleStartTime[publisherMeasurementsCounter]);
+        if(publisherMeasurementsCounter < measurementCycles){
+            //save current configured publish interval
+            currentPublishCycleTime[publisherMeasurementsCounter] = pubIntervalNs;
+            //save the calculated starting time
+            if(publisherMeasurementsCounter != 0) {
+                calculatedCycleStartTime[publisherMeasurementsCounter].tv_nsec =
+                        calculatedCycleStartTime[publisherMeasurementsCounter - 1].tv_nsec + pubIntervalNs;
+                calculatedCycleStartTime[publisherMeasurementsCounter].tv_sec =
+                        calculatedCycleStartTime[publisherMeasurementsCounter - 1].tv_sec;
+                nanoSecondFieldConversion(&calculatedCycleStartTime[publisherMeasurementsCounter]);
+            }
+            //save publish start time
+            clock_gettime(CLOCKID, &realCycleStartTime[publisherMeasurementsCounter]);
+
+            /*if(publisherMeasurementsCounter != 0) {
+                calculatedCycleStartTime[publisherMeasurementsCounter].tv_nsec =
+                        realCycleStartTime[publisherMeasurementsCounter-1].tv_nsec + pubIntervalNs;
+                calculatedCycleStartTime[publisherMeasurementsCounter].tv_sec =
+                        realCycleStartTime[publisherMeasurementsCounter-1].tv_sec;
+                nanoSecondFieldConversion(&calculatedCycleStartTime[publisherMeasurementsCounter]);
+            }*/
         }
-        //save publish start time
-        clock_gettime(CLOCKID, &realCycleStartTime[publisherMeasurementsCounter]);
         pubCallback(pubServer, pubData);
-        //save publish finished time
-        clock_gettime(CLOCKID, &publishFinishedTimestamp[publisherMeasurementsCounter]);
-        if(publisherMeasurementsCounter < MAX_MEASUREMENTS){
+        if(publisherMeasurementsCounter < measurementCycles) {
+            //save publish finished time
+            clock_gettime(CLOCKID, &publishFinishedTimestamp[publisherMeasurementsCounter]);
             //value is currently set to the counter variable
             publishCounterValue[publisherMeasurementsCounter] = publisherMeasurementsCounter;
             publisherMeasurementsCounter++;
+        } else if (publisherMeasurementsCounter == measurementCycles){
+            fpPublisher                          = fopen(filePublishedData, "w+");
+            for (size_t pubLoopVariable = 0; pubLoopVariable < publisherMeasurementsCounter; pubLoopVariable++)
+            {
+                fprintf(fpPublisher, "%" PRIu64",%" PRIu64 ",%ld.%09ld,%ld.%09ld,%ld.%09ld\n",
+                        publishCounterValue[pubLoopVariable],
+                        currentPublishCycleTime[pubLoopVariable],
+                        calculatedCycleStartTime[pubLoopVariable].tv_sec,
+                        calculatedCycleStartTime[pubLoopVariable].tv_nsec,
+                        realCycleStartTime[pubLoopVariable].tv_sec,
+                        realCycleStartTime[pubLoopVariable].tv_nsec,
+                        publishFinishedTimestamp[pubLoopVariable].tv_sec,
+                        publishFinishedTimestamp[pubLoopVariable].tv_nsec);
+            }
+            publisherMeasurementsCounter++;
+            fclose(fpPublisher);
         }
     }
 }
@@ -101,6 +131,12 @@ UA_PubSubManager_addRepeatedCallback(UA_Server *server,
     pubCallback                         = callback;
     pubData                             = data;
     pubIntervalNs                       = (UA_Int64) (interval_ms * MILLI_AS_NANO_SECONDS);
+    publisherMeasurementsCounter = 0;
+    UA_Variant cycles;
+    UA_StatusCode ret = UA_Server_readValue(server, UA_NODEID_STRING(1, "cycles"), &cycles);
+    if(ret == UA_STATUSCODE_GOOD){
+        measurementCycles = *((UA_UInt32 *) cycles.data);
+    }
 
     /* Handle the signal */
     signalAction.sa_flags               = SA_SIGINFO;
@@ -148,6 +184,13 @@ UA_PubSubManager_changeRepeatedCallbackInterval(UA_Server *server,
 {
     struct itimerspec timerspec;
     int               resultTimerCreate = 0;
+    publisherMeasurementsCounter = 0;
+    UA_Variant cycles;
+    UA_StatusCode ret = UA_Server_readValue(server, UA_NODEID_STRING(1, "cycles"), &cycles);
+    if(ret == UA_STATUSCODE_GOOD){
+        measurementCycles = *((UA_UInt32 *) cycles.data);
+    }
+
     pubIntervalNs                       = (UA_Int64) (interval_ms * MILLI_AS_NANO_SECONDS);
     timerspec.it_interval.tv_sec        = (long int) (pubIntervalNs % SECONDS_AS_NANO_SECONDS);
     timerspec.it_interval.tv_nsec       = (long int) (pubIntervalNs % SECONDS_AS_NANO_SECONDS);
