@@ -72,7 +72,7 @@ static void handler(int sig, siginfo_t* si, void* uc)
             //save the calculated starting time
             if(publisherMeasurementsCounter != 0) {
                 calculatedCycleStartTime[publisherMeasurementsCounter].tv_nsec = (long int)
-                        calculatedCycleStartTime[publisherMeasurementsCounter - 1].tv_nsec + pubIntervalNs;
+                        (calculatedCycleStartTime[publisherMeasurementsCounter - 1].tv_nsec + pubIntervalNs);
                 calculatedCycleStartTime[publisherMeasurementsCounter].tv_sec = (long int)
                         calculatedCycleStartTime[publisherMeasurementsCounter - 1].tv_sec;
                 nanoSecondFieldConversion(&calculatedCycleStartTime[publisherMeasurementsCounter]);
