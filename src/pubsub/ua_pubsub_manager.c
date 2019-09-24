@@ -201,12 +201,36 @@ UA_Server_addPublishedDataSet(UA_Server *server, const UA_PublishedDataSetConfig
     if(pdsIdentifier != NULL){
         UA_NodeId_copy(&newPubSubDataSet->identifier, pdsIdentifier);
     }
+    //fill the DataSetMetaData
+    switch(tmpPublishedDataSetConfig.publishedDataSetType){
+        case UA_PUBSUB_DATASET_PUBLISHEDITEMS_TEMPLATE:
+            UA_DataSetMetaDataType_copy(&tmpPublishedDataSetConfig.config.itemsTemplate.metaData, &newPubSubDataSet->dataSetMetaData);
+            break;
+        case UA_PUBSUB_DATASET_PUBLISHEDEVENTS_TEMPLATE:
+            UA_DataSetMetaDataType_copy(&tmpPublishedDataSetConfig.config.eventTemplate.metaData, &newPubSubDataSet->dataSetMetaData);
+            break;
+        case UA_PUBSUB_DATASET_PUBLISHEDEVENTS:
+            newPubSubDataSet->dataSetMetaData.configurationVersion.majorVersion = UA_PubSubConfigurationVersionTimeDifference();
+            newPubSubDataSet->dataSetMetaData.configurationVersion.minorVersion = UA_PubSubConfigurationVersionTimeDifference();
+            newPubSubDataSet->dataSetMetaData.dataSetClassId = UA_GUID_NULL;
+            UA_String_copy(&tmpPublishedDataSetConfig.name, &newPubSubDataSet->dataSetMetaData.name);
+            newPubSubDataSet->dataSetMetaData.description = UA_LOCALIZEDTEXT_ALLOC("", "");
+            break;
+        case UA_PUBSUB_DATASET_PUBLISHEDITEMS:
+            newPubSubDataSet->dataSetMetaData.configurationVersion.majorVersion = UA_PubSubConfigurationVersionTimeDifference();
+            newPubSubDataSet->dataSetMetaData.configurationVersion.minorVersion = UA_PubSubConfigurationVersionTimeDifference();
+            UA_String_copy(&tmpPublishedDataSetConfig.name, &newPubSubDataSet->dataSetMetaData.name);
+            newPubSubDataSet->dataSetMetaData.description = UA_LOCALIZEDTEXT_ALLOC("", "");
+            newPubSubDataSet->dataSetMetaData.dataSetClassId = UA_GUID_NULL;
+            break;
+    }
+
     server->pubSubManager.publishedDataSetsSize++;
     result.addResult = UA_STATUSCODE_GOOD;
     result.fieldAddResults = NULL;
     result.fieldAddResultsSize = 0;
-    result.configurationVersion.majorVersion = UA_PubSubConfigurationVersionTimeDifference();
-    result.configurationVersion.minorVersion = UA_PubSubConfigurationVersionTimeDifference();
+    result.configurationVersion.majorVersion = newPubSubDataSet->dataSetMetaData.configurationVersion.majorVersion;
+    result.configurationVersion.minorVersion = newPubSubDataSet->dataSetMetaData.configurationVersion.minorVersion;
 #ifdef UA_ENABLE_PUBSUB_INFORMATIONMODEL
     addPublishedDataItemsRepresentation(server, newPubSubDataSet);
 #endif
