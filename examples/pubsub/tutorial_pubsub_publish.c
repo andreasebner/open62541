@@ -71,11 +71,7 @@ addPublishedDataSet(UA_Server *server) {
     UA_Server_addPublishedDataSet(server, &publishedDataSetConfig, &publishedDataSetIdent);
 }
 
-/**
- * **DataSetField handling**
- *
- * The DataSetField (DSF) is part of the PDS and describes exactly one published
- * field. */
+#ifndef UA_ENABLE_PUBSUB_MEASUREMENT_STATICVALUESOURCE
 static void
 addDataSetField(UA_Server *server) {
     /* Add a field to the previous created PublishedDataSet */
@@ -91,6 +87,32 @@ addDataSetField(UA_Server *server) {
     UA_Server_addDataSetField(server, publishedDataSetIdent,
                               &dataSetFieldConfig, &dataSetFieldIdent);
 }
+#else
+static void
+addDataSetField(UA_Server *server) {
+    /* Add one DataSetField with static value source to PDS */
+    UA_NodeId dataSetFieldIdent;
+    UA_DataSetFieldConfig dsfConfig;
+    memset(&dsfConfig, 0, sizeof(UA_DataSetFieldConfig));
+    dsfConfig.dataSetFieldType = UA_PUBSUB_DATASETFIELD_VARIABLE;
+    dsfConfig.field.variable.fieldNameAlias = UA_STRING("Server localtime");
+    dsfConfig.field.variable.promotedField = UA_FALSE;
+    dsfConfig.field.variable.publishParameters.attributeId = UA_ATTRIBUTEID_VALUE;
+   /* Create Variant and configure as DataSetField source */
+    UA_UInt32 *intValue = UA_UInt32_new();
+    *intValue = 62541;
+    UA_Variant variant;
+    memset(&variant, 0, sizeof(UA_Variant));
+    UA_Variant_setScalar(&variant, intValue, &UA_TYPES[UA_TYPES_UINT32]);
+    UA_DataValue staticValueSource;
+    memset(&staticValueSource, 0, sizeof(staticValueSource));
+    staticValueSource.value = variant;
+    dsfConfig.field.variable.staticValueSourceEnabled = UA_TRUE;
+    dsfConfig.field.variable.staticValueSource.value = variant;
+    UA_Server_addDataSetField(server, publishedDataSetIdent, &dsfConfig, &dataSetFieldIdent);
+}
+#endif
+
 
 /**
  * **WriterGroup handling**
@@ -104,7 +126,7 @@ addWriterGroup(UA_Server *server) {
     UA_WriterGroupConfig writerGroupConfig;
     memset(&writerGroupConfig, 0, sizeof(UA_WriterGroupConfig));
     writerGroupConfig.name = UA_STRING("Demo WriterGroup");
-    writerGroupConfig.publishingInterval = 100;
+    writerGroupConfig.publishingInterval = 0.5;
     writerGroupConfig.enabled = UA_FALSE;
     writerGroupConfig.writerGroupId = 100;
     writerGroupConfig.encodingMimeType = UA_PUBSUB_ENCODING_UADP;
@@ -236,6 +258,5 @@ int main(int argc, char **argv) {
             return EXIT_FAILURE;
         }
     }
-
     return run(&transportProfile, &networkAddressUrl);
 }

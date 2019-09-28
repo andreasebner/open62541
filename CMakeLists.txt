@@ -204,8 +204,11 @@ endif()
 option(UA_ENABLE_CUSTOM_NODESTORE "Do not compile the default Nodestore implementation into the library" OFF)
 mark_as_advanced(UA_ENABLE_CUSTOM_NODESTORE)
 
-option(UA_ENABLE_PUBSUB "Enable publish/subscribe" OFF)
+option(UA_ENABLE_PUBSUB "Enable publish/subscribe" ON)
 mark_as_advanced(UA_ENABLE_PUBSUB)
+
+option(UA_ENABLE_PUBSUB_PUBLISHCYCLE_MEASUREMENT "Store duration of the first 10000 publish cycles. (This option should only used with the tutorial_pubsub_publish and disbaled delta frames." ON)
+option(UA_ENABLE_PUBSUB_MEASUREMENT_STATICVALUESOURCE "Use static value source" ON)
 
 option(UA_ENABLE_DA "Enable data access" ON)
 mark_as_advanced(UA_ENABLE_DA)
@@ -315,7 +318,7 @@ if(CMAKE_VERSION VERSION_GREATER 3.6)
 endif()
 
 # Build Targets
-option(UA_BUILD_EXAMPLES "Build example servers and clients" OFF)
+option(UA_BUILD_EXAMPLES "Build example servers and clients" ON)
 option(UA_BUILD_TOOLS "Build OPC UA shell tools" OFF)
 option(UA_BUILD_UNIT_TESTS "Build the unit tests" OFF)
 option(UA_BUILD_FUZZING "Build the fuzzing executables" OFF)

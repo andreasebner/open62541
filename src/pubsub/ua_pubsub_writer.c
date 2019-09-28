@@ -8,11 +8,13 @@
  */
 
 #include <open62541/server_pubsub.h>
+#include <time.h>
 #include "server/ua_server_internal.h"
 
 #ifdef UA_ENABLE_PUBSUB /* conditional compilation */
 
 #include "ua_pubsub.h"
+#include "ua_pubsub_networkmessage.h"
 
 #ifdef UA_ENABLE_PUBSUB_INFORMATIONMODEL
 #include "ua_pubsub_ns0.h"
@@ -20,6 +22,28 @@
 
 #ifdef UA_ENABLE_PUBSUB_DELTAFRAMES
 #include "ua_types_encoding_binary.h"
+#endif
+
+#ifdef UA_ENABLE_PUBSUB_PUBLISHCYCLE_MEASUREMENT
+#define CLOCKID CLOCK_MONOTONIC_RAW
+#define MAX_MEASUREMENTS 10000
+#define MILLI_AS_NANO_SECONDS    (1000 * 1000)
+
+UA_Int32 currentPublishCycleTime[MAX_MEASUREMENTS];
+struct timespec cycleDuration[MAX_MEASUREMENTS];
+size_t publisherMeasurementsCounter  = 0;
+
+static void
+timespec_diff(struct timespec *start, struct timespec *stop,
+              struct timespec *result) {
+    if((stop->tv_nsec - start->tv_nsec) < 0) {
+        result->tv_sec = stop->tv_sec - start->tv_sec - 1;
+        result->tv_nsec = stop->tv_nsec - start->tv_nsec + 1000000000;
+    } else {
+        result->tv_sec = stop->tv_sec - start->tv_sec;
+        result->tv_nsec = stop->tv_nsec - start->tv_nsec;
+    }
+}
 #endif
 
 #define UA_MAX_STACKBUF 512 /* Max size of network messages on the stack */
@@ -1594,6 +1618,13 @@ void
 UA_WriterGroup_publishCallback(UA_Server *server, UA_WriterGroup *writerGroup) {
     UA_LOG_DEBUG(&server->config.logger, UA_LOGCATEGORY_SERVER, "Publish Callback");
 
+#ifdef UA_ENABLE_PUBSUB_PUBLISHCYCLE_MEASUREMENT
+    struct timespec begin, end;
+    if(publisherMeasurementsCounter < MAX_MEASUREMENTS){
+        clock_gettime(CLOCKID, &begin);
+    }
+#endif
+
     if(!writerGroup) {
         UA_LOG_WARNING(&server->config.logger, UA_LOGCATEGORY_SERVER,
                        "Publish failed. WriterGroup not found");
@@ -1671,6 +1702,10 @@ UA_WriterGroup_publishCallback(UA_Server *server, UA_WriterGroup *writerGroup) {
            if(res != UA_STATUSCODE_GOOD)
                 UA_LOG_WARNING(&server->config.logger, UA_LOGCATEGORY_SERVER,
                                "PubSub Publish: Could not send a NetworkMessage");
+           //TODO add remove structure for static value source
+#ifdef UA_ENABLE_PUBSUB_MEASUREMENT_STATICVALUESOURCE
+           dsmStore->data.keyFrameData.dataSetFields = NULL;
+#endif
             UA_DataSetMessage_free(&dsmStore[dsmCount]);
             continue;
         }
@@ -1704,6 +1739,26 @@ UA_WriterGroup_publishCallback(UA_Server *server, UA_WriterGroup *writerGroup) {
     /* Clean up DSM */
     for(size_t i = 0; i < dsmCount; i++)
         UA_DataSetMessage_free(&dsmStore[i]);
+
+#ifdef UA_ENABLE_PUBSUB_PUBLISHCYCLE_MEASUREMENT
+    if(publisherMeasurementsCounter < MAX_MEASUREMENTS){
+        clock_gettime(CLOCKID, &end);
+        timespec_diff(&begin, &end, &cycleDuration[publisherMeasurementsCounter]);
+        currentPublishCycleTime[publisherMeasurementsCounter++] = (UA_Int32) (writerGroup->config.publishingInterval * MILLI_AS_NANO_SECONDS);
+    }
+    if(publisherMeasurementsCounter == MAX_MEASUREMENTS){
+        FILE *fpPublisher = fopen("cycletime_measurement.csv", "w");
+        for(UA_UInt32 i = 0; i < publisherMeasurementsCounter; i++) {
+            fprintf(fpPublisher, "%u, %u, %ld.%09ld\n",
+                    i,
+                    currentPublishCycleTime[i],
+                    cycleDuration[i].tv_sec,
+                    cycleDuration[i].tv_nsec);
+        }
+        fclose(fpPublisher);
+        publisherMeasurementsCounter++;
+    }
+#endif
 }
 
 /* Add new publishCallback. The first execution is triggered directly after
