@@ -238,7 +238,7 @@ if(UA_ENABLE_PUBSUB_INFORMATIONMODEL)
 endif()
 
 option(UA_ENABLE_PUBSUB_CUSTOM_PUBLISH_HANDLING
-       "Use a custom implementation for the publish callback handling" OFF)
+       "Use a custom implementation for the publish callback handling" ON)
 mark_as_advanced(UA_ENABLE_PUBSUB_CUSTOM_PUBLISH_HANDLING)
 if(UA_ENABLE_PUBSUB_CUSTOM_PUBLISH_INTERRUPT)
     if(NOT UA_ENABLE_PUBSUB)
