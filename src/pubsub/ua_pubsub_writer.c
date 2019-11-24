@@ -237,6 +237,8 @@ UA_Server_freezeWriterGroupConfiguration(UA_Server *server, const UA_NodeId writ
     UA_WriterGroup *wg = UA_WriterGroup_findWGbyId(server, writerGroup);
     if(!wg)
         return UA_STATUSCODE_BADNOTFOUND;
+    if(wg->config.configurationFrozen)
+        return UA_STATUSCODE_GOOD;
     //PubSubConnection freezeCounter++
     UA_PubSubConnection *pubSubConnection =  wg->linkedConnection;;
     pubSubConnection->configurationFreezeCounter++;
@@ -349,6 +351,8 @@ UA_Server_unfreezeWriterGroupConfiguration(UA_Server *server, const UA_NodeId wr
     UA_WriterGroup *wg = UA_WriterGroup_findWGbyId(server, writerGroup);
     if(!wg)
         return UA_STATUSCODE_BADNOTFOUND;
+    if(!wg->config.configurationFrozen)
+        return UA_STATUSCODE_GOOD;
     //if(wg->config.rtLevel == UA_PUBSUB_RT_NONE){
     //    UA_LOG_WARNING(&server->config.logger, UA_LOGCATEGORY_SERVER,
     //                   "PubSub configuration freeze without RT configuration has no effect.");
@@ -988,6 +992,99 @@ UA_Server_updateWriterGroupConfig(UA_Server *server, UA_NodeId writerGroupIdenti
     if(currentWriterGroup->config.priority != config->priority) {
         UA_LOG_WARNING(&server->config.logger, UA_LOGCATEGORY_SERVER,
                        "No or unsupported WriterGroup update.");
+    }
+    if(currentWriterGroup->config.rtLevel != config->rtLevel){
+        switch(currentWriterGroup->config.rtLevel){
+            case UA_PUBSUB_RT_NONE:
+                if(config->rtLevel == UA_PUBSUB_RT_DIRECT_VALUE_ACCESS || config->rtLevel == UA_PUBSUB_RT_FIXED_SIZE){
+                    //check if all fields have an static source
+                    UA_DataSetWriter *tmpDSW;
+                    LIST_FOREACH(tmpDSW, &currentWriterGroup->writers, listEntry){
+                        UA_PublishedDataSet *publishedDataSet = UA_PublishedDataSet_findPDSbyId(server, tmpDSW->connectedDataSet);
+                        UA_DataSetField *tmpDSF;
+                        TAILQ_FOREACH(tmpDSF, &publishedDataSet->fields, listEntry){
+                            if(tmpDSF->config.field.variable.staticValueSourceEnabled != UA_TRUE){
+                                UA_LOG_WARNING(&server->config.logger, UA_LOGCATEGORY_SERVER,
+                                               "WriterGroup RT configuration update failed. Fields in connected PDS are not RT capable.");
+                                return UA_STATUSCODE_BADCONFIGURATIONERROR;
+                            }
+                            if(config->rtLevel == UA_PUBSUB_RT_FIXED_SIZE){
+                                if((UA_NodeId_equal(&tmpDSF->fieldMetaData.dataType, &UA_TYPES[UA_TYPES_STRING].typeId) ||
+                                    UA_NodeId_equal(&tmpDSF->fieldMetaData.dataType, &UA_TYPES[UA_TYPES_BYTESTRING].typeId)) &&
+                                        tmpDSF->fieldMetaData.maxStringLength == 0){
+                                    UA_LOG_WARNING(&server->config.logger, UA_LOGCATEGORY_SERVER,
+                                                   "WriterGroup RT configuration update failed.  PDS contains String/ByteString with dynamic length.");
+                                    return UA_STATUSCODE_BADNOTSUPPORTED;
+                                } else if(!UA_DataType_isNumeric(UA_findDataType(&tmpDSF->fieldMetaData.dataType))){
+                                    UA_LOG_WARNING(&server->config.logger, UA_LOGCATEGORY_SERVER,
+                                                   "WriterGroup RT configuration update failed.  PDS contains variable with dynamic size.");
+                                    return UA_STATUSCODE_BADNOTSUPPORTED;
+                                }
+                            }
+                        }
+                    }
+                    currentWriterGroup->config.rtLevel = config->rtLevel;
+                }
+                break;
+            case UA_PUBSUB_RT_DIRECT_VALUE_ACCESS:
+                if(config->rtLevel == UA_PUBSUB_RT_NONE || config->rtLevel == UA_PUBSUB_RT_FIXED_SIZE){
+                    UA_DataSetWriter *tmpDSW;
+                    LIST_FOREACH(tmpDSW, &currentWriterGroup->writers, listEntry){
+                        UA_PublishedDataSet *publishedDataSet = UA_PublishedDataSet_findPDSbyId(server, tmpDSW->connectedDataSet);
+                        UA_DataSetField *tmpDSF;
+                        TAILQ_FOREACH(tmpDSF, &publishedDataSet->fields, listEntry){
+                            if(config->rtLevel == UA_PUBSUB_RT_NONE && (tmpDSF->config.field.variable.staticValueSourceEnabled == UA_TRUE)){
+                                UA_LOG_WARNING(&server->config.logger, UA_LOGCATEGORY_SERVER,
+                                               "WriterGroup RT configuration update failed. Fields in connected PDS are not non-RT capable.");
+                                return UA_STATUSCODE_BADCONFIGURATIONERROR;
+                            } else if (config->rtLevel == UA_PUBSUB_RT_FIXED_SIZE && (tmpDSF->config.field.variable.staticValueSourceEnabled != UA_TRUE)){
+                                UA_LOG_WARNING(&server->config.logger, UA_LOGCATEGORY_SERVER,
+                                               "WriterGroup RT configuration update failed. Fields in connected PDS are not RT capable.");
+                                return UA_STATUSCODE_BADCONFIGURATIONERROR;
+                            }
+                            if(config->rtLevel == UA_PUBSUB_RT_FIXED_SIZE){
+                                if((UA_NodeId_equal(&tmpDSF->fieldMetaData.dataType, &UA_TYPES[UA_TYPES_STRING].typeId) ||
+                                    UA_NodeId_equal(&tmpDSF->fieldMetaData.dataType, &UA_TYPES[UA_TYPES_BYTESTRING].typeId)) &&
+                                   tmpDSF->fieldMetaData.maxStringLength == 0){
+                                    UA_LOG_WARNING(&server->config.logger, UA_LOGCATEGORY_SERVER,
+                                                   "WriterGroup RT configuration update failed.  PDS contains String/ByteString with dynamic length.");
+                                    return UA_STATUSCODE_BADNOTSUPPORTED;
+                                } else if(!UA_DataType_isNumeric(UA_findDataType(&tmpDSF->fieldMetaData.dataType))){
+                                    UA_LOG_WARNING(&server->config.logger, UA_LOGCATEGORY_SERVER,
+                                                   "WriterGroup RT configuration update failed.  PDS contains variable with dynamic size.");
+                                    return UA_STATUSCODE_BADNOTSUPPORTED;
+                                }
+                            }
+
+                        }
+                    }
+                    currentWriterGroup->config.rtLevel = config->rtLevel;
+                }
+                break;
+            case UA_PUBSUB_RT_FIXED_SIZE:
+                if(config->rtLevel == UA_PUBSUB_RT_NONE || config->rtLevel == UA_PUBSUB_RT_DIRECT_VALUE_ACCESS){
+                    UA_DataSetWriter *tmpDSW;
+                    LIST_FOREACH(tmpDSW, &currentWriterGroup->writers, listEntry){
+                        UA_PublishedDataSet *publishedDataSet = UA_PublishedDataSet_findPDSbyId(server, tmpDSW->connectedDataSet);
+                        UA_DataSetField *tmpDSF;
+                        TAILQ_FOREACH(tmpDSF, &publishedDataSet->fields, listEntry){
+                            if(config->rtLevel == UA_PUBSUB_RT_NONE && (tmpDSF->config.field.variable.staticValueSourceEnabled == UA_TRUE)){
+                                UA_LOG_WARNING(&server->config.logger, UA_LOGCATEGORY_SERVER,
+                                               "WriterGroup RT configuration update failed. Fields in connected PDS are not non-RT capable.");
+                                return UA_STATUSCODE_BADCONFIGURATIONERROR;
+                            } else if (config->rtLevel == UA_PUBSUB_RT_DIRECT_VALUE_ACCESS && (tmpDSF->config.field.variable.staticValueSourceEnabled != UA_TRUE)){
+                                UA_LOG_WARNING(&server->config.logger, UA_LOGCATEGORY_SERVER,
+                                               "WriterGroup RT configuration update failed. Fields in connected PDS are not RT capable.");
+                                return UA_STATUSCODE_BADCONFIGURATIONERROR;
+                            }
+                        }
+                    }
+                    currentWriterGroup->config.rtLevel = config->rtLevel;
+                }
+                break;
+            default:
+                break;
+        }
     }
     return UA_STATUSCODE_GOOD;
 }

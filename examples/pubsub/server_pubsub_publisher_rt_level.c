@@ -11,39 +11,39 @@
 #include <time.h>
 #include <open62541/server_pubsub.h>
 #include "bufmalloc.h"
+#include "ua_pubsub_manager.h"
 
 /* possible options: PUBSUB_CONFIG_FASTPATH_NONE, PUBSUB_CONFIG_FASTPATH_FIXED_OFFSETS, PUBSUB_CONFIG_FASTPATH_STATIC_VALUES */
-#define PUBSUB_CONFIG_FASTPATH_FIXED_OFFSETS
-#define PUBSUB_CONFIG_PUBLISH_CYCLE_MS 100
-#define PUBSUB_CONFIG_PUBLISH_CYCLES 100
 #define PUBSUB_CONFIG_FIELD_COUNT 10
 
-#define MAX_MEASUREMENTS         10000
 #define MILLI_AS_NANO_SECONDS    (1000 * 1000)
 #define SECONDS_AS_NANO_SECONDS  (1000 * 1000 * 1000)
 #define CLOCKID                  CLOCK_MONOTONIC
 #define SIG                      SIGUSR1
-#define PUB_INTERVAL             0.25 /* Publish interval in milliseconds */
-#define DATA_SET_WRITER_ID       62541
 #define MEASUREMENT_OUTPUT       "publisher_measurement.csv"
 
 /* Arrays to store measurement data */
-UA_Int32 currentPublishCycleTime_RT_none[MAX_MEASUREMENTS+1];
-struct timespec calculatedCycleStartTime_RT_none[MAX_MEASUREMENTS+1];
-struct timespec cycleStartDelay_RT_none[MAX_MEASUREMENTS+1];
-struct timespec cycleDuration_RT_none[MAX_MEASUREMENTS+1];
+UA_UInt32 measurementCycles;
+UA_Duration latestPublishCycle;
+UA_UInt32 publishedFields;
+UA_Int32 *currentPublishCycleTime_RT_none;
+struct timespec *calculatedCycleStartTime_RT_none;
+struct timespec *cycleStartDelay_RT_none;
+struct timespec *cycleDuration_RT_none;
 
-UA_Int32 currentPublishCycleTime_RT_static_source[MAX_MEASUREMENTS+1];
-struct timespec calculatedCycleStartTime_RT_static_source[MAX_MEASUREMENTS+1];
-struct timespec cycleStartDelay_RT_static_source[MAX_MEASUREMENTS+1];
-struct timespec cycleDuration_RT_static_source[MAX_MEASUREMENTS+1];
+UA_Int32 *currentPublishCycleTime_RT_static_source;
+struct timespec *calculatedCycleStartTime_RT_static_source;
+struct timespec *cycleStartDelay_RT_static_source;
+struct timespec *cycleDuration_RT_static_source;
 
-UA_Int32 currentPublishCycleTime_RT_fixed_size[MAX_MEASUREMENTS+1];
-struct timespec calculatedCycleStartTime_RT_fixed_size[MAX_MEASUREMENTS+1];
-struct timespec cycleStartDelay_RT_fixed_size[MAX_MEASUREMENTS+1];
-struct timespec cycleDuration_RT_fixed_size[MAX_MEASUREMENTS+1];
+UA_Int32 *currentPublishCycleTime_RT_fixed_size;
+struct timespec *calculatedCycleStartTime_RT_fixed_size;
+struct timespec *cycleStartDelay_RT_fixed_size;
+struct timespec *cycleDuration_RT_fixed_size;
+
 size_t publisherMeasurementsCounter  = 0;
-enum rtMode{RT_NONE, RT_DIRECT_VALUE_ACCESS, RT_FIXED_OFFSETS} currentMeasurementMode;
+UA_PubSubRTLevel currentMeasurementMode;
+UA_Boolean measurementTriggered = UA_FALSE;
 
 /**
  * The PubSub RT level example points out the configuration of different PubSub RT-levels. These levels will be
@@ -60,8 +60,8 @@ enum rtMode{RT_NONE, RT_DIRECT_VALUE_ACCESS, RT_FIXED_OFFSETS} currentMeasuremen
  * freeze, the NetworkMessages and DataSetMessages will be calculated and buffered. During the publish cycle these buffers will only be updated.
  */
 
-UA_NodeId publishedDataSetIdent, dataSetFieldIdent, writerGroupIdent, connectionIdentifier;
-UA_UInt32 *valueStore[PUBSUB_CONFIG_FIELD_COUNT];
+UA_NodeId publishedDataSetIdent, dataSetFieldIdent, writerGroupIdent, connectionIdentifier, dataSetWriterIdent, measurementRunningNode;
+UA_UInt32 **valueStore;
 
 UA_Boolean running = true;
 static void stopHandler(int sign) {
@@ -98,7 +98,7 @@ struct sigevent pubEvent;
 struct sigaction signalAction;
 UA_Server *measurementServer;
 void *pubData;
-UA_Int64 pubIntervalNs;
+UA_Int32 pubIntervalNs;
 UA_Boolean measurementRunning = UA_FALSE;
 
 static void
@@ -130,6 +130,11 @@ publishInterrupt(int sig, siginfo_t* si, void* uc) {
         return;
     }
 
+    if(publisherMeasurementsCounter >= measurementCycles){
+        measurementRunning = UA_FALSE;
+        return;
+    }
+
     /* Execute the publish callback in the interrupt */
     struct timespec begin, end;
     clock_gettime(CLOCKID, &begin);
@@ -138,11 +143,8 @@ publishInterrupt(int sig, siginfo_t* si, void* uc) {
     useNormalAlloc();
     clock_gettime(CLOCKID, &end);
 
-    if(publisherMeasurementsCounter >= MAX_MEASUREMENTS)
-        return;
-
     switch(currentMeasurementMode){
-        case RT_NONE:
+        case UA_PUBSUB_RT_NONE:
             /* Save current configured publish interval */
             currentPublishCycleTime_RT_none[publisherMeasurementsCounter] = (UA_Int32) pubIntervalNs;
             /* Save the difference to the calculated time */
@@ -158,7 +160,7 @@ publishInterrupt(int sig, siginfo_t* si, void* uc) {
                     calculatedCycleStartTime_RT_none[publisherMeasurementsCounter - 1].tv_sec;
             nanoSecondFieldConversion(&calculatedCycleStartTime_RT_none[publisherMeasurementsCounter]);
             break;
-        case RT_DIRECT_VALUE_ACCESS:
+        case UA_PUBSUB_RT_DIRECT_VALUE_ACCESS:
             /* Save current configured publish interval */
             currentPublishCycleTime_RT_static_source[publisherMeasurementsCounter] = (UA_Int32) pubIntervalNs;
             /* Save the difference to the calculated time */
@@ -174,7 +176,7 @@ publishInterrupt(int sig, siginfo_t* si, void* uc) {
                     calculatedCycleStartTime_RT_static_source[publisherMeasurementsCounter - 1].tv_sec;
             nanoSecondFieldConversion(&calculatedCycleStartTime_RT_static_source[publisherMeasurementsCounter]);
             break;
-        case RT_FIXED_OFFSETS:
+        case UA_PUBSUB_RT_FIXED_SIZE:
             /* Save current configured publish interval */
             currentPublishCycleTime_RT_fixed_size[publisherMeasurementsCounter] = (UA_Int32) pubIntervalNs;
             /* Save the difference to the calculated time */
@@ -192,11 +194,6 @@ publishInterrupt(int sig, siginfo_t* si, void* uc) {
             break;
         default:
             return;
-    }
-
-    /* Write the pubsub measurement data */
-    if(publisherMeasurementsCounter == MAX_MEASUREMENTS) {
-       measurementRunning = UA_FALSE;
     }
 }
 
@@ -220,7 +217,7 @@ UA_PubSubManager_addRepeatedCallback(UA_Server *server,
 
     /* Set global values for the publish callback */
     int resultTimerCreate = 0;
-    pubIntervalNs = (UA_Int64) (interval_ms * MILLI_AS_NANO_SECONDS);
+    pubIntervalNs = (UA_Int32) (interval_ms * MILLI_AS_NANO_SECONDS);
 
     /* Handle the signal */
     memset(&signalAction, 0, sizeof(signalAction));
@@ -259,17 +256,17 @@ UA_PubSubManager_addRepeatedCallback(UA_Server *server,
     publisherMeasurementsCounter = 0;
 
     switch(currentMeasurementMode){
-        case RT_NONE:
+        case UA_PUBSUB_RT_NONE:
             clock_gettime(CLOCKID, &calculatedCycleStartTime_RT_none[0]);
             calculatedCycleStartTime_RT_none[0].tv_nsec += pubIntervalNs;
             nanoSecondFieldConversion(&calculatedCycleStartTime_RT_none[0]);
             break;
-        case RT_DIRECT_VALUE_ACCESS:
+        case UA_PUBSUB_RT_DIRECT_VALUE_ACCESS:
             clock_gettime(CLOCKID, &calculatedCycleStartTime_RT_static_source[0]);
             calculatedCycleStartTime_RT_static_source[0].tv_nsec += pubIntervalNs;
             nanoSecondFieldConversion(&calculatedCycleStartTime_RT_static_source[0]);
             break;
-        case RT_FIXED_OFFSETS:
+        case UA_PUBSUB_RT_FIXED_SIZE:
             clock_gettime(CLOCKID, &calculatedCycleStartTime_RT_fixed_size[0]);
             calculatedCycleStartTime_RT_fixed_size[0].tv_nsec += pubIntervalNs;
             nanoSecondFieldConversion(&calculatedCycleStartTime_RT_fixed_size[0]);
@@ -295,7 +292,7 @@ UA_PubSubManager_changeRepeatedCallbackInterval(UA_Server *server,
 
     struct itimerspec timerspec;
     int resultTimerCreate = 0;
-    pubIntervalNs = (UA_Int64) (interval_ms * MILLI_AS_NANO_SECONDS);
+    pubIntervalNs = ((UA_Int32) (interval_ms * MILLI_AS_NANO_SECONDS));
     timerspec.it_interval.tv_sec = (long int) (pubIntervalNs / SECONDS_AS_NANO_SECONDS);
     timerspec.it_interval.tv_nsec = (long int) (pubIntervalNs % SECONDS_AS_NANO_SECONDS);
     timerspec.it_value.tv_sec = (long int) (pubIntervalNs / (SECONDS_AS_NANO_SECONDS));
@@ -309,17 +306,17 @@ UA_PubSubManager_changeRepeatedCallbackInterval(UA_Server *server,
     }
 
     switch(currentMeasurementMode){
-        case RT_NONE:
+        case UA_PUBSUB_RT_NONE:
             clock_gettime(CLOCKID, &calculatedCycleStartTime_RT_none[publisherMeasurementsCounter]);
             calculatedCycleStartTime_RT_none[publisherMeasurementsCounter].tv_nsec += pubIntervalNs;
             nanoSecondFieldConversion(&calculatedCycleStartTime_RT_none[publisherMeasurementsCounter]);
             break;
-        case RT_DIRECT_VALUE_ACCESS:
+        case UA_PUBSUB_RT_DIRECT_VALUE_ACCESS:
             clock_gettime(CLOCKID, &calculatedCycleStartTime_RT_static_source[publisherMeasurementsCounter]);
             calculatedCycleStartTime_RT_static_source[publisherMeasurementsCounter].tv_nsec += pubIntervalNs;
             nanoSecondFieldConversion(&calculatedCycleStartTime_RT_static_source[publisherMeasurementsCounter]);
             break;
-        case RT_FIXED_OFFSETS:
+        case UA_PUBSUB_RT_FIXED_SIZE:
             clock_gettime(CLOCKID, &calculatedCycleStartTime_RT_fixed_size[publisherMeasurementsCounter]);
             calculatedCycleStartTime_RT_fixed_size[publisherMeasurementsCounter].tv_nsec += pubIntervalNs;
             nanoSecondFieldConversion(&calculatedCycleStartTime_RT_fixed_size[publisherMeasurementsCounter]);
@@ -339,14 +336,38 @@ UA_PubSubManager_removeRepeatedPubSubCallback(UA_Server *server, UA_UInt64 callb
 }
 
 static void
-startMeasurementCycle(UA_Server *server, UA_UInt16 fields, UA_Duration publishCycle, UA_UInt32 cycles){
-    UA_Server_setWriterGroupDisabled(server, writerGroupIdent);
-    UA_Server_unfreezeWriterGroupConfiguration(server, writerGroupIdent);
+resetPubSubMeasurementConfiguration(UA_Server *server, UA_Duration publishCycle, UA_PubSubRTLevel rtLevel){
+    UA_PublishedDataSetConfig publishedDataSetConfig;
+    memset(&publishedDataSetConfig, 0, sizeof(UA_PublishedDataSetConfig));
+    publishedDataSetConfig.publishedDataSetType = UA_PUBSUB_DATASET_PUBLISHEDITEMS;
+    publishedDataSetConfig.name = UA_STRING("Demo PDS");
+    UA_Server_addPublishedDataSet(server, &publishedDataSetConfig, &publishedDataSetIdent);
+
     UA_WriterGroupConfig writerGroupConfig;
     memset(&writerGroupConfig, 0, sizeof(UA_WriterGroupConfig));
     UA_Server_getWriterGroupConfig(server, writerGroupIdent, &writerGroupConfig);
-    writerGroupConfig.publishingInterval = PUBSUB_CONFIG_PUBLISH_CYCLE_MS;
+    writerGroupConfig.publishingInterval = publishCycle;
+    writerGroupConfig.rtLevel = rtLevel;
+    currentMeasurementMode = rtLevel;
     UA_Server_updateWriterGroupConfig(server, writerGroupIdent, &writerGroupConfig);
+    UA_DataSetWriterConfig dataSetWriterConfig;
+    memset(&dataSetWriterConfig, 0, sizeof(UA_DataSetWriterConfig));
+    dataSetWriterConfig.name = UA_STRING("Measurement DataSetWriter");
+    dataSetWriterConfig.dataSetWriterId = 62541;
+    UA_Server_addDataSetWriter(measurementServer, writerGroupIdent, publishedDataSetIdent, &dataSetWriterConfig, &dataSetWriterIdent);
+}
+
+static void
+startMeasurementCycle(UA_Server *server, UA_UInt16 fields, UA_Duration publishCycle, UA_UInt32 cycles){
+    measurementRunning = UA_TRUE;
+    UA_Variant measurementStateValue;
+    UA_Variant_init(&measurementStateValue);
+    UA_Variant_setScalar(&measurementStateValue, &measurementRunning, &UA_TYPES[UA_TYPES_BOOLEAN]);
+    UA_Server_writeValue(server, measurementRunningNode, measurementStateValue);
+
+    UA_Server_setWriterGroupDisabled(server, writerGroupIdent);
+    UA_Server_unfreezeWriterGroupConfiguration(server, writerGroupIdent);
+    resetPubSubMeasurementConfiguration(server, publishCycle, UA_PUBSUB_RT_NONE);
 
     //run the measurement with none RT optimizations
     UA_DataSetFieldConfig dsfConfig;
@@ -365,14 +386,14 @@ startMeasurementCycle(UA_Server *server, UA_UInt16 fields, UA_Duration publishCy
         UA_UInt32 intValue = (UA_UInt32) i * 1000;
         UA_Variant_setScalar(&value, &intValue, &UA_TYPES[UA_TYPES_UINT32]);
         attributes.value = value;
-        if(UA_Server_addVariableNode(server, UA_NODEID_NUMERIC(1,  1000 + (UA_UInt32) i),
+        if(UA_Server_addVariableNode(server, UA_NODEID_NUMERIC(1,  10000 + (UA_UInt32) i),
                                      collectionNodeID, UA_NODEID_NUMERIC(0, UA_NS0ID_ORGANIZES),
                                      UA_QUALIFIEDNAME(1, "variable"), UA_NODEID_NUMERIC(0, UA_NS0ID_BASEDATAVARIABLETYPE),
                                      attributes, NULL, NULL) != UA_STATUSCODE_GOOD){
             UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_SERVER, "Failed to add Publish-Node to the server. Node number: %zu", i);
             continue;
         }
-        dsfConfig.field.variable.publishParameters.publishedVariable = UA_NODEID_NUMERIC(1, 1000 + (UA_UInt32) i);
+        dsfConfig.field.variable.publishParameters.publishedVariable = UA_NODEID_NUMERIC(1, 10000 + (UA_UInt32) i);
         dsfConfig.field.variable.publishParameters.attributeId = UA_ATTRIBUTEID_VALUE;
         UA_Server_addDataSetField(server, publishedDataSetIdent, &dsfConfig, &dataSetFieldIdent);
     }
@@ -380,19 +401,34 @@ startMeasurementCycle(UA_Server *server, UA_UInt16 fields, UA_Duration publishCy
     /* Freeze the PubSub configuration (and start implicitly the publish callback) */
     UA_Server_freezeWriterGroupConfiguration(server, writerGroupIdent);
     UA_Server_setWriterGroupOperational(server, writerGroupIdent);
-    while(!measurementRunning)
-        usleep(1000);
+    while(measurementRunning){
+        UA_Server_run_iterate(server, UA_FALSE);
+    }
     UA_Server_setWriterGroupDisabled(server, writerGroupIdent);
     UA_Server_unfreezeWriterGroupConfiguration(server, writerGroupIdent);
     //cleanup
-    UA_Server_deleteNode(server, collectionNodeID, UA_TRUE);
+    UA_Server_removePublishedDataSet(server, publishedDataSetIdent);
+    UA_BrowseDescription bd;
+    bd.includeSubtypes = false;
+    bd.nodeId = collectionNodeID;
+    bd.referenceTypeId = UA_NODEID_NUMERIC(0, UA_NS0ID_ORGANIZES);
+    bd.resultMask = UA_BROWSERESULTMASK_NONE;
+    bd.nodeClassMask = UA_NODECLASS_VARIABLE;
+    bd.browseDirection = UA_BROWSEDIRECTION_FORWARD;
+    UA_BrowseResult br = UA_Server_browse(measurementServer, UA_UINT32_MAX, &bd);
+    for (size_t j = 0; j < br.referencesSize; ++j) {
+        UA_ReferenceDescription rd = br.references[j];
+        UA_Server_deleteNode(measurementServer, rd.nodeId.nodeId, UA_FALSE);
+    }
+    UA_BrowseResult_deleteMembers(&br);
+    UA_Server_deleteNode(server, collectionNodeID, UA_FALSE);
+    publisherMeasurementsCounter = 0;
+    measurementRunning = UA_TRUE;
 
-#ifdef EXTENDED
     //run the measurement with RT direct value access
-    writerGroupConfig.rtLevel = UA_PUBSUB_RT_DIRECT_VALUE_ACCESS;
-    UA_Server_updateWriterGroupConfig(server, writerGroupIdent, &writerGroupConfig);
-    //TODO RT level update maybe not possible
+    resetPubSubMeasurementConfiguration(server, publishCycle, UA_PUBSUB_RT_DIRECT_VALUE_ACCESS);
     /* Add one DataSetField with static value source to PDS */
+    valueStore = (UA_UInt32 **) UA_calloc(fields, sizeof(UA_UInt32 *));
     for(size_t i = 0; i < fields; i++){
         memset(&dsfConfig, 0, sizeof(UA_DataSetFieldConfig));
         /* Create Variant and configure as DataSetField source */
@@ -411,17 +447,22 @@ startMeasurementCycle(UA_Server *server, UA_UInt16 fields, UA_Duration publishCy
     }
     UA_Server_freezeWriterGroupConfiguration(server, writerGroupIdent);
     UA_Server_setWriterGroupOperational(server, writerGroupIdent);
-    while(!measurementRunning)
-        usleep(1000);
+    while(measurementRunning){
+        UA_Server_run_iterate(server, UA_FALSE);
+    }
     UA_Server_setWriterGroupDisabled(server, writerGroupIdent);
     UA_Server_unfreezeWriterGroupConfiguration(server, writerGroupIdent);
+    //cleanup
+    UA_Server_removePublishedDataSet(server, publishedDataSetIdent);
+    for(size_t i = 0; i < fields; i++)
+        UA_free(valueStore[i]);
+    UA_free(valueStore);
+    publisherMeasurementsCounter = 0;
+    measurementRunning = UA_TRUE;
 
     //run the measurement with fixed offsets
-    writerGroupConfig.rtLevel = UA_PUBSUB_RT_FIXED_SIZE;
-    writerGroupConfig.rtLevel = UA_PUBSUB_RT_DIRECT_VALUE_ACCESS;
-    UA_Server_updateWriterGroupConfig(server, writerGroupIdent, &writerGroupConfig);
-    //TODO RT level update maybe not possible */
-    /* Add one DataSetField with static value source to PDS */
+    resetPubSubMeasurementConfiguration(server, publishCycle, UA_PUBSUB_RT_FIXED_SIZE);
+    valueStore = (UA_UInt32 **) UA_calloc(fields, sizeof(UA_UInt32 *));
     for(size_t i = 0; i < fields; i++){
         memset(&dsfConfig, 0, sizeof(UA_DataSetFieldConfig));
         /* Create Variant and configure as DataSetField source */
@@ -440,18 +481,27 @@ startMeasurementCycle(UA_Server *server, UA_UInt16 fields, UA_Duration publishCy
     }
     UA_Server_freezeWriterGroupConfiguration(server, writerGroupIdent);
     UA_Server_setWriterGroupOperational(server, writerGroupIdent);
-    while(!measurementRunning)
-        usleep(1000);
+    while(measurementRunning){
+        UA_Server_run_iterate(server, UA_FALSE);
+    }
     UA_Server_setWriterGroupDisabled(server, writerGroupIdent);
     UA_Server_unfreezeWriterGroupConfiguration(server, writerGroupIdent);
-#endif
-    //TODO Write Down CSV File into local folder
+    //cleanup
+    UA_Server_removePublishedDataSet(server, publishedDataSetIdent);
+    for(size_t i = 0; i < fields; i++)
+        UA_free(valueStore[i]);
+    UA_free(valueStore);
+
+    UA_Variant_init(&measurementStateValue);
+    UA_Variant_setScalar(&measurementStateValue, &measurementRunning, &UA_TYPES[UA_TYPES_BOOLEAN]);
+    UA_Server_writeValue(server, measurementRunningNode, measurementStateValue);
+
     UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
                 "Logging the measurements to %s", MEASUREMENT_OUTPUT);
 
     FILE *fpPublisher = fopen(MEASUREMENT_OUTPUT, "w");
-    for(size_t i = 0; i < publisherMeasurementsCounter; i++) {
-        fprintf(fpPublisher, "%u, %u, %ld.%09ld, %ld.%09ld, %ld.%09ld, "
+    for(size_t i = 0; i <= publisherMeasurementsCounter-1; i++) {
+        fprintf(fpPublisher, "%zu, %u, %ld.%09ld, %ld.%09ld, %ld.%09ld, "
                              "%u, %ld.%09ld, %ld.%09ld, %ld.%09ld, "
                              "%u, %ld.%09ld, %ld.%09ld, %ld.%09ld\n",
                 i,
@@ -478,7 +528,6 @@ startMeasurementCycle(UA_Server *server, UA_UInt16 fields, UA_Duration publishCy
                 cycleDuration_RT_fixed_size[i].tv_nsec);
     }
     fclose(fpPublisher);
-
 }
 
 /*
@@ -520,14 +569,106 @@ measurementMethodCallback(UA_Server *server,
                          const UA_NodeId *objectId, void *objectContext,
                          size_t inputSize, const UA_Variant *input,
                          size_t outputSize, UA_Variant *output) {
-    UA_UInt32 *publishCycles = (UA_UInt32 *)input->data;
-    if(*publishCycles > 0)
-        startMeasurementCycle(server, 10, 10, *publishCycles);
+
+    UA_UInt32 *publishCyclesInput = ((UA_UInt32 *) input[0].data);
+    UA_Duration *publishIntervalInput = ((UA_Duration *) input[1].data);
+    UA_UInt32 *publishedFieldsInput = ((UA_UInt32 *) input[2].data);
+    if(*publishCyclesInput > 0 &&  *publishCyclesInput < 100000)
+        measurementCycles = *publishCyclesInput;
+    else
+        measurementCycles = 1000;
+    if(*publishIntervalInput > 0.05 &&  *publishIntervalInput < 1000.0)
+        latestPublishCycle = *publishIntervalInput;
+    else
+        latestPublishCycle = 10.0;
+    if(*publishedFieldsInput > 0 &&  *publishedFieldsInput < 100)
+        publishedFields = *publishedFieldsInput;
+    else
+        publishedFields = 10;
+
+    currentPublishCycleTime_RT_none = (UA_Int32 *) UA_calloc(measurementCycles+1, sizeof(UA_Int32));
+    calculatedCycleStartTime_RT_none = (struct timespec *)   UA_calloc(measurementCycles+1, sizeof(struct timespec));
+    cycleStartDelay_RT_none = (struct timespec *)   UA_calloc(measurementCycles+1, sizeof(struct timespec));
+    cycleDuration_RT_none = (struct timespec *)   UA_calloc(measurementCycles+1, sizeof(struct timespec));
+    currentPublishCycleTime_RT_static_source = (UA_Int32 *) UA_calloc(measurementCycles+1, sizeof(UA_Int32));
+    calculatedCycleStartTime_RT_static_source = (struct timespec *)   UA_calloc(measurementCycles+1, sizeof(struct timespec));
+    cycleStartDelay_RT_static_source = (struct timespec *)   UA_calloc(measurementCycles+1, sizeof(struct timespec));
+    cycleDuration_RT_static_source = (struct timespec *)   UA_calloc(measurementCycles+1, sizeof(struct timespec));
+    currentPublishCycleTime_RT_fixed_size = (UA_Int32 *) UA_calloc(measurementCycles+1, sizeof(UA_Int32));
+    calculatedCycleStartTime_RT_fixed_size = (struct timespec *)   UA_calloc(measurementCycles+1, sizeof(struct timespec));
+    cycleStartDelay_RT_fixed_size = (struct timespec *)   UA_calloc(measurementCycles+1, sizeof(struct timespec));
+    cycleDuration_RT_fixed_size = (struct timespec *)   UA_calloc(measurementCycles+1, sizeof(struct timespec));
 
     UA_StatusCode statusCode = UA_STATUSCODE_GOOD;
-    UA_Variant_setScalarCopy(output, &statusCode, &UA_TYPES[UA_TYPES_STATUSCODE]);
+    if(measurementRunning)
+        statusCode = UA_STATUSCODE_BADINTERNALERROR;
+    measurementTriggered = UA_TRUE;
     UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_SERVER, "PubSub measurement was called.");
+    UA_Variant_setScalarCopy(output, &statusCode, &UA_TYPES[UA_TYPES_STATUSCODE]);
     return UA_STATUSCODE_GOOD;
+}
+
+static void
+createMeasurementInformationModel(void){
+    UA_Argument inputArguments[3];
+    UA_Argument_init(&inputArguments[0]);
+    inputArguments[0].description = UA_LOCALIZEDTEXT("en-US", "PublishCycles");
+    inputArguments[0].name = UA_STRING("PublishCycles");
+    inputArguments[0].dataType = UA_TYPES[UA_TYPES_INT32].typeId;
+    inputArguments[0].valueRank = UA_VALUERANK_SCALAR;
+
+    UA_Argument_init(&inputArguments[1]);
+    inputArguments[1].description = UA_LOCALIZEDTEXT("en-US", "PublishInterval");
+    inputArguments[1].name = UA_STRING("PublishInterval");
+    inputArguments[1].dataType = UA_TYPES[UA_TYPES_DURATION].typeId;
+    inputArguments[1].valueRank = UA_VALUERANK_SCALAR;
+
+    UA_Argument_init(&inputArguments[2]);
+    inputArguments[2].description = UA_LOCALIZEDTEXT("en-US", "PublishFields");
+    inputArguments[2].name = UA_STRING("PublishFields");
+    inputArguments[2].dataType = UA_TYPES[UA_TYPES_INT32].typeId;
+    inputArguments[2].valueRank = UA_VALUERANK_SCALAR;
+
+    UA_Argument outputArgument;
+    UA_Argument_init(&outputArgument);
+    outputArgument.description = UA_LOCALIZEDTEXT("en-US", "Result");
+    outputArgument.name = UA_STRING("Result");
+    outputArgument.dataType = UA_TYPES[UA_TYPES_STATUSCODE].typeId;
+    outputArgument.valueRank = UA_VALUERANK_SCALAR;
+
+    UA_MethodAttributes helloAttr = UA_MethodAttributes_default;
+    helloAttr.description = UA_LOCALIZEDTEXT("en-US","StartPubSubMeasurement");
+    helloAttr.displayName = UA_LOCALIZEDTEXT("en-US","StartPubSubMeasurement");
+    helloAttr.executable = true;
+    helloAttr.userExecutable = true;
+    UA_Server_addMethodNode(measurementServer, UA_NODEID_NUMERIC(1,62541),
+                            UA_NODEID_NUMERIC(0, UA_NS0ID_OBJECTSFOLDER),
+                            UA_NODEID_NUMERIC(0, UA_NS0ID_HASCOMPONENT),
+                            UA_QUALIFIEDNAME(1, "StartPubSubMeasurement"),
+                            helloAttr, &measurementMethodCallback,
+                            3, inputArguments, 1, &outputArgument,
+                            NULL, NULL);
+
+    UA_VariableAttributes variableAttributes = UA_VariableAttributes_default;
+    variableAttributes.displayName = UA_LOCALIZEDTEXT("en-US", "MeasurementRunning");
+    UA_Variant value;
+    UA_Variant_init(&value);
+    UA_Variant_setScalar(&value, &measurementRunning, &UA_TYPES[UA_TYPES_BOOLEAN]);
+    variableAttributes.value = value;
+    UA_Server_addVariableNode(measurementServer, UA_NODEID_NUMERIC(1, 50000),
+            UA_NODEID_NUMERIC(0, UA_NS0ID_OBJECTSFOLDER),
+            UA_NODEID_NUMERIC(0, UA_NS0ID_HASCOMPONENT),
+            UA_QUALIFIEDNAME(1, "MeasurementRunning"),
+            UA_NODEID_NUMERIC(0, UA_NS0ID_BASEDATAVARIABLETYPE),
+            variableAttributes, NULL, &measurementRunningNode);
+}
+
+static void
+startMeasurementCallback(UA_Server *server, void *data) {
+    if(measurementTriggered){
+        measurementTriggered = UA_FALSE;
+        startMeasurementCycle(server, (UA_UInt16) publishedFields, latestPublishCycle, measurementCycles);
+    }
 }
 
 int main(void) {
@@ -552,7 +693,7 @@ int main(void) {
     UA_WriterGroupConfig writerGroupConfig;
     memset(&writerGroupConfig, 0, sizeof(UA_WriterGroupConfig));
     writerGroupConfig.name = UA_STRING("Demo WriterGroup");
-    writerGroupConfig.publishingInterval = PUBSUB_CONFIG_PUBLISH_CYCLE_MS;
+    writerGroupConfig.publishingInterval = latestPublishCycle;
     writerGroupConfig.enabled = UA_FALSE;
     writerGroupConfig.writerGroupId = 100;
     writerGroupConfig.encodingMimeType = UA_PUBSUB_ENCODING_UADP;
@@ -568,108 +709,14 @@ int main(void) {
                                                     (UA_UadpNetworkMessageContentMask) UA_UADPNETWORKMESSAGECONTENTMASK_WRITERGROUPID |
                                                     (UA_UadpNetworkMessageContentMask) UA_UADPNETWORKMESSAGECONTENTMASK_PAYLOADHEADER);
     writerGroupConfig.messageSettings.content.decoded.data = &writerGroupMessage;
-
-    /*
-#ifdef PUBSUB_CONFIG_FASTPATH_FIXED_OFFSETS
-    writerGroupConfig.rtLevel = UA_PUBSUB_RT_FIXED_SIZE;
-#elif defined PUBSUB_CONFIG_FASTPATH_STATIC_VALUES
-    writerGroupConfig.rtLevel = UA_PUBSUB_RT_DIRECT_VALUE_ACCESS;
-#endif
-    UA_Server_addWriterGroup(server, connectionIdentifier, &writerGroupConfig, &writerGroupIdent);
+    UA_Server_addWriterGroup(measurementServer, connectionIdentifier, &writerGroupConfig, &writerGroupIdent);
     // Add one DataSetWriter
-    UA_NodeId dataSetWriterIdent;
-    UA_DataSetWriterConfig dataSetWriterConfig;
-    memset(&dataSetWriterConfig, 0, sizeof(UA_DataSetWriterConfig));
-    dataSetWriterConfig.name = UA_STRING("Demo DataSetWriter");
-    dataSetWriterConfig.dataSetWriterId = 62541;
-    dataSetWriterConfig.keyFrameCount = 10;
-    UA_Server_addDataSetWriter(server, writerGroupIdent, publishedDataSetIdent, &dataSetWriterConfig, &dataSetWriterIdent);
+    createMeasurementInformationModel();
 
-#if defined PUBSUB_CONFIG_FASTPATH_FIXED_OFFSETS || defined PUBSUB_CONFIG_FASTPATH_STATIC_VALUES
-    // Add one DataSetField with static value source to PDS //
-    UA_DataSetFieldConfig dsfConfig;
-    for(size_t i = 0; i < PUBSUB_CONFIG_FIELD_COUNT; i++){
-        memset(&dsfConfig, 0, sizeof(UA_DataSetFieldConfig));
-        // Create Variant and configure as DataSetField source //
-        UA_UInt32 *intValue = UA_UInt32_new();
-        *intValue = (UA_UInt32) i * 1000;
-        valueStore[i] = intValue;
-        UA_Variant variant;
-        memset(&variant, 0, sizeof(UA_Variant));
-        UA_Variant_setScalar(&variant, intValue, &UA_TYPES[UA_TYPES_UINT32]);
-        UA_DataValue staticValueSource;
-        memset(&staticValueSource, 0, sizeof(staticValueSource));
-        staticValueSource.value = variant;
-        dsfConfig.field.variable.staticValueSourceEnabled = UA_TRUE;
-        dsfConfig.field.variable.staticValueSource.value = variant;
-        UA_Server_addDataSetField(server, publishedDataSetIdent, &dsfConfig, &dataSetFieldIdent);
-    }
-#endif
-#if defined PUBSUB_CONFIG_FASTPATH_NONE
-    UA_DataSetFieldConfig dsfConfig;
-    memset(&dsfConfig, 0, sizeof(UA_DataSetFieldConfig));
-    for(size_t i = 0; i < PUBSUB_CONFIG_FIELD_COUNT; i++){
-        UA_VariableAttributes attributes = UA_VariableAttributes_default;
-        UA_Variant value;
-        UA_Variant_init(&value);
-        UA_UInt32 intValue = (UA_UInt32) i * 1000;
-        UA_Variant_setScalar(&value, &intValue, &UA_TYPES[UA_TYPES_UINT32]);
-        attributes.value = value;
-        if(UA_Server_addVariableNode(server, UA_NODEID_NUMERIC(1,  1000 + (UA_UInt32) i),
-                UA_NODEID_NUMERIC(0, UA_NS0ID_OBJECTSFOLDER), UA_NODEID_NUMERIC(0, UA_NS0ID_ORGANIZES),
-                UA_QUALIFIEDNAME(1, "variable"), UA_NODEID_NUMERIC(0, UA_NS0ID_BASEDATAVARIABLETYPE),
-                 attributes, NULL, NULL) != UA_STATUSCODE_GOOD){
-            UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_SERVER, "Failed to add Publish-Node to the server. Node number: %zu", i);
-            continue;
-        }
-        dsfConfig.field.variable.publishParameters.publishedVariable = UA_NODEID_NUMERIC(1, 1000 + (UA_UInt32) i);
-        dsfConfig.field.variable.publishParameters.attributeId = UA_ATTRIBUTEID_VALUE;
-        UA_Server_addDataSetField(server, publishedDataSetIdent, &dsfConfig, &dataSetFieldIdent);
-    }
-#endif
-    // The PubSub configuration is currently editable and the publish callback is not running //
-    writerGroupConfig.publishingInterval = PUBSUB_CONFIG_PUBLISH_CYCLE_MS;
-    UA_Server_updateWriterGroupConfig(server, writerGroupIdent, &writerGroupConfig);
-
-     */
-
-    UA_Argument inputArgument;
-    UA_Argument_init(&inputArgument);
-    inputArgument.description = UA_LOCALIZEDTEXT("en-US", "PublishCycles");
-    inputArgument.name = UA_STRING("PublishCycles");
-    inputArgument.dataType = UA_TYPES[UA_TYPES_UINT32].typeId;
-    inputArgument.valueRank = UA_VALUERANK_SCALAR;
-
-    UA_Argument outputArgument;
-    UA_Argument_init(&outputArgument);
-    outputArgument.description = UA_LOCALIZEDTEXT("en-US", "Result");
-    outputArgument.name = UA_STRING("Result");
-    outputArgument.dataType = UA_TYPES[UA_TYPES_STATUSCODE].typeId;
-    outputArgument.valueRank = UA_VALUERANK_SCALAR;
-
-    UA_MethodAttributes helloAttr = UA_MethodAttributes_default;
-    helloAttr.description = UA_LOCALIZEDTEXT("en-US","StartPubSubMeasurement");
-    helloAttr.displayName = UA_LOCALIZEDTEXT("en-US","StartPubSubMeasurement");
-    helloAttr.executable = true;
-    helloAttr.userExecutable = true;
-    UA_Server_addMethodNode(measurementServer, UA_NODEID_NUMERIC(1,62541),
-                            UA_NODEID_NUMERIC(0, UA_NS0ID_OBJECTSFOLDER),
-                            UA_NODEID_NUMERIC(0, UA_NS0ID_HASORDEREDCOMPONENT),
-                            UA_QUALIFIEDNAME(1, "StartPubSubMeasurement"),
-                            helloAttr, &measurementMethodCallback,
-                            1, &inputArgument, 1, &outputArgument,
-                            NULL, NULL);
-
-    /* Freeze the PubSub configuration (and start implicitly the publish callback) */
-    UA_Server_freezeWriterGroupConfiguration(measurementServer, writerGroupIdent);
-    UA_Server_setWriterGroupOperational(measurementServer, writerGroupIdent);
-
-    /*
+    //check if the measurement start is triggered
     UA_UInt64 callbackId;
-    UA_Server_addRepeatedCallback(server, valueUpdateCallback, NULL, PUBSUB_CONFIG_PUBLISH_CYCLE_MS, &callbackId);
-     */
+    UA_Server_addRepeatedCallback(measurementServer, startMeasurementCallback, NULL, 250, &callbackId);
 
-    startMeasurementCycle(measurementServer, 10, 10, 1000);
     UA_StatusCode retval = UA_STATUSCODE_GOOD;
     retval |= UA_Server_run(measurementServer, &running);
 
