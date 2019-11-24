@@ -104,6 +104,11 @@ UA_Boolean measurementRunning = UA_FALSE;
 static void
 timespec_diff(struct timespec *start, struct timespec *stop,
               struct timespec *result) {
+    if((start->tv_sec >= stop->tv_sec) && (start->tv_nsec >= stop->tv_nsec)){
+        result->tv_sec = 0;
+        result->tv_nsec = 0;
+        return;
+    }
     if((stop->tv_nsec - start->tv_nsec) < 0) {
         result->tv_sec = stop->tv_sec - start->tv_sec - 1;
         result->tv_nsec = stop->tv_nsec - start->tv_nsec + 1000000000;
