@@ -569,43 +569,48 @@ measurementMethodCallback(UA_Server *server,
                          const UA_NodeId *objectId, void *objectContext,
                          size_t inputSize, const UA_Variant *input,
                          size_t outputSize, UA_Variant *output) {
-
-    UA_UInt32 *publishCyclesInput = ((UA_UInt32 *) input[0].data);
-    UA_Duration *publishIntervalInput = ((UA_Duration *) input[1].data);
-    UA_UInt32 *publishedFieldsInput = ((UA_UInt32 *) input[2].data);
-    if(*publishCyclesInput > 0 &&  *publishCyclesInput < 100000)
-        measurementCycles = *publishCyclesInput;
-    else
-        measurementCycles = 1000;
-    if(*publishIntervalInput > 0.05 &&  *publishIntervalInput < 1000.0)
-        latestPublishCycle = *publishIntervalInput;
-    else
-        latestPublishCycle = 10.0;
-    if(*publishedFieldsInput > 0 &&  *publishedFieldsInput < 100)
-        publishedFields = *publishedFieldsInput;
-    else
-        publishedFields = 10;
-
-    currentPublishCycleTime_RT_none = (UA_Int32 *) UA_calloc(measurementCycles+1, sizeof(UA_Int32));
-    calculatedCycleStartTime_RT_none = (struct timespec *)   UA_calloc(measurementCycles+1, sizeof(struct timespec));
-    cycleStartDelay_RT_none = (struct timespec *)   UA_calloc(measurementCycles+1, sizeof(struct timespec));
-    cycleDuration_RT_none = (struct timespec *)   UA_calloc(measurementCycles+1, sizeof(struct timespec));
-    currentPublishCycleTime_RT_static_source = (UA_Int32 *) UA_calloc(measurementCycles+1, sizeof(UA_Int32));
-    calculatedCycleStartTime_RT_static_source = (struct timespec *)   UA_calloc(measurementCycles+1, sizeof(struct timespec));
-    cycleStartDelay_RT_static_source = (struct timespec *)   UA_calloc(measurementCycles+1, sizeof(struct timespec));
-    cycleDuration_RT_static_source = (struct timespec *)   UA_calloc(measurementCycles+1, sizeof(struct timespec));
-    currentPublishCycleTime_RT_fixed_size = (UA_Int32 *) UA_calloc(measurementCycles+1, sizeof(UA_Int32));
-    calculatedCycleStartTime_RT_fixed_size = (struct timespec *)   UA_calloc(measurementCycles+1, sizeof(struct timespec));
-    cycleStartDelay_RT_fixed_size = (struct timespec *)   UA_calloc(measurementCycles+1, sizeof(struct timespec));
-    cycleDuration_RT_fixed_size = (struct timespec *)   UA_calloc(measurementCycles+1, sizeof(struct timespec));
-
     UA_StatusCode statusCode = UA_STATUSCODE_GOOD;
-    if(measurementRunning)
+    if(measurementRunning){
         statusCode = UA_STATUSCODE_BADINTERNALERROR;
-    measurementTriggered = UA_TRUE;
-    UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_SERVER, "PubSub measurement was called.");
+    } else {
+        UA_UInt32 *publishCyclesInput = ((UA_UInt32 *) input[0].data);
+        UA_Duration *publishIntervalInput = ((UA_Duration *) input[1].data);
+        UA_UInt32 *publishedFieldsInput = ((UA_UInt32 *) input[2].data);
+        if (*publishCyclesInput > 0 && *publishCyclesInput < 100000)
+            measurementCycles = *publishCyclesInput;
+        else
+            measurementCycles = 1000;
+        if (*publishIntervalInput > 0.05 && *publishIntervalInput < 1000.0)
+            latestPublishCycle = *publishIntervalInput;
+        else
+            latestPublishCycle = 10.0;
+        if (*publishedFieldsInput > 0 && *publishedFieldsInput < 100)
+            publishedFields = *publishedFieldsInput;
+        else
+            publishedFields = 10;
+
+        currentPublishCycleTime_RT_none = (UA_Int32 *) UA_calloc(measurementCycles + 1, sizeof(UA_Int32));
+        calculatedCycleStartTime_RT_none = (struct timespec *) UA_calloc(measurementCycles + 1,
+                                                                         sizeof(struct timespec));
+        cycleStartDelay_RT_none = (struct timespec *) UA_calloc(measurementCycles + 1, sizeof(struct timespec));
+        cycleDuration_RT_none = (struct timespec *) UA_calloc(measurementCycles + 1, sizeof(struct timespec));
+        currentPublishCycleTime_RT_static_source = (UA_Int32 *) UA_calloc(measurementCycles + 1, sizeof(UA_Int32));
+        calculatedCycleStartTime_RT_static_source = (struct timespec *) UA_calloc(measurementCycles + 1,
+                                                                                  sizeof(struct timespec));
+        cycleStartDelay_RT_static_source = (struct timespec *) UA_calloc(measurementCycles + 1,
+                                                                         sizeof(struct timespec));
+        cycleDuration_RT_static_source = (struct timespec *) UA_calloc(measurementCycles + 1, sizeof(struct timespec));
+        currentPublishCycleTime_RT_fixed_size = (UA_Int32 *) UA_calloc(measurementCycles + 1, sizeof(UA_Int32));
+        calculatedCycleStartTime_RT_fixed_size = (struct timespec *) UA_calloc(measurementCycles + 1,
+                                                                               sizeof(struct timespec));
+        cycleStartDelay_RT_fixed_size = (struct timespec *) UA_calloc(measurementCycles + 1, sizeof(struct timespec));
+        cycleDuration_RT_fixed_size = (struct timespec *) UA_calloc(measurementCycles + 1, sizeof(struct timespec));
+        UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_SERVER, "PubSub measurement was called.Cycles: %i, Interval: %f, Fields: %i",
+                    measurementCycles, latestPublishCycle, publishedFields);
+        measurementTriggered = UA_TRUE;
+    }
     UA_Variant_setScalarCopy(output, &statusCode, &UA_TYPES[UA_TYPES_STATUSCODE]);
-    return UA_STATUSCODE_GOOD;
+    return statusCode;
 }
 
 static void
