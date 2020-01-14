@@ -18,19 +18,19 @@ static UA_DataTypeMember Point_members[3] = {
                 UA_TYPES_FLOAT,  /* .memberTypeIndex, points into UA_TYPES since namespaceZero is true */
                 0,               /* .padding */
                 true,            /* .namespaceZero, see .memberTypeIndex */
-                false            /* .isArray */
+                false,            /* .isArray */
         },
 
         /* y */
         {
                 UA_TYPENAME("y")
-                UA_TYPES_FLOAT, Point_padding_y, true, false
+                UA_TYPES_FLOAT, Point_padding_y, true, false,
         },
 
         /* z */
         {
                 UA_TYPENAME("z")
-                UA_TYPES_FLOAT, Point_padding_z, true, false
+                UA_TYPES_FLOAT, Point_padding_z, true, false,
         }
 };
 
