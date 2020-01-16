@@ -1,0 +1,1480 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="open62541-examples"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\tools\;CMake Files\tools\cmake\;CMake Files\tools\packaging\;CMake Files\include\;CMake Files\include\open62541\;CMake Files\arch\;CMake Files\arch\posix\;CMake Files\arch\win32\;CMake Files\arch\freertosLWIP\;CMake Files\arch\vxworks\;CMake Files\arch\eCos\;CMake Files\arch\wec7\;CMake Files\doc\;CMake Files\examples\;CMake Files\examples\nodeset\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="access_control_client">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/access_control_client" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 access_control_client"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="access_control_client/fast">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/access_control_client" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 access_control_client/fast"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="access_control_server">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/access_control_server" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 access_control_server"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="access_control_server/fast">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/access_control_server" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 access_control_server/fast"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="custom_datatype_server">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/custom_datatype_server" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 custom_datatype_server"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="custom_datatype_server/fast">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/custom_datatype_server" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 custom_datatype_server/fast"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="custom_datatype_client">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/custom_datatype_client" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 custom_datatype_client"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="custom_datatype_client/fast">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/custom_datatype_client" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 custom_datatype_client/fast"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="server_mainloop">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/server_mainloop" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 server_mainloop"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="server_mainloop/fast">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/server_mainloop" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 server_mainloop/fast"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="client_subscription_loop">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/client_subscription_loop" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 client_subscription_loop"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="client_subscription_loop/fast">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/client_subscription_loop" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 client_subscription_loop/fast"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="tutorial_server_monitoreditems">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/tutorial_server_monitoreditems" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 tutorial_server_monitoreditems"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="tutorial_server_monitoreditems/fast">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/tutorial_server_monitoreditems" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 tutorial_server_monitoreditems/fast"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="tutorial_server_variabletype">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/tutorial_server_variabletype" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 tutorial_server_variabletype"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="tutorial_server_variabletype/fast">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/tutorial_server_variabletype" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 tutorial_server_variabletype/fast"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="server_inheritance">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/server_inheritance" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 server_inheritance"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="server_inheritance/fast">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/server_inheritance" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 server_inheritance/fast"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="server_instantiation">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/server_instantiation" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 server_instantiation"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="server_instantiation/fast">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/server_instantiation" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 server_instantiation/fast"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="tutorial_server_datasource">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/tutorial_server_datasource" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 tutorial_server_datasource"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="tutorial_server_datasource/fast">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/tutorial_server_datasource" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 tutorial_server_datasource/fast"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="tutorial_server_variable">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/tutorial_server_variable" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 tutorial_server_variable"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="tutorial_server_variable/fast">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/tutorial_server_variable" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 tutorial_server_variable/fast"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="client_async">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/client_async" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 client_async"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="client_async/fast">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/client_async" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 client_async/fast"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="tutorial_datatypes">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/tutorial_datatypes" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 tutorial_datatypes"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="tutorial_datatypes/fast">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/tutorial_datatypes" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 tutorial_datatypes/fast"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="tutorial_server_firststeps">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/tutorial_server_firststeps" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 tutorial_server_firststeps"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="tutorial_server_firststeps/fast">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/tutorial_server_firststeps" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 tutorial_server_firststeps/fast"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="server_ctt">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/server_ctt" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 server_ctt"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="server_ctt/fast">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/server_ctt" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 server_ctt/fast"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="tutorial_server_object">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/tutorial_server_object" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 tutorial_server_object"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="tutorial_server_object/fast">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/tutorial_server_object" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 tutorial_server_object/fast"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="tutorial_server_method">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/tutorial_server_method" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 tutorial_server_method"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="tutorial_server_method/fast">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/tutorial_server_method" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 tutorial_server_method/fast"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="server_repeated_job">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/server_repeated_job" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 server_repeated_job"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="server_repeated_job/fast">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/server_repeated_job" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 server_repeated_job/fast"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="tutorial_client_firststeps">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/tutorial_client_firststeps" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 tutorial_client_firststeps"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="tutorial_client_firststeps/fast">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/tutorial_client_firststeps" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 tutorial_client_firststeps/fast"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="tutorial_client_events">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/tutorial_client_events" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 tutorial_client_events"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="tutorial_client_events/fast">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/tutorial_client_events" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 tutorial_client_events/fast"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="client_connectivitycheck_loop">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/client_connectivitycheck_loop" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 client_connectivitycheck_loop"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="client_connectivitycheck_loop/fast">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/client_connectivitycheck_loop" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 client_connectivitycheck_loop/fast"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="client">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/client" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 client"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="client/fast">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/client" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 client/fast"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="client_connect">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/client_connect" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 client_connect"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="client_connect/fast">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/client_connect" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 client_connect/fast"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="client_connect_loop">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/client_connect_loop" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 client_connect_loop"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="client_connect_loop/fast">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/client_connect_loop" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 client_connect_loop/fast"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="open62541-generator-ids-di">
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/examples/nodeset"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/nodeset/Makefile&quot;  VERBOSE=1 open62541-generator-ids-di"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/nodeset/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/nodeset/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/nodeset/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="open62541-generator-types-di">
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/examples/nodeset"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/nodeset/Makefile&quot;  VERBOSE=1 open62541-generator-types-di"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/nodeset/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/nodeset/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/nodeset/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="optional_fields">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/optional_fields" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/nodeset/Makefile&quot;  VERBOSE=1 optional_fields"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/nodeset/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/nodeset/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/nodeset/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="optional_fields/fast">
+				<Option output="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples/optional_fields" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/bin/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DUA_ARCHITECTURE_POSIX"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/examples"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/arch"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/plugins/include"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/deps"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src/pubsub"/>
+					<Add directory="/home/grigory/Abschlussprojekt/open62541-fork/src_generated"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/nodeset/Makefile&quot;  VERBOSE=1 optional_fields/fast"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/nodeset/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/nodeset/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/nodeset/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="open62541-generator-types-autoid">
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/examples/nodeset"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/nodeset/Makefile&quot;  VERBOSE=1 open62541-generator-types-autoid"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/nodeset/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/nodeset/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/nodeset/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="open62541-generator-ids-autoid">
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/examples/nodeset"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/nodeset/Makefile&quot;  VERBOSE=1 open62541-generator-ids-autoid"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/nodeset/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/nodeset/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/nodeset/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="open62541-generator-ns-di">
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/examples/nodeset"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/nodeset/Makefile&quot;  VERBOSE=1 open62541-generator-ns-di"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/nodeset/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/nodeset/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/nodeset/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="open62541-generator-ns-autoid">
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/examples/nodeset"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/nodeset/Makefile&quot;  VERBOSE=1 open62541-generator-ns-autoid"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/nodeset/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/nodeset/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/nodeset/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/examples/access_control/client_access_control.c">
+			<Option target="access_control_client"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/examples/access_control/server_access_control.c">
+			<Option target="access_control_server"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/examples/client.c">
+			<Option target="client"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/examples/client_async.c">
+			<Option target="client_async"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/examples/client_connect.c">
+			<Option target="client_connect"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/examples/client_connect_loop.c">
+			<Option target="client_connect_loop"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/examples/client_connectivitycheck_loop.c">
+			<Option target="client_connectivitycheck_loop"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/examples/client_subscription_loop.c">
+			<Option target="client_subscription_loop"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/examples/common.h">
+			<Option target="access_control_client"/>
+			<Option target="access_control_server"/>
+			<Option target="custom_datatype_server"/>
+			<Option target="custom_datatype_client"/>
+			<Option target="server_mainloop"/>
+			<Option target="client_subscription_loop"/>
+			<Option target="tutorial_server_monitoreditems"/>
+			<Option target="tutorial_server_variabletype"/>
+			<Option target="server_inheritance"/>
+			<Option target="server_instantiation"/>
+			<Option target="tutorial_server_datasource"/>
+			<Option target="tutorial_server_variable"/>
+			<Option target="client_async"/>
+			<Option target="tutorial_datatypes"/>
+			<Option target="tutorial_server_firststeps"/>
+			<Option target="server_ctt"/>
+			<Option target="tutorial_server_object"/>
+			<Option target="tutorial_server_method"/>
+			<Option target="server_repeated_job"/>
+			<Option target="tutorial_client_firststeps"/>
+			<Option target="tutorial_client_events"/>
+			<Option target="client_connectivitycheck_loop"/>
+			<Option target="client"/>
+			<Option target="client_connect"/>
+			<Option target="client_connect_loop"/>
+			<Option target="optional_fields"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/examples/custom_datatype/client_types_custom.c">
+			<Option target="custom_datatype_client"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/examples/custom_datatype/server_types_custom.c">
+			<Option target="custom_datatype_server"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/examples/nodeset/optional_fields.c">
+			<Option target="optional_fields"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/examples/server_ctt.c">
+			<Option target="server_ctt"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/examples/server_inheritance.c">
+			<Option target="server_inheritance"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/examples/server_instantiation.c">
+			<Option target="server_instantiation"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/examples/server_mainloop.c">
+			<Option target="server_mainloop"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/examples/server_repeated_job.c">
+			<Option target="server_repeated_job"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/examples/tutorial_client_events.c">
+			<Option target="tutorial_client_events"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/examples/tutorial_client_firststeps.c">
+			<Option target="tutorial_client_firststeps"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/examples/tutorial_datatypes.c">
+			<Option target="tutorial_datatypes"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/examples/tutorial_server_datasource.c">
+			<Option target="tutorial_server_datasource"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/examples/tutorial_server_firststeps.c">
+			<Option target="tutorial_server_firststeps"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/examples/tutorial_server_method.c">
+			<Option target="tutorial_server_method"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/examples/tutorial_server_monitoreditems.c">
+			<Option target="tutorial_server_monitoreditems"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/examples/tutorial_server_object.c">
+			<Option target="tutorial_server_object"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/examples/tutorial_server_variable.c">
+			<Option target="tutorial_server_variable"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/examples/tutorial_server_variabletype.c">
+			<Option target="tutorial_server_variabletype"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/src_generated/open62541/namespace_autoid_generated.c">
+			<Option target="optional_fields"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/src_generated/open62541/namespace_autoid_generated.c.rule">
+			<Option target="optional_fields"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/src_generated/open62541/namespace_di_generated.c">
+			<Option target="optional_fields"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/src_generated/open62541/namespace_di_generated.c.rule">
+			<Option target="optional_fields"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/src_generated/open62541/types_autoid_generated.c">
+			<Option target="optional_fields"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/src_generated/open62541/types_autoid_generated.c.rule">
+			<Option target="optional_fields"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/src_generated/open62541/types_di_generated.c">
+			<Option target="optional_fields"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/src_generated/open62541/types_di_generated.c.rule">
+			<Option target="optional_fields"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/open62541.pc.in">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/tools/cmake/AssignSourceGroup.cmake">
+			<Option virtualFolder="CMake Files\tools\cmake\"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/tools/cmake/FindClangTools.cmake">
+			<Option virtualFolder="CMake Files\tools\cmake\"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/tools/cmake/FindSphinx.cmake">
+			<Option virtualFolder="CMake Files\tools\cmake\"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/tools/cmake/SetGitBasedVersion.cmake">
+			<Option virtualFolder="CMake Files\tools\cmake\"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/tools/cmake/linting_build.cmake">
+			<Option virtualFolder="CMake Files\tools\cmake\"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/tools/cmake/linting_target.cmake">
+			<Option virtualFolder="CMake Files\tools\cmake\"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/tools/cmake/macros_internal.cmake">
+			<Option virtualFolder="CMake Files\tools\cmake\"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/tools/cmake/macros_public.cmake">
+			<Option virtualFolder="CMake Files\tools\cmake\"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/tools/cmake/open62541Config.cmake.in">
+			<Option virtualFolder="CMake Files\tools\cmake\"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/tools/packaging/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\tools\packaging\"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/include/open62541/config.h.in">
+			<Option virtualFolder="CMake Files\include\open62541\"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/arch/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\arch\"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/arch/posix/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\arch\posix\"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/arch/win32/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\arch\win32\"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/arch/freertosLWIP/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\arch\freertosLWIP\"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/arch/vxworks/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\arch\vxworks\"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/arch/eCos/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\arch\eCos\"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/arch/wec7/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\arch\wec7\"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/doc/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\doc\"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/doc/conf.py">
+			<Option virtualFolder="CMake Files\doc\"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/examples/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\examples\"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/examples/nodeset/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\examples\nodeset\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
