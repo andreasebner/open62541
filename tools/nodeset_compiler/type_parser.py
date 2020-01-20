@@ -29,8 +29,6 @@ excluded_types = ["NodeIdType", "InstanceNode", "TypeNode", "Node", "ObjectNode"
 builtin_overlayable = ["Boolean", "SByte", "Byte", "Int16", "UInt16", "Int32", "UInt32", "Int64", "UInt64", "Float",
                        "Double", "DateTime", "StatusCode", "Guid"]
 
-bit_types = ["Bit"]
-
 # Type aliases
 type_aliases = {"CharArray": "String"}
 
@@ -140,8 +138,6 @@ class StructType(Type):
         Type.__init__(self, outname, xml, namespace)
         length_fields = []
         optional_fields = []
-        field_counter = -1
-        self.optionalFieldMask = 0
 
         for child in xml:
             length_field = child.get("LengthField")
@@ -149,7 +145,7 @@ class StructType(Type):
                 length_fields.append(length_field)
         for child in xml:
             child_type = child.get("TypeName")
-            if child_type and get_type_name(child_type) == "Bit" and re.match(re.compile('.+Specified'), child.get("Name")):
+            if child_type and get_type_name(child_type) == "Bit":
                 optional_fields.append(child.get("Name"))
         for child in xml:
             if not child.tag == "{http://opcfoundation.org/BinarySchema/}Field":
@@ -158,11 +154,8 @@ class StructType(Type):
                 continue
             if get_type_name(child.get("TypeName")) == "Bit":
                 continue
-            else:
-                field_counter = field_counter + 1
             switch_field = child.get("SwitchField")
             if switch_field and switch_field in optional_fields:
-                self.optionalFieldMask | (1 << field_counter)
                 member_is_optional = True
             else:
                 member_is_optional = False
@@ -221,7 +214,7 @@ class TypeParser():
             for child in element:
                 if child.tag == "{http://opcfoundation.org/BinarySchema/}Field":
                     childname = get_type_name(child.get("TypeName"))
-                    if childname not in self.types and childname not in bit_types:
+                    if childname not in self.types and childname != "Bit":
                         return False
             return True
 
@@ -240,6 +233,32 @@ class TypeParser():
                 return True
             if re.search("NodeId$", name) != None:
                 return True
+            return False
+
+        def structWithOptionalFields(element):
+            opt_fields = []
+            for child in element:
+                typename = child.get("TypeName")
+                print child.get("Name")
+                if typename and get_type_name(typename) == "Bit":
+                    print "bit type"
+                    if re.match(re.compile('.+Specified'), child.get("Name")):
+                        print "specified"
+                        opt_fields.append(typename)
+                    elif child.get("Name") == "Reserved1":
+                        print "reserved"
+                        return len(opt_fields) + int(child.get("Length")) == 32
+                    else:
+                        print "none"
+                        return False
+                else:
+                    return False
+
+        def structWithBitFields(element):
+            for child in element:
+                typename = child.get("TypeName")
+                if typename and get_type_name(typename) == "Bit":
+                    return True
             return False
 
         snippets = {}
@@ -262,6 +281,8 @@ class TypeParser():
                     del snippets[name]
                     continue
                 if not typeReady(typeXml):
+                    continue
+                if structWithBitFields(typeXml) and not structWithOptionalFields(typeXml):
                     continue
                 if name in builtin_types:
                     new_type = BuiltinType(name)

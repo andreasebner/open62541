@@ -166,6 +166,16 @@ if(UA_NAMESPACE_ZERO STREQUAL "FULL")
             INTERNAL
     )
 
+    ua_generate_datatypes(
+            NAME "test"
+            NAMESPACE_IDX 4
+            TARGET_SUFFIX "testtypes"
+            FILE_CSV "${CMAKE_SOURCE_DIR}/test.csv"
+            FILES_BSD "${CMAKE_SOURCE_DIR}/test.bsd"
+            INTERNAL
+    )
+
+
 
     add_example(optional_fields optional_fields.c
             ${UA_NODESET_DI_SOURCES}

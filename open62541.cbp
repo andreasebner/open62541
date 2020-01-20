@@ -1593,6 +1593,16 @@
 					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/nodeset/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
+			<Target title="open62541-generator-testtypes">
+				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/examples/nodeset"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/nodeset/Makefile&quot;  VERBOSE=1 open62541-generator-testtypes"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/nodeset/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/nodeset/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/grigory/Abschlussprojekt/open62541-fork/examples/nodeset/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
 			<Target title="open62541-generator-ns-di">
 				<Option working_dir="/home/grigory/Abschlussprojekt/open62541-fork/examples/nodeset"/>
 				<Option type="4"/>
@@ -2284,10 +2294,16 @@
 		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/src_generated/open62541/namespace_autoid_generated.c.rule">
 			<Option target="optional_fields"/>
 		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/src_generated/open62541/namespace_autoid_generated.h">
+			<Option target="optional_fields"/>
+		</Unit>
 		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/src_generated/open62541/namespace_di_generated.c">
 			<Option target="optional_fields"/>
 		</Unit>
 		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/src_generated/open62541/namespace_di_generated.c.rule">
+			<Option target="optional_fields"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/src_generated/open62541/namespace_di_generated.h">
 			<Option target="optional_fields"/>
 		</Unit>
 		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/src_generated/open62541/nodeids.h">
@@ -2330,10 +2346,16 @@
 		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/src_generated/open62541/types_autoid_generated.c.rule">
 			<Option target="optional_fields"/>
 		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/src_generated/open62541/types_autoid_generated.h">
+			<Option target="optional_fields"/>
+		</Unit>
 		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/src_generated/open62541/types_di_generated.c">
 			<Option target="optional_fields"/>
 		</Unit>
 		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/src_generated/open62541/types_di_generated.c.rule">
+			<Option target="optional_fields"/>
+		</Unit>
+		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/src_generated/open62541/types_di_generated.h">
 			<Option target="optional_fields"/>
 		</Unit>
 		<Unit filename="/home/grigory/Abschlussprojekt/open62541-fork/src_generated/open62541/types_generated.c">
