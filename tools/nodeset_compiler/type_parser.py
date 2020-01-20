@@ -29,6 +29,8 @@ excluded_types = ["NodeIdType", "InstanceNode", "TypeNode", "Node", "ObjectNode"
 builtin_overlayable = ["Boolean", "SByte", "Byte", "Int16", "UInt16", "Int32", "UInt32", "Int64", "UInt64", "Float",
                        "Double", "DateTime", "StatusCode", "Guid"]
 
+bit_types = ["Bit"]
+
 # Type aliases
 type_aliases = {"CharArray": "String"}
 
@@ -126,33 +128,50 @@ class OpaqueType(Type):
 
 
 class StructMember(object):
-    def __init__(self, name, member_type, is_array):
+    def __init__(self, name, member_type, is_array, is_optional):
         self.name = name
         self.member_type = member_type
         self.is_array = is_array
+        self.is_optional = is_optional
 
 
 class StructType(Type):
     def __init__(self, outname, xml, namespace, types):
         Type.__init__(self, outname, xml, namespace)
         length_fields = []
+        optional_fields = []
+        field_counter = -1
+        self.optionalFieldMask = 0
 
         for child in xml:
             length_field = child.get("LengthField")
             if length_field:
                 length_fields.append(length_field)
-
+        for child in xml:
+            child_type = child.get("TypeName")
+            if child_type and get_type_name(child_type) == "Bit" and re.match(re.compile('.+Specified'), child.get("Name")):
+                optional_fields.append(child.get("Name"))
         for child in xml:
             if not child.tag == "{http://opcfoundation.org/BinarySchema/}Field":
                 continue
             if child.get("Name") in length_fields:
                 continue
+            if get_type_name(child.get("TypeName")) == "Bit":
+                continue
+            else:
+                field_counter = field_counter + 1
+            switch_field = child.get("SwitchField")
+            if switch_field and switch_field in optional_fields:
+                self.optionalFieldMask | (1 << field_counter)
+                member_is_optional = True
+            else:
+                member_is_optional = False
             member_name = child.get("Name")
             member_name = member_name[:1].lower() + member_name[1:]
             member_type_name = get_type_name(child.get("TypeName"))
             member_type = types[member_type_name]
             is_array = True if child.get("LengthField") else False
-            self.members.append(StructMember(member_name, member_type, is_array))
+            self.members.append(StructMember(member_name, member_type, is_array, member_is_optional))
 
         self.pointerfree = True
         for m in self.members:
@@ -202,7 +221,7 @@ class TypeParser():
             for child in element:
                 if child.tag == "{http://opcfoundation.org/BinarySchema/}Field":
                     childname = get_type_name(child.get("TypeName"))
-                    if childname not in self.types:
+                    if childname not in self.types and childname not in bit_types:
                         return False
             return True
 

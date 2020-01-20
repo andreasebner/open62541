@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/tutorial_datatypes.dir/tutorial_datatypes.c.o"
-  "../bin/examples/tutorial_datatypes.pdb"
   "../bin/examples/tutorial_datatypes"
+  "../bin/examples/tutorial_datatypes.pdb"
+  "CMakeFiles/tutorial_datatypes.dir/tutorial_datatypes.c.o"
 )
 
 # Per-language clean rules from dependency scanning.

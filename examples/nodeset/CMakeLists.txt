@@ -157,10 +157,10 @@ if(UA_NAMESPACE_ZERO STREQUAL "FULL")
     # generate AutoIDopen namespace which is using DI
     ua_generate_nodeset_and_datatypes(
             NAME "autoid"
-            FILE_CSV "${CMAKE_SOURCE_DIR}/deps/ua-nodeset/AutoID/Opc.Ua.AutoID.NodeIds.csv"
-            FILE_BSD "${CMAKE_SOURCE_DIR}/deps/ua-nodeset/AutoID/Opc.Ua.AutoID.Types.bsd"
+            FILE_CSV "${CMAKE_SOURCE_DIR}/Opc.Ua.AutoID.NodeIds.csv"
+            FILE_BSD "${CMAKE_SOURCE_DIR}/Opc.Ua.AutoID.Types.bsd"
             NAMESPACE_IDX 3
-            FILE_NS "${CMAKE_SOURCE_DIR}/deps/ua-nodeset/AutoID/Opc.Ua.AutoID.NodeSet2.xml"
+            FILE_NS "${CMAKE_SOURCE_DIR}/Opc.Ua.AutoID.NodeSet2.xml"
             # AutoID depends on the di nodeset, which must be generated before
             DEPENDS "di"
             INTERNAL

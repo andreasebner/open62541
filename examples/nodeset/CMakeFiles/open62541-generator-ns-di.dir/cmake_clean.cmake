@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/open62541-generator-ns-di"
   "../../src_generated/open62541/namespace_di_generated.c"
   "../../src_generated/open62541/namespace_di_generated.h"
+  "CMakeFiles/open62541-generator-ns-di"
 )
 
 # Per-language clean rules from dependency scanning.

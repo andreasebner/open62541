@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/access_control_client.dir/access_control/client_access_control.c.o"
-  "../bin/examples/access_control_client.pdb"
   "../bin/examples/access_control_client"
+  "../bin/examples/access_control_client.pdb"
+  "CMakeFiles/access_control_client.dir/access_control/client_access_control.c.o"
 )
 
 # Per-language clean rules from dependency scanning.

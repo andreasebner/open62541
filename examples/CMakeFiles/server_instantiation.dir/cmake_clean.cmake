@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/server_instantiation.dir/server_instantiation.c.o"
-  "../bin/examples/server_instantiation.pdb"
   "../bin/examples/server_instantiation"
+  "../bin/examples/server_instantiation.pdb"
+  "CMakeFiles/server_instantiation.dir/server_instantiation.c.o"
 )
 
 # Per-language clean rules from dependency scanning.

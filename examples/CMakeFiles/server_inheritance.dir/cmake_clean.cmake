@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/server_inheritance.dir/server_inheritance.c.o"
-  "../bin/examples/server_inheritance.pdb"
   "../bin/examples/server_inheritance"
+  "../bin/examples/server_inheritance.pdb"
+  "CMakeFiles/server_inheritance.dir/server_inheritance.c.o"
 )
 
 # Per-language clean rules from dependency scanning.

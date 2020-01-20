@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/tutorial_server_monitoreditems.dir/tutorial_server_monitoreditems.c.o"
-  "../bin/examples/tutorial_server_monitoreditems.pdb"
   "../bin/examples/tutorial_server_monitoreditems"
+  "../bin/examples/tutorial_server_monitoreditems.pdb"
+  "CMakeFiles/tutorial_server_monitoreditems.dir/tutorial_server_monitoreditems.c.o"
 )
 
 # Per-language clean rules from dependency scanning.

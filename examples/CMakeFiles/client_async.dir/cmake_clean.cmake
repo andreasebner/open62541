@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/client_async.dir/client_async.c.o"
-  "../bin/examples/client_async.pdb"
   "../bin/examples/client_async"
+  "../bin/examples/client_async.pdb"
+  "CMakeFiles/client_async.dir/client_async.c.o"
 )
 
 # Per-language clean rules from dependency scanning.

@@ -50,12 +50,18 @@
   <opc:Field TypeName="opc:UInt16" Name="XPC_W2"/>
  </opc:StructuredType>
  <opc:StructuredType BaseType="ua:ExtensionObject" Name="ScanResult">
+  <opc:Field TypeName="opc:Bit" Name="LocationSpecified"/>
+  <opc:Field Length="31" TypeName="opc:Bit" Name="Reserved1"/>
   <opc:Field TypeName="opc:CharArray" Name="CodeType"/>
   <opc:Field TypeName="tns:ScanData" Name="ScanData"/>
   <opc:Field TypeName="opc:DateTime" Name="Timestamp"/>
   <opc:Field SwitchField="LocationSpecified" TypeName="tns:Location" Name="Location"/>
  </opc:StructuredType>
  <opc:StructuredType BaseType="tns:ScanResult" Name="OcrScanResult">
+  <opc:Field TypeName="opc:Bit" Name="LocationSpecified"/>
+  <opc:Field TypeName="opc:Bit" Name="FontSpecified"/>
+  <opc:Field TypeName="opc:Bit" Name="DecodingTimeSpecified"/>
+  <opc:Field Length="29" TypeName="opc:Bit" Name="Reserved1"/>
   <opc:Field SourceType="tns:ScanResult" TypeName="opc:CharArray" Name="CodeType"/>
   <opc:Field SourceType="tns:ScanResult" TypeName="tns:ScanData" Name="ScanData"/>
   <opc:Field SourceType="tns:ScanResult" TypeName="opc:DateTime" Name="Timestamp"/>
@@ -67,7 +73,12 @@
   <opc:Field SwitchField="DecodingTimeSpecified" TypeName="opc:DateTime" Name="DecodingTime"/>
  </opc:StructuredType>
  <opc:StructuredType BaseType="tns:ScanResult" Name="OpticalScanResult">
-  <opc:Field Name="Reserved1" TypeName="opc:UInt32"/>
+  <opc:Field TypeName="opc:Bit" Name="LocationSpecified"/>
+  <opc:Field TypeName="opc:Bit" Name="GradeSpecified"/>
+  <opc:Field TypeName="opc:Bit" Name="PositionSpecified"/>
+  <opc:Field TypeName="opc:Bit" Name="SymbologySpecified"/>
+  <opc:Field TypeName="opc:Bit" Name="ImageIdSpecified"/>
+  <opc:Field Length="27" TypeName="opc:Bit" Name="Reserved1"/>
   <opc:Field SourceType="tns:ScanResult" TypeName="opc:CharArray" Name="CodeType"/>
   <opc:Field SourceType="tns:ScanResult" TypeName="tns:ScanData" Name="ScanData"/>
   <opc:Field SourceType="tns:ScanResult" TypeName="opc:DateTime" Name="Timestamp"/>
@@ -78,7 +89,8 @@
   <opc:Field SwitchField="ImageIdSpecified" TypeName="ua:NodeId" Name="ImageId"/>
  </opc:StructuredType>
  <opc:StructuredType BaseType="tns:ScanResult" Name="OpticalVerifierScanResult">
-  <opc:Field Name="Reserved1" TypeName="opc:UInt32"/>
+  <opc:Field TypeName="opc:Bit" Name="LocationSpecified"/>
+  <opc:Field Length="31" TypeName="opc:Bit" Name="Reserved1"/>
   <opc:Field SourceType="tns:ScanResult" TypeName="opc:CharArray" Name="CodeType"/>
   <opc:Field SourceType="tns:ScanResult" TypeName="tns:ScanData" Name="ScanData"/>
   <opc:Field SourceType="tns:ScanResult" TypeName="opc:DateTime" Name="Timestamp"/>
@@ -94,7 +106,8 @@
   <opc:Field TypeName="opc:Int16" Name="PrintGain"/>
  </opc:StructuredType>
  <opc:StructuredType BaseType="tns:ScanResult" Name="RfidScanResult">
-  <opc:Field Name="Reserved1" TypeName="opc:UInt32"/>
+  <opc:Field TypeName="opc:Bit" Name="LocationSpecified"/>
+  <opc:Field Length="31" TypeName="opc:Bit" Name="Reserved1"/>
   <opc:Field SourceType="tns:ScanResult" TypeName="opc:CharArray" Name="CodeType"/>
   <opc:Field SourceType="tns:ScanResult" TypeName="tns:ScanData" Name="ScanData"/>
   <opc:Field SourceType="tns:ScanResult" TypeName="opc:DateTime" Name="Timestamp"/>
@@ -103,7 +116,8 @@
   <opc:Field LengthField="NoOfSighting" TypeName="tns:RfidSighting" Name="Sighting"/>
  </opc:StructuredType>
  <opc:StructuredType BaseType="tns:ScanResult" Name="RtlsLocationResult">
-  <opc:Field Name="Reserved1" TypeName="opc:UInt32"/>
+  <opc:Field TypeName="opc:Bit" Name="LocationSpecified"/>
+  <opc:Field Length="31" TypeName="opc:Bit" Name="Reserved1"/>
   <opc:Field SourceType="tns:ScanResult" TypeName="opc:CharArray" Name="CodeType"/>
   <opc:Field SourceType="tns:ScanResult" TypeName="tns:ScanData" Name="ScanData"/>
   <opc:Field SourceType="tns:ScanResult" TypeName="opc:DateTime" Name="Timestamp"/>
@@ -114,7 +128,8 @@
   <opc:Field TypeName="opc:DateTime" Name="ReceiveTime"/>
  </opc:StructuredType>
  <opc:StructuredType BaseType="ua:ExtensionObject" Name="ScanSettings">
-  <opc:Field Name="Reserved1" TypeName="opc:UInt32"/>
+  <opc:Field TypeName="opc:Bit" Name="LocationTypeSpecified"/>
+  <opc:Field Length="31" TypeName="opc:Bit" Name="Reserved1"/>
   <opc:Field TypeName="opc:Double" Name="Duration"/>
   <opc:Field TypeName="opc:Int32" Name="Cycles"/>
   <opc:Field TypeName="opc:Boolean" Name="DataAvailable"/>

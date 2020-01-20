@@ -34,7 +34,7 @@ find_dependency(PythonInterp REQUIRED)
 
 include("${CMAKE_CURRENT_LIST_DIR}/open62541Macros.cmake")
 
-set(open62541_COMPONENTS_ALL Methods;Subscriptions;Discovery)
+set(open62541_COMPONENTS_ALL FullNamespace;Methods;Subscriptions;Discovery)
 
 foreach(_comp ${open62541_FIND_COMPONENTS})
   list (FIND open62541_COMPONENTS_ALL "${_comp}" _index)

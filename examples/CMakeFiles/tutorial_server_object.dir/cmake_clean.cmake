@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/tutorial_server_object.dir/tutorial_server_object.c.o"
-  "../bin/examples/tutorial_server_object.pdb"
   "../bin/examples/tutorial_server_object"
+  "../bin/examples/tutorial_server_object.pdb"
+  "CMakeFiles/tutorial_server_object.dir/tutorial_server_object.c.o"
 )
 
 # Per-language clean rules from dependency scanning.

@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/tutorial_server_variabletype.dir/tutorial_server_variabletype.c.o"
-  "../bin/examples/tutorial_server_variabletype.pdb"
   "../bin/examples/tutorial_server_variabletype"
+  "../bin/examples/tutorial_server_variabletype.pdb"
+  "CMakeFiles/tutorial_server_variabletype.dir/tutorial_server_variabletype.c.o"
 )
 
 # Per-language clean rules from dependency scanning.

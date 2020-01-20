@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/client_connectivitycheck_loop.dir/client_connectivitycheck_loop.c.o"
-  "../bin/examples/client_connectivitycheck_loop.pdb"
   "../bin/examples/client_connectivitycheck_loop"
+  "../bin/examples/client_connectivitycheck_loop.pdb"
+  "CMakeFiles/client_connectivitycheck_loop.dir/client_connectivitycheck_loop.c.o"
 )
 
 # Per-language clean rules from dependency scanning.

@@ -5,6 +5,7 @@
 #include <open62541/server.h>
 #include <open62541/server_config_default.h>
 
+#include "open62541/namespace0_generated.h"
 #include "open62541/namespace_di_generated.h"
 #include "open62541/namespace_autoid_generated.h"
 #include "open62541/types_autoid_generated_encoding_binary.h"
@@ -76,19 +77,26 @@ int main(int argc, char** argv) {
 
     /*add3PointDataType(server);
     add3DPointVariable(server);*/
-
-    UA_RtlsLocationResult r;
+    /*
+    UA_RtlsLocationResult *r = UA_RtlsLocationResult_new();
+    UA_RtlsLocationResult_init(r);
     UA_ByteString *buf = UA_ByteString_new();
-    size_t msgSize = UA_RtlsLocationResult_calcSizeBinary(&r);
+    size_t msgSize = UA_RtlsLocationResult_calcSizeBinary(r);
     UA_ByteString_allocBuffer(buf, msgSize);
-    memset(buf->data, 0, msgSize);
 
     UA_Byte *bufSettingsPos = buf->data;
     const UA_Byte *bufEnd = &buf->data[buf->length];
 
-    UA_RtlsLocationResult_encodeBinary(&r, &bufSettingsPos, bufEnd);
+    UA_RtlsLocationResult_encodeBinary(r, &bufSettingsPos, bufEnd);
+*/
 
-    UA_StatusCode retval;
+
+    UA_StatusCode retval;/* = namespace0_generated(server);
+    if(retval != UA_STATUSCODE_GOOD) {
+        UA_LOG_ERROR(UA_Log_Stdout, UA_LOGCATEGORY_SERVER, "Adding NS0 failed. Please check previous error output.");
+        UA_Server_delete(server);
+        return (int)UA_STATUSCODE_BADUNEXPECTEDERROR;
+    }*/
 
     retval = UA_Server_run(server, &running);
 

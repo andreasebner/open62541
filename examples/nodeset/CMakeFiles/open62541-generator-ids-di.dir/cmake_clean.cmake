@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/open62541-generator-ids-di"
   "../../src_generated/open62541/di_nodeids.h"
+  "CMakeFiles/open62541-generator-ids-di"
 )
 
 # Per-language clean rules from dependency scanning.
