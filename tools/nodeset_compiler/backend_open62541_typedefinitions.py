@@ -87,6 +87,9 @@ class CGenerator(object):
         if isinstance(datatype, OpaqueType):
             return "UA_DATATYPEKIND_" + datatype.base_type.upper()
         if isinstance(datatype, StructType):
+            for m in datatype.members:
+                if m.is_optional:
+                    return "UA_DATATYPEKIND_OPTSTRUCT"
             return "UA_DATATYPEKIND_STRUCTURE"
         raise RuntimeError("Unknown type")
 
@@ -172,7 +175,8 @@ class CGenerator(object):
                     m += " - sizeof(UA_%s)," % makeCIdentifier(before.member_type.name)
             m += " /* .padding */\n"
             m += "    %s, /* .namespaceZero */\n" % ("true" if member.member_type.ns0 else "false")
-            m += ("    true" if member.is_array else "    false") + " /* .isArray */\n}"
+            m += ("    true," if member.is_array else "    false,") + " /* .isArray */\n"
+            m += ("    true" if member.is_optional else "    false") + " /* .isOptional */\n}"
             if i != size:
                 m += ","
             members += m
@@ -245,6 +249,10 @@ class CGenerator(object):
         if len(struct.members) == 0:
             return "typedef void * UA_%s;" % makeCIdentifier(struct.name)
         returnstr = "typedef struct {\n"
+        for member in struct.members:
+            if member.is_optional:
+                n = makeCIdentifier(member.name)
+                returnstr += "    UA_Boolean has%s;\n" % (n[:1].upper() + n[1:])
         for member in struct.members:
             if member.is_array:
                 returnstr += "    size_t %sSize;\n" % makeCIdentifier(member.name)

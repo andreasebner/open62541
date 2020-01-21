@@ -136,11 +136,19 @@ endif()
 if(UA_NAMESPACE_ZERO STREQUAL "FULL")
 
     ua_generate_datatypes(
-        NAME "optstructs"
-        TARGET_SUFFIX "types-optstructs"
+        NAME "wrongOptstructs"
+        TARGET_SUFFIX "types-wrongOptstructs"
         NAMESPACE_IDX 4
         FILE_CSV "${CMAKE_SOURCE_DIR}/wrong_bit_types.csv"
         FILES_BSD "${CMAKE_SOURCE_DIR}/wrong_bit_types.bsd"
+    )
+
+    ua_generate_datatypes(
+            NAME "optstructs"
+            TARGET_SUFFIX "types-optstructs"
+            NAMESPACE_IDX 5
+            FILE_CSV "${CMAKE_SOURCE_DIR}/optstructs.csv"
+            FILES_BSD "${CMAKE_SOURCE_DIR}/optstructs.bsd"
     )
 
 endif()

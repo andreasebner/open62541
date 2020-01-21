@@ -1,0 +1,18 @@
+<opc:TypeDictionary xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tns="http://opcfoundation.org/UA/AutoID/" DefaultByteOrder="LittleEndian" xmlns:opc="http://opcfoundation.org/BinarySchema/" xmlns:ua="http://opcfoundation.org/UA/" TargetNamespace="http://opcfoundation.org/UA/AutoID/">
+ <opc:Import Namespace="http://opcfoundation.org/UA/"/>
+ <opc:StructuredType BaseType="ua:ExtensionObject" Name="OptStruct">
+  <opc:Field TypeName="opc:Bit" Name="AntennaNameSpecified"/>
+  <opc:Field TypeName="opc:Bit" Name="TestDoubleSpecified"/>
+  <opc:Field Length="30" TypeName="opc:Bit" Name="Reserved1"/>
+  <opc:Field TypeName="opc:Int32" Name="TestInt"/>
+  <opc:Field SwitchField="AntennaNameSpecified" TypeName="opc:CharArray" Name="AntennaName"/>
+  <opc:Field TypeName="opc:Float" Name="TestFloat"/>
+  <opc:Field SwitchField="TestDoubleSpecified" TypeName="opc:Double" Name="TestDouble"/>
+ </opc:StructuredType>
+ <opc:StructuredType BaseType="ua:ExtensionObject" Name="NotOptStruct">
+  <opc:Field TypeName="opc:Int32" Name="TestInt"/>
+  <opc:Field TypeName="opc:CharArray" Name="AntennaName"/>
+  <opc:Field TypeName="opc:Float" Name="TestFloat"/>
+  <opc:Field TypeName="opc:Double" Name="TestDouble"/>
+ </opc:StructuredType>
+</opc:TypeDictionary>
