@@ -579,47 +579,47 @@ static status
 NodeId_encodeBinaryWithEncodingMask(UA_NodeId const *src, u8 encoding, Ctx *ctx) {
     status ret = UA_STATUSCODE_GOOD;
     switch(src->identifierType) {
-        case UA_NODEIDTYPE_NUMERIC:
-            if(src->identifier.numeric > UA_UINT16_MAX || src->namespaceIndex > UA_BYTE_MAX) {
-                encoding |= UA_NODEIDTYPE_NUMERIC_COMPLETE;
-                ret |= ENCODE_DIRECT(&encoding, Byte);
-                ret |= ENCODE_DIRECT(&src->namespaceIndex, UInt16);
-                ret |= ENCODE_DIRECT(&src->identifier.numeric, UInt32);
-            } else if(src->identifier.numeric > UA_BYTE_MAX || src->namespaceIndex > 0) {
-                encoding |= UA_NODEIDTYPE_NUMERIC_FOURBYTE;
-                ret |= ENCODE_DIRECT(&encoding, Byte);
-                u8 nsindex = (u8)src->namespaceIndex;
-                ret |= ENCODE_DIRECT(&nsindex, Byte);
-                u16 identifier16 = (u16)src->identifier.numeric;
-                ret |= ENCODE_DIRECT(&identifier16, UInt16);
-            } else {
-                encoding |= UA_NODEIDTYPE_NUMERIC_TWOBYTE;
-                ret |= ENCODE_DIRECT(&encoding, Byte);
-                u8 identifier8 = (u8)src->identifier.numeric;
-                ret |= ENCODE_DIRECT(&identifier8, Byte);
-            }
-            break;
-        case UA_NODEIDTYPE_STRING:encoding |= (u8)UA_NODEIDTYPE_STRING;
+    case UA_NODEIDTYPE_NUMERIC:
+        if(src->identifier.numeric > UA_UINT16_MAX || src->namespaceIndex > UA_BYTE_MAX) {
+            encoding |= UA_NODEIDTYPE_NUMERIC_COMPLETE;
             ret |= ENCODE_DIRECT(&encoding, Byte);
             ret |= ENCODE_DIRECT(&src->namespaceIndex, UInt16);
-            if(ret != UA_STATUSCODE_GOOD)
-                return ret;
-            ret = ENCODE_DIRECT(&src->identifier.string, String);
-            break;
-        case UA_NODEIDTYPE_GUID:encoding |= (u8)UA_NODEIDTYPE_GUID;
+            ret |= ENCODE_DIRECT(&src->identifier.numeric, UInt32);
+        } else if(src->identifier.numeric > UA_BYTE_MAX || src->namespaceIndex > 0) {
+            encoding |= UA_NODEIDTYPE_NUMERIC_FOURBYTE;
             ret |= ENCODE_DIRECT(&encoding, Byte);
-            ret |= ENCODE_DIRECT(&src->namespaceIndex, UInt16);
-            ret |= ENCODE_DIRECT(&src->identifier.guid, Guid);
-            break;
-        case UA_NODEIDTYPE_BYTESTRING:encoding |= (u8)UA_NODEIDTYPE_BYTESTRING;
+            u8 nsindex = (u8)src->namespaceIndex;
+            ret |= ENCODE_DIRECT(&nsindex, Byte);
+            u16 identifier16 = (u16)src->identifier.numeric;
+            ret |= ENCODE_DIRECT(&identifier16, UInt16);
+        } else {
+            encoding |= UA_NODEIDTYPE_NUMERIC_TWOBYTE;
             ret |= ENCODE_DIRECT(&encoding, Byte);
-            ret |= ENCODE_DIRECT(&src->namespaceIndex, UInt16);
-            if(ret != UA_STATUSCODE_GOOD)
-                return ret;
-            ret = ENCODE_DIRECT(&src->identifier.byteString, String); /* ByteString */
-            break;
-        default:
-            return UA_STATUSCODE_BADINTERNALERROR;
+            u8 identifier8 = (u8)src->identifier.numeric;
+            ret |= ENCODE_DIRECT(&identifier8, Byte);
+        }
+        break;
+    case UA_NODEIDTYPE_STRING:encoding |= (u8)UA_NODEIDTYPE_STRING;
+        ret |= ENCODE_DIRECT(&encoding, Byte);
+        ret |= ENCODE_DIRECT(&src->namespaceIndex, UInt16);
+        if(ret != UA_STATUSCODE_GOOD)
+            return ret;
+        ret = ENCODE_DIRECT(&src->identifier.string, String);
+        break;
+    case UA_NODEIDTYPE_GUID:encoding |= (u8)UA_NODEIDTYPE_GUID;
+        ret |= ENCODE_DIRECT(&encoding, Byte);
+        ret |= ENCODE_DIRECT(&src->namespaceIndex, UInt16);
+        ret |= ENCODE_DIRECT(&src->identifier.guid, Guid);
+        break;
+    case UA_NODEIDTYPE_BYTESTRING:encoding |= (u8)UA_NODEIDTYPE_BYTESTRING;
+        ret |= ENCODE_DIRECT(&encoding, Byte);
+        ret |= ENCODE_DIRECT(&src->namespaceIndex, UInt16);
+        if(ret != UA_STATUSCODE_GOOD)
+            return ret;
+        ret = ENCODE_DIRECT(&src->identifier.byteString, String); /* ByteString */
+        break;
+    default:
+        return UA_STATUSCODE_BADINTERNALERROR;
     }
     return ret;
 }
@@ -643,42 +643,42 @@ DECODE_BINARY(NodeId) {
 
     /* Decode the namespace and identifier */
     switch(encodingByte) {
-        case UA_NODEIDTYPE_NUMERIC_TWOBYTE:
-            dst->identifierType = UA_NODEIDTYPE_NUMERIC;
-            ret = DECODE_DIRECT(&dstByte, Byte);
-            dst->identifier.numeric = dstByte;
-            dst->namespaceIndex = 0;
-            break;
-        case UA_NODEIDTYPE_NUMERIC_FOURBYTE:
-            dst->identifierType = UA_NODEIDTYPE_NUMERIC;
-            ret |= DECODE_DIRECT(&dstByte, Byte);
-            dst->namespaceIndex = dstByte;
-            ret |= DECODE_DIRECT(&dstUInt16, UInt16);
-            dst->identifier.numeric = dstUInt16;
-            break;
-        case UA_NODEIDTYPE_NUMERIC_COMPLETE:
-            dst->identifierType = UA_NODEIDTYPE_NUMERIC;
-            ret |= DECODE_DIRECT(&dst->namespaceIndex, UInt16);
-            ret |= DECODE_DIRECT(&dst->identifier.numeric, UInt32);
-            break;
-        case UA_NODEIDTYPE_STRING:
-            dst->identifierType = UA_NODEIDTYPE_STRING;
-            ret |= DECODE_DIRECT(&dst->namespaceIndex, UInt16);
-            ret |= DECODE_DIRECT(&dst->identifier.string, String);
-            break;
-        case UA_NODEIDTYPE_GUID:
-            dst->identifierType = UA_NODEIDTYPE_GUID;
-            ret |= DECODE_DIRECT(&dst->namespaceIndex, UInt16);
-            ret |= DECODE_DIRECT(&dst->identifier.guid, Guid);
-            break;
-        case UA_NODEIDTYPE_BYTESTRING:
-            dst->identifierType = UA_NODEIDTYPE_BYTESTRING;
-            ret |= DECODE_DIRECT(&dst->namespaceIndex, UInt16);
-            ret |= DECODE_DIRECT(&dst->identifier.byteString, String); /* ByteString */
-            break;
-        default:
-            ret |= UA_STATUSCODE_BADINTERNALERROR;
-            break;
+    case UA_NODEIDTYPE_NUMERIC_TWOBYTE:
+        dst->identifierType = UA_NODEIDTYPE_NUMERIC;
+        ret = DECODE_DIRECT(&dstByte, Byte);
+        dst->identifier.numeric = dstByte;
+        dst->namespaceIndex = 0;
+        break;
+    case UA_NODEIDTYPE_NUMERIC_FOURBYTE:
+        dst->identifierType = UA_NODEIDTYPE_NUMERIC;
+        ret |= DECODE_DIRECT(&dstByte, Byte);
+        dst->namespaceIndex = dstByte;
+        ret |= DECODE_DIRECT(&dstUInt16, UInt16);
+        dst->identifier.numeric = dstUInt16;
+        break;
+    case UA_NODEIDTYPE_NUMERIC_COMPLETE:
+        dst->identifierType = UA_NODEIDTYPE_NUMERIC;
+        ret |= DECODE_DIRECT(&dst->namespaceIndex, UInt16);
+        ret |= DECODE_DIRECT(&dst->identifier.numeric, UInt32);
+        break;
+    case UA_NODEIDTYPE_STRING:
+        dst->identifierType = UA_NODEIDTYPE_STRING;
+        ret |= DECODE_DIRECT(&dst->namespaceIndex, UInt16);
+        ret |= DECODE_DIRECT(&dst->identifier.string, String);
+        break;
+    case UA_NODEIDTYPE_GUID:
+        dst->identifierType = UA_NODEIDTYPE_GUID;
+        ret |= DECODE_DIRECT(&dst->namespaceIndex, UInt16);
+        ret |= DECODE_DIRECT(&dst->identifier.guid, Guid);
+        break;
+    case UA_NODEIDTYPE_BYTESTRING:
+        dst->identifierType = UA_NODEIDTYPE_BYTESTRING;
+        ret |= DECODE_DIRECT(&dst->namespaceIndex, UInt16);
+        ret |= DECODE_DIRECT(&dst->identifier.byteString, String); /* ByteString */
+        break;
+    default:
+        ret |= UA_STATUSCODE_BADINTERNALERROR;
+        break;
     }
     return ret;
 }
@@ -831,14 +831,14 @@ ENCODE_BINARY(ExtensionObject) {
         if(ret != UA_STATUSCODE_GOOD)
             return ret;
         switch(src->encoding) {
-            case UA_EXTENSIONOBJECT_ENCODED_NOBODY:
-                break;
-            case UA_EXTENSIONOBJECT_ENCODED_BYTESTRING:
-            case UA_EXTENSIONOBJECT_ENCODED_XML:
-                ret = ENCODE_DIRECT(&src->content.encoded.body, String); /* ByteString */
-                break;
-            default:
-                ret = UA_STATUSCODE_BADINTERNALERROR;
+        case UA_EXTENSIONOBJECT_ENCODED_NOBODY:
+            break;
+        case UA_EXTENSIONOBJECT_ENCODED_BYTESTRING:
+        case UA_EXTENSIONOBJECT_ENCODED_XML:
+            ret = ENCODE_DIRECT(&src->content.encoded.body, String); /* ByteString */
+            break;
+        default:
+            ret = UA_STATUSCODE_BADINTERNALERROR;
         }
         return ret;
     }
@@ -920,26 +920,26 @@ DECODE_BINARY(ExtensionObject) {
     }
 
     switch(encoding) {
-        case UA_EXTENSIONOBJECT_ENCODED_BYTESTRING:
-            ret = ExtensionObject_decodeBinaryContent(dst, &binTypeId, ctx);
-            UA_NodeId_deleteMembers(&binTypeId);
-            break;
-        case UA_EXTENSIONOBJECT_ENCODED_NOBODY:
-            dst->encoding = (UA_ExtensionObjectEncoding)encoding;
-            dst->content.encoded.typeId = binTypeId; /* move to dst */
-            dst->content.encoded.body = UA_BYTESTRING_NULL;
-            break;
-        case UA_EXTENSIONOBJECT_ENCODED_XML:
-            dst->encoding = (UA_ExtensionObjectEncoding)encoding;
-            dst->content.encoded.typeId = binTypeId; /* move to dst */
-            ret = DECODE_DIRECT(&dst->content.encoded.body, String); /* ByteString */
-            if(ret != UA_STATUSCODE_GOOD)
-                UA_NodeId_clear(&dst->content.encoded.typeId);
-            break;
-        default:
-            UA_NodeId_clear(&binTypeId);
-            ret = UA_STATUSCODE_BADDECODINGERROR;
-            break;
+    case UA_EXTENSIONOBJECT_ENCODED_BYTESTRING:
+        ret = ExtensionObject_decodeBinaryContent(dst, &binTypeId, ctx);
+        UA_NodeId_deleteMembers(&binTypeId);
+        break;
+    case UA_EXTENSIONOBJECT_ENCODED_NOBODY:
+        dst->encoding = (UA_ExtensionObjectEncoding)encoding;
+        dst->content.encoded.typeId = binTypeId; /* move to dst */
+        dst->content.encoded.body = UA_BYTESTRING_NULL;
+        break;
+    case UA_EXTENSIONOBJECT_ENCODED_XML:
+        dst->encoding = (UA_ExtensionObjectEncoding)encoding;
+        dst->content.encoded.typeId = binTypeId; /* move to dst */
+        ret = DECODE_DIRECT(&dst->content.encoded.body, String); /* ByteString */
+        if(ret != UA_STATUSCODE_GOOD)
+            UA_NodeId_clear(&dst->content.encoded.typeId);
+        break;
+    default:
+        UA_NodeId_clear(&binTypeId);
+        ret = UA_STATUSCODE_BADDECODINGERROR;
+        break;
     }
 
     return ret;
@@ -1295,7 +1295,7 @@ DECODE_BINARY(DiagnosticInfo) {
     if(encodingMask & 0x40u) {
         /* innerDiagnosticInfo is allocated on the heap */
         dst->innerDiagnosticInfo = (UA_DiagnosticInfo*)
-                UA_calloc(1, sizeof(UA_DiagnosticInfo));
+            UA_calloc(1, sizeof(UA_DiagnosticInfo));
         if(!dst->innerDiagnosticInfo)
             return UA_STATUSCODE_BADOUTOFMEMORY;
         dst->hasInnerDiagnosticInfo = true;
@@ -1416,37 +1416,37 @@ encodeBinaryNotImplemented(const void *src, const UA_DataType *type, Ctx *ctx) {
 /********************/
 
 const encodeBinarySignature encodeBinaryJumpTable[UA_DATATYPEKINDS] = {
-        (encodeBinarySignature)Boolean_encodeBinary,
-        (encodeBinarySignature)Byte_encodeBinary, /* SByte */
-        (encodeBinarySignature)Byte_encodeBinary,
-        (encodeBinarySignature)UInt16_encodeBinary, /* Int16 */
-        (encodeBinarySignature)UInt16_encodeBinary,
-        (encodeBinarySignature)UInt32_encodeBinary, /* Int32 */
-        (encodeBinarySignature)UInt32_encodeBinary,
-        (encodeBinarySignature)UInt64_encodeBinary, /* Int64 */
-        (encodeBinarySignature)UInt64_encodeBinary,
-        (encodeBinarySignature)Float_encodeBinary,
-        (encodeBinarySignature)Double_encodeBinary,
-        (encodeBinarySignature)String_encodeBinary,
-        (encodeBinarySignature)UInt64_encodeBinary, /* DateTime */
-        (encodeBinarySignature)Guid_encodeBinary,
-        (encodeBinarySignature)String_encodeBinary, /* ByteString */
-        (encodeBinarySignature)String_encodeBinary, /* XmlElement */
-        (encodeBinarySignature)NodeId_encodeBinary,
-        (encodeBinarySignature)ExpandedNodeId_encodeBinary,
-        (encodeBinarySignature)UInt32_encodeBinary, /* StatusCode */
-        (encodeBinarySignature)QualifiedName_encodeBinary,
-        (encodeBinarySignature)LocalizedText_encodeBinary,
-        (encodeBinarySignature)ExtensionObject_encodeBinary,
-        (encodeBinarySignature)DataValue_encodeBinary,
-        (encodeBinarySignature)Variant_encodeBinary,
-        (encodeBinarySignature)DiagnosticInfo_encodeBinary,
-        (encodeBinarySignature)encodeBinaryNotImplemented, /* Decimal */
-        (encodeBinarySignature)UInt32_encodeBinary, /* Enumeration */
-        (encodeBinarySignature)encodeBinaryStruct,
-        (encodeBinarySignature)encodeBinaryStructWithOptFields, /* Structure with Optional Fields */
-        (encodeBinarySignature)encodeBinaryStruct, /* Union */
-        (encodeBinarySignature)encodeBinaryStruct /* BitfieldCluster */
+    (encodeBinarySignature)Boolean_encodeBinary,
+    (encodeBinarySignature)Byte_encodeBinary, /* SByte */
+    (encodeBinarySignature)Byte_encodeBinary,
+    (encodeBinarySignature)UInt16_encodeBinary, /* Int16 */
+    (encodeBinarySignature)UInt16_encodeBinary,
+    (encodeBinarySignature)UInt32_encodeBinary, /* Int32 */
+    (encodeBinarySignature)UInt32_encodeBinary,
+    (encodeBinarySignature)UInt64_encodeBinary, /* Int64 */
+    (encodeBinarySignature)UInt64_encodeBinary,
+    (encodeBinarySignature)Float_encodeBinary,
+    (encodeBinarySignature)Double_encodeBinary,
+    (encodeBinarySignature)String_encodeBinary,
+    (encodeBinarySignature)UInt64_encodeBinary, /* DateTime */
+    (encodeBinarySignature)Guid_encodeBinary,
+    (encodeBinarySignature)String_encodeBinary, /* ByteString */
+    (encodeBinarySignature)String_encodeBinary, /* XmlElement */
+    (encodeBinarySignature)NodeId_encodeBinary,
+    (encodeBinarySignature)ExpandedNodeId_encodeBinary,
+    (encodeBinarySignature)UInt32_encodeBinary, /* StatusCode */
+    (encodeBinarySignature)QualifiedName_encodeBinary,
+    (encodeBinarySignature)LocalizedText_encodeBinary,
+    (encodeBinarySignature)ExtensionObject_encodeBinary,
+    (encodeBinarySignature)DataValue_encodeBinary,
+    (encodeBinarySignature)Variant_encodeBinary,
+    (encodeBinarySignature)DiagnosticInfo_encodeBinary,
+    (encodeBinarySignature)encodeBinaryNotImplemented, /* Decimal */
+    (encodeBinarySignature)UInt32_encodeBinary, /* Enumeration */
+    (encodeBinarySignature)encodeBinaryStruct,
+    (encodeBinarySignature)encodeBinaryStructWithOptFields, /* Structure with Optional Fields */
+    (encodeBinarySignature)encodeBinaryStruct, /* Union */
+    (encodeBinarySignature)encodeBinaryStruct /* BitfieldCluster */
 };
 
 status
@@ -1517,37 +1517,37 @@ decodeBinaryStructure(void *dst, const UA_DataType *type, Ctx *ctx) {
 }
 
 const decodeBinarySignature decodeBinaryJumpTable[UA_DATATYPEKINDS] = {
-        (decodeBinarySignature)Boolean_decodeBinary,
-        (decodeBinarySignature)Byte_decodeBinary, /* SByte */
-        (decodeBinarySignature)Byte_decodeBinary,
-        (decodeBinarySignature)UInt16_decodeBinary, /* Int16 */
-        (decodeBinarySignature)UInt16_decodeBinary,
-        (decodeBinarySignature)UInt32_decodeBinary, /* Int32 */
-        (decodeBinarySignature)UInt32_decodeBinary,
-        (decodeBinarySignature)UInt64_decodeBinary, /* Int64 */
-        (decodeBinarySignature)UInt64_decodeBinary,
-        (decodeBinarySignature)Float_decodeBinary,
-        (decodeBinarySignature)Double_decodeBinary,
-        (decodeBinarySignature)String_decodeBinary,
-        (decodeBinarySignature)UInt64_decodeBinary, /* DateTime */
-        (decodeBinarySignature)Guid_decodeBinary,
-        (decodeBinarySignature)String_decodeBinary, /* ByteString */
-        (decodeBinarySignature)String_decodeBinary, /* XmlElement */
-        (decodeBinarySignature)NodeId_decodeBinary,
-        (decodeBinarySignature)ExpandedNodeId_decodeBinary,
-        (decodeBinarySignature)UInt32_decodeBinary, /* StatusCode */
-        (decodeBinarySignature)QualifiedName_decodeBinary,
-        (decodeBinarySignature)LocalizedText_decodeBinary,
-        (decodeBinarySignature)ExtensionObject_decodeBinary,
-        (decodeBinarySignature)DataValue_decodeBinary,
-        (decodeBinarySignature)Variant_decodeBinary,
-        (decodeBinarySignature)DiagnosticInfo_decodeBinary,
-        (decodeBinarySignature)decodeBinaryNotImplemented, /* Decimal */
-        (decodeBinarySignature)UInt32_decodeBinary, /* Enumeration */
-        (decodeBinarySignature)decodeBinaryStructure,
-        (decodeBinarySignature)decodeBinaryNotImplemented, /* Structure with optional fields */
-        (decodeBinarySignature)decodeBinaryNotImplemented, /* Union */
-        (decodeBinarySignature)decodeBinaryNotImplemented /* BitfieldCluster */
+    (decodeBinarySignature)Boolean_decodeBinary,
+    (decodeBinarySignature)Byte_decodeBinary, /* SByte */
+    (decodeBinarySignature)Byte_decodeBinary,
+    (decodeBinarySignature)UInt16_decodeBinary, /* Int16 */
+    (decodeBinarySignature)UInt16_decodeBinary,
+    (decodeBinarySignature)UInt32_decodeBinary, /* Int32 */
+    (decodeBinarySignature)UInt32_decodeBinary,
+    (decodeBinarySignature)UInt64_decodeBinary, /* Int64 */
+    (decodeBinarySignature)UInt64_decodeBinary,
+    (decodeBinarySignature)Float_decodeBinary,
+    (decodeBinarySignature)Double_decodeBinary,
+    (decodeBinarySignature)String_decodeBinary,
+    (decodeBinarySignature)UInt64_decodeBinary, /* DateTime */
+    (decodeBinarySignature)Guid_decodeBinary,
+    (decodeBinarySignature)String_decodeBinary, /* ByteString */
+    (decodeBinarySignature)String_decodeBinary, /* XmlElement */
+    (decodeBinarySignature)NodeId_decodeBinary,
+    (decodeBinarySignature)ExpandedNodeId_decodeBinary,
+    (decodeBinarySignature)UInt32_decodeBinary, /* StatusCode */
+    (decodeBinarySignature)QualifiedName_decodeBinary,
+    (decodeBinarySignature)LocalizedText_decodeBinary,
+    (decodeBinarySignature)ExtensionObject_decodeBinary,
+    (decodeBinarySignature)DataValue_decodeBinary,
+    (decodeBinarySignature)Variant_decodeBinary,
+    (decodeBinarySignature)DiagnosticInfo_decodeBinary,
+    (decodeBinarySignature)decodeBinaryNotImplemented, /* Decimal */
+    (decodeBinarySignature)UInt32_decodeBinary, /* Enumeration */
+    (decodeBinarySignature)decodeBinaryStructure,
+    (decodeBinarySignature)decodeBinaryNotImplemented, /* Structure with optional fields */
+    (decodeBinarySignature)decodeBinaryNotImplemented, /* Union */
+    (decodeBinarySignature)decodeBinaryNotImplemented /* BitfieldCluster */
 };
 
 status
@@ -1608,25 +1608,25 @@ CALCSIZE_BINARY(Guid) { return 16; }
 CALCSIZE_BINARY(NodeId) {
     size_t s = 1; /* Encoding byte */
     switch(src->identifierType) {
-        case UA_NODEIDTYPE_NUMERIC:
-            if(src->identifier.numeric > UA_UINT16_MAX || src->namespaceIndex > UA_BYTE_MAX) {
-                s += 6;
-            } else if(src->identifier.numeric > UA_BYTE_MAX || src->namespaceIndex > 0) {
-                s += 3;
-            } else {
-                s += 1;
-            }
-            break;
-        case UA_NODEIDTYPE_BYTESTRING:
-        case UA_NODEIDTYPE_STRING:
-            s += 2;
-            s += String_calcSizeBinary(&src->identifier.string, NULL);
-            break;
-        case UA_NODEIDTYPE_GUID:
-            s += 18;
-            break;
-        default:
-            return 0;
+    case UA_NODEIDTYPE_NUMERIC:
+        if(src->identifier.numeric > UA_UINT16_MAX || src->namespaceIndex > UA_BYTE_MAX) {
+            s += 6;
+        } else if(src->identifier.numeric > UA_BYTE_MAX || src->namespaceIndex > 0) {
+            s += 3;
+        } else {
+            s += 1;
+        }
+        break;
+    case UA_NODEIDTYPE_BYTESTRING:
+    case UA_NODEIDTYPE_STRING:
+        s += 2;
+        s += String_calcSizeBinary(&src->identifier.string, NULL);
+        break;
+    case UA_NODEIDTYPE_GUID:
+        s += 18;
+        break;
+    default:
+        return 0;
     }
     return s;
 }
@@ -1660,14 +1660,14 @@ CALCSIZE_BINARY(ExtensionObject) {
     if(src->encoding <= UA_EXTENSIONOBJECT_ENCODED_XML) {
         s += NodeId_calcSizeBinary(&src->content.encoded.typeId, NULL);
         switch(src->encoding) {
-            case UA_EXTENSIONOBJECT_ENCODED_NOBODY:
-                break;
-            case UA_EXTENSIONOBJECT_ENCODED_BYTESTRING:
-            case UA_EXTENSIONOBJECT_ENCODED_XML:
-                s += String_calcSizeBinary(&src->content.encoded.body, NULL);
-                break;
-            default:
-                return 0;
+        case UA_EXTENSIONOBJECT_ENCODED_NOBODY:
+            break;
+        case UA_EXTENSIONOBJECT_ENCODED_BYTESTRING:
+        case UA_EXTENSIONOBJECT_ENCODED_XML:
+            s += String_calcSizeBinary(&src->content.encoded.body, NULL);
+            break;
+        default:
+            return 0;
         }
         return s;
     }
@@ -1842,37 +1842,37 @@ calcSizeBinaryNotImplemented(const void *p, const UA_DataType *type) {
 }
 
 const calcSizeBinarySignature calcSizeBinaryJumpTable[UA_DATATYPEKINDS] = {
-        (calcSizeBinarySignature)calcSizeBinary1, /* Boolean */
-        (calcSizeBinarySignature)calcSizeBinary1, /* SByte */
-        (calcSizeBinarySignature)calcSizeBinary1, /* Byte */
-        (calcSizeBinarySignature)calcSizeBinary2, /* Int16 */
-        (calcSizeBinarySignature)calcSizeBinary2, /* UInt16 */
-        (calcSizeBinarySignature)calcSizeBinary4, /* Int32 */
-        (calcSizeBinarySignature)calcSizeBinary4, /* UInt32 */
-        (calcSizeBinarySignature)calcSizeBinary8, /* Int64 */
-        (calcSizeBinarySignature)calcSizeBinary8, /* UInt64 */
-        (calcSizeBinarySignature)calcSizeBinary4, /* Float */
-        (calcSizeBinarySignature)calcSizeBinary8, /* Double */
-        (calcSizeBinarySignature)String_calcSizeBinary,
-        (calcSizeBinarySignature)calcSizeBinary8, /* DateTime */
-        (calcSizeBinarySignature)Guid_calcSizeBinary,
-        (calcSizeBinarySignature)String_calcSizeBinary, /* ByteString */
-        (calcSizeBinarySignature)String_calcSizeBinary, /* XmlElement */
-        (calcSizeBinarySignature)NodeId_calcSizeBinary,
-        (calcSizeBinarySignature)ExpandedNodeId_calcSizeBinary,
-        (calcSizeBinarySignature)calcSizeBinary4, /* StatusCode */
-        (calcSizeBinarySignature)QualifiedName_calcSizeBinary,
-        (calcSizeBinarySignature)LocalizedText_calcSizeBinary,
-        (calcSizeBinarySignature)ExtensionObject_calcSizeBinary,
-        (calcSizeBinarySignature)DataValue_calcSizeBinary,
-        (calcSizeBinarySignature)Variant_calcSizeBinary,
-        (calcSizeBinarySignature)DiagnosticInfo_calcSizeBinary,
-        (calcSizeBinarySignature)calcSizeBinaryNotImplemented, /* Decimal */
-        (calcSizeBinarySignature)calcSizeBinary4, /* Enumeration */
-        (calcSizeBinarySignature)calcSizeBinaryStructure,
-        (calcSizeBinarySignature)calcSizeBinaryStructureWithOptFields, /* Structure with Optional Fields */
-        (calcSizeBinarySignature)calcSizeBinaryNotImplemented, /* Union */
-        (calcSizeBinarySignature)calcSizeBinaryNotImplemented /* BitfieldCluster */
+    (calcSizeBinarySignature)calcSizeBinary1, /* Boolean */
+    (calcSizeBinarySignature)calcSizeBinary1, /* SByte */
+    (calcSizeBinarySignature)calcSizeBinary1, /* Byte */
+    (calcSizeBinarySignature)calcSizeBinary2, /* Int16 */
+    (calcSizeBinarySignature)calcSizeBinary2, /* UInt16 */
+    (calcSizeBinarySignature)calcSizeBinary4, /* Int32 */
+    (calcSizeBinarySignature)calcSizeBinary4, /* UInt32 */
+    (calcSizeBinarySignature)calcSizeBinary8, /* Int64 */
+    (calcSizeBinarySignature)calcSizeBinary8, /* UInt64 */
+    (calcSizeBinarySignature)calcSizeBinary4, /* Float */
+    (calcSizeBinarySignature)calcSizeBinary8, /* Double */
+    (calcSizeBinarySignature)String_calcSizeBinary,
+    (calcSizeBinarySignature)calcSizeBinary8, /* DateTime */
+    (calcSizeBinarySignature)Guid_calcSizeBinary,
+    (calcSizeBinarySignature)String_calcSizeBinary, /* ByteString */
+    (calcSizeBinarySignature)String_calcSizeBinary, /* XmlElement */
+    (calcSizeBinarySignature)NodeId_calcSizeBinary,
+    (calcSizeBinarySignature)ExpandedNodeId_calcSizeBinary,
+    (calcSizeBinarySignature)calcSizeBinary4, /* StatusCode */
+    (calcSizeBinarySignature)QualifiedName_calcSizeBinary,
+    (calcSizeBinarySignature)LocalizedText_calcSizeBinary,
+    (calcSizeBinarySignature)ExtensionObject_calcSizeBinary,
+    (calcSizeBinarySignature)DataValue_calcSizeBinary,
+    (calcSizeBinarySignature)Variant_calcSizeBinary,
+    (calcSizeBinarySignature)DiagnosticInfo_calcSizeBinary,
+    (calcSizeBinarySignature)calcSizeBinaryNotImplemented, /* Decimal */
+    (calcSizeBinarySignature)calcSizeBinary4, /* Enumeration */
+    (calcSizeBinarySignature)calcSizeBinaryStructure,
+    (calcSizeBinarySignature)calcSizeBinaryStructureWithOptFields, /* Structure with Optional Fields */
+    (calcSizeBinarySignature)calcSizeBinaryNotImplemented, /* Union */
+    (calcSizeBinarySignature)calcSizeBinaryNotImplemented /* BitfieldCluster */
 };
 
 size_t
