@@ -35,12 +35,36 @@ int main(int argc, char** argv) {
 
 
     UA_Location* l = UA_Location_new();
-    l->switchField = 1;
+    l->switchField = 0;
     l->local = UA_STRING("local");
     l->nMEA = UA_STRING("nmea");
+    l->name = UA_STRING("name");
 
+    UA_ByteString *lBuf = UA_ByteString_new();
     size_t lsize = UA_Location_calcSizeBinary(l);
-    printf("%zu\n", lsize);
+    if(lsize == 0) printf("SwitchField too large\n");
+    UA_ByteString_allocBuffer(lBuf, lsize);
+    memset(lBuf->data, 0, lsize);
+
+    UA_Byte *lBufPos = lBuf->data;
+    const UA_Byte *lBufEnd = &lBuf->data[lBuf->length];
+
+    UA_Location_encodeBinary(l, &lBufPos, lBufEnd);
+
+    for(size_t i=0; i<lBuf->length; i++){
+        printf("%02X", lBuf->data[i]);
+    }
+    printf("\n");
+
+    UA_Location *ld = UA_Location_new();
+    size_t lOffset = 0;
+    UA_Location_decodeBinary(lBuf, &lOffset, ld);
+
+    printf("switchField: %d\n", ld->switchField);
+    printf("nMEA: %s\n", ld->nMEA.data);
+    printf("local: %s\n", ld->local.data);
+    printf("wGS84: %s\n", ld->wGS84.data);
+    printf("name: %s\n", ld->name.data);
 
 //----------------------------------------------------------------------
 

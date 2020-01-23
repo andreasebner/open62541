@@ -1406,6 +1406,46 @@ encodeBinaryStructWithOptFields(const void *src, const UA_DataType *type, Ctx *c
 }
 
 static status
+encodeBinaryUnion(const void *src, const UA_DataType *type, Ctx *ctx) {
+    /* Check the recursion limit */
+    if(ctx->depth > UA_ENCODING_MAX_RECURSION)
+        return UA_STATUSCODE_BADENCODINGERROR;
+    ctx->depth++;
+
+    uintptr_t ptr = (uintptr_t)src;
+    status ret = UA_STATUSCODE_GOOD;
+    u8 membersSize = type->membersSize;
+
+    UA_UInt32 switchField = *(UA_UInt32*) ptr;
+    if(switchField >= membersSize) return UA_STATUSCODE_BADENCODINGERROR;
+
+    const UA_DataType *typelists[2] = { UA_TYPES, &type[-type->typeIndex] };
+
+    /* Loop over members */
+    for(size_t i = 0; i < membersSize; ++i) {
+        const UA_DataTypeMember *m = &type->members[i];
+        const UA_DataType *mt = &typelists[!m->namespaceZero][m->memberTypeIndex];
+        ptr += m->padding;
+
+        /* Array. Buffer-exchange is done inside Array_encodeBinary if required. */
+        if(m->isArray) {
+            const size_t length = *((const size_t*)ptr);
+            ptr += sizeof(size_t);
+            if(i == switchField) ret = Array_encodeBinary(*(void *UA_RESTRICT const *)ptr, length, mt, ctx);
+            ptr += sizeof(void*);
+            continue;
+        }
+
+        /* Scalar */
+        if((i == 0) || (i == switchField)) ret = encodeWithExchangeBuffer((const void*)ptr, mt, ctx);
+        ptr += mt->memSize;
+    }
+
+    ctx->depth--;
+    return ret;
+}
+
+static status
 encodeBinaryNotImplemented(const void *src, const UA_DataType *type, Ctx *ctx) {
     (void)src, (void)type, (void)ctx;
     return UA_STATUSCODE_BADNOTIMPLEMENTED;
@@ -1445,7 +1485,7 @@ const encodeBinarySignature encodeBinaryJumpTable[UA_DATATYPEKINDS] = {
     (encodeBinarySignature)UInt32_encodeBinary, /* Enumeration */
     (encodeBinarySignature)encodeBinaryStruct,
     (encodeBinarySignature)encodeBinaryStructWithOptFields, /* Structure with Optional Fields */
-    (encodeBinarySignature)encodeBinaryStruct, /* Union */
+    (encodeBinarySignature)encodeBinaryUnion, /* Union */
     (encodeBinarySignature)encodeBinaryStruct /* BitfieldCluster */
 };
 
@@ -1572,6 +1612,46 @@ decodeBinaryStructureWithOptFields(void *dst, const UA_DataType *type, Ctx *ctx)
     return ret;
 }
 
+static status
+decodeBinaryUnion(void *dst, const UA_DataType *type, Ctx *ctx) {
+    /* Check the recursion limit */
+    if(ctx->depth > UA_ENCODING_MAX_RECURSION)
+        return UA_STATUSCODE_BADENCODINGERROR;
+    ctx->depth++;
+
+    uintptr_t ptr = (uintptr_t)dst;
+    status ret = UA_STATUSCODE_GOOD;
+    u8 membersSize = type->membersSize;
+
+    UA_UInt32 switchField = *(UA_UInt32*) ctx->pos;
+    if(switchField >= membersSize) return UA_STATUSCODE_BADDECODINGERROR;
+
+    const UA_DataType *typelists[2] = { UA_TYPES, &type[-type->typeIndex] };
+
+    /* Loop over members */
+    for(size_t i = 0; i < membersSize && ret == UA_STATUSCODE_GOOD; ++i) {
+        const UA_DataTypeMember *m = &type->members[i];
+        const UA_DataType *mt = &typelists[!m->namespaceZero][m->memberTypeIndex];
+        ptr += m->padding;
+
+        /* Array */
+        if(m->isArray) {
+            size_t *length = (size_t*)ptr;
+            ptr += sizeof(size_t);
+            if(i == switchField) ret = Array_decodeBinary((void *UA_RESTRICT *UA_RESTRICT)ptr, length, mt , ctx);
+            ptr += sizeof(void*);
+            continue;
+        }
+
+        /* Scalar */
+        if((i == 0) || (i == switchField)) ret = decodeBinaryJumpTable[mt->typeKind]((void *UA_RESTRICT)ptr, mt, ctx);
+        ptr += mt->memSize;
+    }
+
+    ctx->depth--;
+    return ret;
+}
+
 const decodeBinarySignature decodeBinaryJumpTable[UA_DATATYPEKINDS] = {
     (decodeBinarySignature)Boolean_decodeBinary,
     (decodeBinarySignature)Byte_decodeBinary, /* SByte */
@@ -1602,7 +1682,7 @@ const decodeBinarySignature decodeBinaryJumpTable[UA_DATATYPEKINDS] = {
     (decodeBinarySignature)UInt32_decodeBinary, /* Enumeration */
     (decodeBinarySignature)decodeBinaryStructure,
     (decodeBinarySignature)decodeBinaryStructureWithOptFields, /* Structure with optional fields */
-    (decodeBinarySignature)decodeBinaryNotImplemented, /* Union */
+    (decodeBinarySignature)decodeBinaryUnion, /* Union */
     (decodeBinarySignature)decodeBinaryNotImplemented /* BitfieldCluster */
 };
 
@@ -1897,8 +1977,7 @@ calcSizeBinaryUnion(const void *p, const UA_DataType *type) {
     uintptr_t ptr = (uintptr_t)p;
     u8 membersSize = type->membersSize;
     UA_UInt32 switchField = *(UA_UInt32*) ptr;
-    if(switchField == 0) return 4;
-    if(switchField >= membersSize) return 0;
+    if(switchField == 0 || switchField >= membersSize) return sizeof(UA_UInt32);
     const UA_DataType *typelists[2] = { UA_TYPES, &type[-type->typeIndex] };
 
     /* Loop over members */
