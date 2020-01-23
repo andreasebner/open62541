@@ -1516,6 +1516,62 @@ decodeBinaryStructure(void *dst, const UA_DataType *type, Ctx *ctx) {
     return ret;
 }
 
+static status
+decodeBinaryStructureWithOptFields(void *dst, const UA_DataType *type, Ctx *ctx){
+    /* Check the recursion limit */
+    if(ctx->depth > UA_ENCODING_MAX_RECURSION)
+        return UA_STATUSCODE_BADENCODINGERROR;
+    ctx->depth++;
+
+    size_t optFieldsSize = getOptFieldsSize(type);
+    uintptr_t ptr = (uintptr_t)dst;
+    UA_UInt32 encodingMask;
+    UInt32_decodeBinary(&encodingMask, &UA_TYPES[UA_TYPES_UINT32], ctx);
+
+    for(size_t h = 0; h < optFieldsSize; h++){
+        *(UA_Boolean*)ptr = encodingMask & (UA_UInt32) (1<<h) ? true : false;
+        ptr += sizeof(UA_Boolean);
+    }
+
+    status ret = UA_STATUSCODE_GOOD;
+    u8 membersSize = type->membersSize;
+    const UA_DataType *typelists[2] = { UA_TYPES, &type[-type->typeIndex] };
+
+    /* Loop over members */
+    for(size_t i = 0, o = 0; i < membersSize && ret == UA_STATUSCODE_GOOD; ++i) {
+        const UA_DataTypeMember *m = &type->members[i];
+        const UA_DataType *mt = &typelists[!m->namespaceZero][m->memberTypeIndex];
+        ptr += m->padding;
+        if(m->isOptional){
+            o++;
+            if(!(encodingMask & (UA_UInt32) (1<<(o-1)))){
+                if(m->isArray){
+                    ptr += sizeof(size_t) + sizeof(void*);
+                }
+                else{
+                    ptr += mt->memSize;
+                }
+                continue;
+            }
+        }
+        /* Array */
+        if(m->isArray) {
+            size_t *length = (size_t*)ptr;
+            ptr += sizeof(size_t);
+            ret = Array_decodeBinary((void *UA_RESTRICT *UA_RESTRICT)ptr, length, mt , ctx);
+            ptr += sizeof(void*);
+            continue;
+        }
+
+        /* Scalar */
+        ret = decodeBinaryJumpTable[mt->typeKind]((void *UA_RESTRICT)ptr, mt, ctx);
+        ptr += mt->memSize;
+    }
+
+    ctx->depth--;
+    return ret;
+}
+
 const decodeBinarySignature decodeBinaryJumpTable[UA_DATATYPEKINDS] = {
     (decodeBinarySignature)Boolean_decodeBinary,
     (decodeBinarySignature)Byte_decodeBinary, /* SByte */
@@ -1545,7 +1601,7 @@ const decodeBinarySignature decodeBinaryJumpTable[UA_DATATYPEKINDS] = {
     (decodeBinarySignature)decodeBinaryNotImplemented, /* Decimal */
     (decodeBinarySignature)UInt32_decodeBinary, /* Enumeration */
     (decodeBinarySignature)decodeBinaryStructure,
-    (decodeBinarySignature)decodeBinaryNotImplemented, /* Structure with optional fields */
+    (decodeBinarySignature)decodeBinaryStructureWithOptFields, /* Structure with optional fields */
     (decodeBinarySignature)decodeBinaryNotImplemented, /* Union */
     (decodeBinarySignature)decodeBinaryNotImplemented /* BitfieldCluster */
 };

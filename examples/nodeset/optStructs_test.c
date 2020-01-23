@@ -66,8 +66,8 @@ int main(int argc, char** argv) {
     size_t msgSizeO = UA_OptStruct_calcSizeBinary(o);
     UA_ByteString_allocBuffer(bufO, msgSizeO);
     memset(bufO->data, 0, msgSizeO);
-    
-    
+
+
     UA_Byte *bufOptStructPos = bufO->data;
     const UA_Byte *bufOptStructEnd = &bufO->data[bufO->length];
 
@@ -77,6 +77,17 @@ int main(int argc, char** argv) {
         printf("%02X", bufO->data[i]);
     }
     printf("\n");
+
+    UA_OptStruct *od = UA_OptStruct_new();
+    size_t offset = 0;
+    UA_OptStruct_decodeBinary(bufO, &offset, od);
+
+    printf("hasAntennaName: %d\n", od->hasAntennaName);
+    printf("hasTestDouble: %d\n", od->hasTestDouble);
+    printf("testInt: %d\n", od->testInt);
+    printf("antennaName: %s\n", od->antennaName.data);
+    printf("testFloat: %f\n", od->testFloat);
+    printf("testDouble: %f\n", od->testDouble);
 
     UA_StatusCode retval;
 
