@@ -34,6 +34,16 @@ int main(int argc, char** argv) {
     UA_ServerConfig_setDefault(UA_Server_getConfig(server));
 
 
+    UA_Location* l = UA_Location_new();
+    l->switchField = 1;
+    l->local = UA_STRING("local");
+    l->nMEA = UA_STRING("nmea");
+
+    size_t lsize = UA_Location_calcSizeBinary(l);
+    printf("%zu\n", lsize);
+
+//----------------------------------------------------------------------
+
     UA_NotOptStruct* r = UA_NotOptStruct_new();
 
     r->antennaName = UA_STRING("hello");

@@ -15,4 +15,11 @@
   <opc:Field TypeName="opc:Float" Name="TestFloat"/>
   <opc:Field TypeName="opc:Double" Name="TestDouble"/>
  </opc:StructuredType>
+ <opc:StructuredType BaseType="ua:Union" Name="Location">
+  <opc:Field TypeName="opc:UInt32" Name="SwitchField"/>
+  <opc:Field SwitchField="SwitchField" TypeName="opc:CharArray" SwitchValue="1" Name="NMEA"/>
+  <opc:Field SwitchField="SwitchField" TypeName="opc:CharArray" SwitchValue="2" Name="Local"/>
+  <opc:Field SwitchField="SwitchField" TypeName="opc:CharArray" SwitchValue="3" Name="WGS84"/>
+  <opc:Field SwitchField="SwitchField" TypeName="opc:CharArray" SwitchValue="4" Name="Name"/>
+ </opc:StructuredType>
 </opc:TypeDictionary>

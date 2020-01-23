@@ -1892,6 +1892,39 @@ getOptFieldsSize(const UA_DataType *type){
 }
 
 static size_t
+calcSizeBinaryUnion(const void *p, const UA_DataType *type) {
+    size_t s = 0;
+    uintptr_t ptr = (uintptr_t)p;
+    u8 membersSize = type->membersSize;
+    UA_UInt32 switchField = *(UA_UInt32*) ptr;
+    if(switchField == 0) return 4;
+    if(switchField >= membersSize) return 0;
+    const UA_DataType *typelists[2] = { UA_TYPES, &type[-type->typeIndex] };
+
+    /* Loop over members */
+    for(size_t i = 0; i < membersSize; ++i) {
+        const UA_DataTypeMember *member = &type->members[i];
+        const UA_DataType *membertype = &typelists[!member->namespaceZero][member->memberTypeIndex];
+        ptr += member->padding;
+
+        /* Array */
+        if(member->isArray) {
+            const size_t length = *((const size_t*)ptr);
+            ptr += sizeof(size_t);
+            if(i == switchField) s += Array_calcSizeBinary(*(void *UA_RESTRICT const *)ptr, length, membertype);
+            ptr += sizeof(void*);
+            continue;
+        }
+
+        /* Scalar */
+        if((i == 0) || (i == switchField)) s += calcSizeBinaryJumpTable[membertype->typeKind]((const void*)ptr, membertype);
+        ptr += membertype->memSize;
+    }
+
+    return s;
+}
+
+static size_t
 calcSizeBinaryNotImplemented(const void *p, const UA_DataType *type) {
     (void)p, (void)type;
     return 0;
@@ -1927,7 +1960,7 @@ const calcSizeBinarySignature calcSizeBinaryJumpTable[UA_DATATYPEKINDS] = {
     (calcSizeBinarySignature)calcSizeBinary4, /* Enumeration */
     (calcSizeBinarySignature)calcSizeBinaryStructure,
     (calcSizeBinarySignature)calcSizeBinaryStructureWithOptFields, /* Structure with Optional Fields */
-    (calcSizeBinarySignature)calcSizeBinaryNotImplemented, /* Union */
+    (calcSizeBinarySignature)calcSizeBinaryUnion, /* Union */
     (calcSizeBinarySignature)calcSizeBinaryNotImplemented /* BitfieldCluster */
 };
 

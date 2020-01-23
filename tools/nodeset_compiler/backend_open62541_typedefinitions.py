@@ -101,6 +101,8 @@ class CGenerator(object):
             for m in datatype.members:
                 if m.is_optional:
                     return "UA_DATATYPEKIND_OPTSTRUCT"
+            if datatype.is_union:
+                return "UA_DATATYPEKIND_UNION"
             return "UA_DATATYPEKIND_STRUCTURE"
         raise RuntimeError("Unknown type")
 

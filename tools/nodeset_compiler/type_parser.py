@@ -139,6 +139,8 @@ class StructType(Type):
         length_fields = []
         optional_fields = []
 
+        bt = xml.get("BaseType")
+        self.is_union = True if bt and get_type_name(bt) == "Union" else False
         for child in xml:
             length_field = child.get("LengthField")
             if length_field:
