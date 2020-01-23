@@ -151,4 +151,7 @@ if(UA_NAMESPACE_ZERO STREQUAL "FULL")
             FILES_BSD "${CMAKE_SOURCE_DIR}/optstructs.bsd"
     )
 
+    add_example(optStructs_test optStructs_test.c
+            ${CMAKE_SOURCE_DIR}/src_generated/open62541/optstructs_generated.c)
+
 endif()
