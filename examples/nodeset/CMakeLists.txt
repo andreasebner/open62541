@@ -151,6 +151,24 @@ if(UA_NAMESPACE_ZERO STREQUAL "FULL")
             FILES_BSD "${CMAKE_SOURCE_DIR}/optstructs.bsd"
     )
 
+    ua_generate_nodeset_and_datatypes(
+            NAME "autoid"
+            FILE_CSV "${CMAKE_SOURCE_DIR}/Opc.Ua.AutoID.NodeIds.csv"
+            FILE_BSD "${CMAKE_SOURCE_DIR}/Opc.Ua.AutoID.Types.bsd"
+            NAMESPACE_IDX 3
+            FILE_NS "${CMAKE_SOURCE_DIR}/Opc.Ua.AutoID.NodeSet2.xml"
+            # POWERLINK depends on the di nodeset, which must be generated before
+            DEPENDS "di"
+            INTERNAL
+    )
+
+    add_example(optStructs_autoId_test optStructs_test.c
+            ${UA_NODESET_DI_SOURCES}
+            ${UA_NODESET_AUTOID_SOURCES}
+            ${UA_TYPES_DI_SOURCES}
+            ${UA_TYPES_AUTOID_SOURCES})
+    add_dependencies(optStructs_autoId_test open62541-generator-ns-autoid)
+
     add_example(optStructs_test optStructs_test.c
             ${CMAKE_SOURCE_DIR}/src_generated/open62541/optstructs_generated.c)
 
