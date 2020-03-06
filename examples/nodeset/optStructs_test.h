@@ -1,8 +1,0 @@
-//
-// Created by grigory on 22.01.20.
-//
-
-#ifndef OPEN62541_OPTSTRUCTS_TEST_H
-#define OPEN62541_OPTSTRUCTS_TEST_H
-
-#endif //OPEN62541_OPTSTRUCTS_TEST_H
