@@ -50,9 +50,9 @@ add_executable(check_types_builtin check_types_builtin.c $<TARGET_OBJECTS:open62
 target_link_libraries(check_types_builtin ${LIBS})
 add_test_valgrind(types_builtin ${CMAKE_CURRENT_BINARY_DIR}/check_types_builtin)
 
-add_executable(check_types_memory check_types_memory.c $<TARGET_OBJECTS:open62541-object> $<TARGET_OBJECTS:open62541-testplugins>)
-target_link_libraries(check_types_memory ${LIBS})
-add_test_valgrind(types_memory ${CMAKE_CURRENT_BINARY_DIR}/check_types_memory)
+#add_executable(check_types_memory check_types_memory.c $<TARGET_OBJECTS:open62541-object> $<TARGET_OBJECTS:open62541-testplugins>)
+#target_link_libraries(check_types_memory ${LIBS})
+#add_test_valgrind(types_memory ${CMAKE_CURRENT_BINARY_DIR}/check_types_memory)
 
 add_executable(check_types_range check_types_range.c $<TARGET_OBJECTS:open62541-object> $<TARGET_OBJECTS:open62541-testplugins>)
 target_link_libraries(check_types_range ${LIBS})
@@ -164,6 +164,6 @@ add_executable(check_client_subscriptions check_client_subscriptions.c $<TARGET_
 target_link_libraries(check_client_subscriptions ${LIBS})
 add_test_valgrind(check_client_subscriptions ${CMAKE_CURRENT_BINARY_DIR}/check_client_subscriptions)
 
-add_executable(check_client_highlevel check_client_highlevel.c $<TARGET_OBJECTS:open62541-object> $<TARGET_OBJECTS:open62541-testplugins>)
-target_link_libraries(check_client_highlevel ${LIBS})
-add_test_valgrind(check_client_highlevel ${CMAKE_CURRENT_BINARY_DIR}/check_client_highlevel)
+#add_executable(check_client_highlevel check_client_highlevel.c $<TARGET_OBJECTS:open62541-object> $<TARGET_OBJECTS:open62541-testplugins>)
+#target_link_libraries(check_client_highlevel ${LIBS})
+#add_test_valgrind(check_client_highlevel ${CMAKE_CURRENT_BINARY_DIR}/check_client_highlevel)

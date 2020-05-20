@@ -49,6 +49,9 @@ struct UA_SecureChannel {
     UA_Connection *connection;
     LIST_HEAD(session_pointerlist, SessionEntry) sessions;
     LIST_HEAD(chunk_pointerlist, ChunkEntry) chunks;
+    //WinCC workaround, count numbers of activateSession requests by the client to
+    //close SecureChannel and force the creation of a new Session
+    UA_UInt32 sessionActivationCounter;
 };
 
 void UA_SecureChannel_init(UA_SecureChannel *channel);

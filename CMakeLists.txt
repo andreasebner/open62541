@@ -87,8 +87,8 @@ if(UA_ENABLE_NONSTANDARD_UDP)
 endif()
 
 # Build Targets
-option(UA_BUILD_EXAMPLES "Build example servers and clients" OFF)
-option(UA_BUILD_UNIT_TESTS "Build the unit tests" OFF)
+option(UA_BUILD_EXAMPLES "Build example servers and clients" ON)
+option(UA_BUILD_UNIT_TESTS "Build the unit tests" ON)
 option(UA_BUILD_EXAMPLES_NODESET_COMPILER "Generate an OPC UA information model from a nodeset XML (experimental)" OFF)
 
 # Advanced Build Targets
@@ -104,6 +104,8 @@ endif()
 # Force compilation with as C++
 option(UA_COMPILE_AS_CXX "Force compilation with a C++ compiler" OFF)
 mark_as_advanced(UA_COMPILE_AS_CXX)
+
+add_custom_target(test-verbose COMMAND ${CMAKE_CTEST_COMMAND} --verbose)
 
 #####################
 # Compiler Settings #
