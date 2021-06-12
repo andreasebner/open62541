@@ -87,13 +87,17 @@ waterControlMethodCallback(UA_Server *server,
     //Enable general 12V line to electric ball valve
     gpioWrite(4, 0);
 
-    if(mode){
+    if(*mode){
         gpioWrite(17, 0);
+        //Allow water flow - Security Valve
+        gpioWrite(27, 0);
     } else {
         //Close water valve
         gpioWrite(17, 1);
+        //Stop water flow - Security Valve
+        gpioWrite(27, 0);
     }
-    UA_sleep_ms(15000);
+    UA_sleep_ms(5000);
     //Ball Valve default should be close direction
     gpioWrite(17, 1);
 
