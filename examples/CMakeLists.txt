@@ -89,6 +89,7 @@ add_example(tutorial_server_object tutorial_server_object.c)
 
 if(UA_ENABLE_METHODCALLS)
     add_example(tutorial_server_method tutorial_server_method.c)
+    target_link_libraries(tutorial_server_method pigpio)
     if (UA_MULTITHREADING EQUAL 100)
         add_example(tutorial_server_method_async tutorial_server_method_async.c)
     endif()

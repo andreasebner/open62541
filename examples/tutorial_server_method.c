@@ -37,6 +37,7 @@
 
 #include <signal.h>
 #include <stdlib.h>
+#include <pigpio.h>
 
 static UA_StatusCode
 helloWorldMethodCallback(UA_Server *server,
@@ -56,6 +57,113 @@ helloWorldMethodCallback(UA_Server *server,
     UA_String_clear(&tmp);
     UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_SERVER, "Hello World was called");
     return UA_STATUSCODE_GOOD;
+}
+
+static UA_StatusCode
+gpioControlMethodCallback(UA_Server *server,
+                         const UA_NodeId *sessionId, void *sessionHandle,
+                         const UA_NodeId *methodId, void *methodContext,
+                         const UA_NodeId *objectId, void *objectContext,
+                         size_t inputSize, const UA_Variant *input,
+                         size_t outputSize, UA_Variant *output) {
+    UA_UInt32 *pin = (UA_UInt32 *) input[0].data;
+    UA_Boolean *mode = (UA_Boolean*) input[1].data;
+    gpioWrite(*pin, *mode);
+
+    return UA_STATUSCODE_GOOD;
+}
+
+volatile bool waterOpen = false;
+
+static UA_StatusCode
+waterControlMethodCallback(UA_Server *server,
+                          const UA_NodeId *sessionId, void *sessionHandle,
+                          const UA_NodeId *methodId, void *methodContext,
+                          const UA_NodeId *objectId, void *objectContext,
+                          size_t inputSize, const UA_Variant *input,
+                          size_t outputSize, UA_Variant *output) {
+    UA_Boolean *mode = (UA_Boolean*) input[0].data;
+
+    //Enable general 12V line to electric ball valve
+    gpioWrite(4, 0);
+
+    if(mode){
+        gpioWrite(17, 0);
+    } else {
+        //Close water valve
+        gpioWrite(17, 1);
+    }
+    UA_sleep_ms(15000);
+    //Ball Valve default should be close direction
+    gpioWrite(17, 1);
+
+/*    if(mode){
+        gpioWrite(26, 1);
+        UA_sleep_ms(15000);
+        gpioWrite(26, 0);
+        waterOpen = false;
+
+    } else {
+        //Close water valve
+        gpioWrite(6, 1);
+        UA_sleep_ms(15000);
+        gpioWrite(6, 0);
+        waterOpen = false;
+    }*/
+
+    //Disable general 12V line to electric ball valve
+    gpioWrite(4, 1);
+
+    return UA_STATUSCODE_GOOD;
+}
+
+static void
+addWaterControlMethod(UA_Server *server) {
+    UA_Argument inputArguments[1];
+    UA_Argument_init(&inputArguments[0]);
+    inputArguments[0].description = UA_LOCALIZEDTEXT("en-US", "State");
+    inputArguments[0].name = UA_STRING("State");
+    inputArguments[0].dataType = UA_TYPES[UA_TYPES_BOOLEAN].typeId;
+    inputArguments[0].valueRank = UA_VALUERANK_SCALAR;
+
+    UA_MethodAttributes gpioControlAttr = UA_MethodAttributes_default;
+    gpioControlAttr.description = UA_LOCALIZEDTEXT("en-US","GeneralWaterControl");
+    gpioControlAttr.displayName = UA_LOCALIZEDTEXT("en-US","GeneralWaterControl");
+    gpioControlAttr.executable = true;
+    gpioControlAttr.userExecutable = true;
+    UA_Server_addMethodNode(server, UA_NODEID_NUMERIC(1,4422),
+                            UA_NODEID_NUMERIC(0, UA_NS0ID_OBJECTSFOLDER),
+                            UA_NODEID_NUMERIC(0, UA_NS0ID_HASCOMPONENT),
+                            UA_QUALIFIEDNAME(1, "GeneralWaterControl"),
+                            gpioControlAttr, &waterControlMethodCallback,
+                            1, inputArguments, 0, NULL, NULL, NULL);
+}
+
+static void
+addGpioControlMethod(UA_Server *server) {
+    UA_Argument inputArguments[2];
+    UA_Argument_init(&inputArguments[0]);
+    inputArguments[0].description = UA_LOCALIZEDTEXT("en-US", "Pin");
+    inputArguments[0].name = UA_STRING("US");
+    inputArguments[0].dataType = UA_TYPES[UA_TYPES_UINT32].typeId;
+    inputArguments[0].valueRank = UA_VALUERANK_SCALAR;
+    UA_Argument_init(&inputArguments[1]);
+    inputArguments[1].description = UA_LOCALIZEDTEXT("en-US", "State");
+    inputArguments[1].name = UA_STRING("State");
+    inputArguments[1].dataType = UA_TYPES[UA_TYPES_BOOLEAN].typeId;
+    inputArguments[1].valueRank = UA_VALUERANK_SCALAR;
+
+    UA_MethodAttributes gpioControlAttr = UA_MethodAttributes_default;
+    gpioControlAttr.description = UA_LOCALIZEDTEXT("en-US","ConrolGPIO");
+    gpioControlAttr.displayName = UA_LOCALIZEDTEXT("en-US","ConrolGPIO");
+    gpioControlAttr.executable = true;
+    gpioControlAttr.userExecutable = true;
+    UA_Server_addMethodNode(server, UA_NODEID_NUMERIC(1,4422),
+                            UA_NODEID_NUMERIC(0, UA_NS0ID_OBJECTSFOLDER),
+                            UA_NODEID_NUMERIC(0, UA_NS0ID_HASCOMPONENT),
+                            UA_QUALIFIEDNAME(1, "ConrolGPIO"),
+                            gpioControlAttr, &gpioControlMethodCallback,
+                            2, inputArguments, 0, NULL, NULL, NULL);
 }
 
 static void
@@ -174,14 +282,20 @@ int main(void) {
     signal(SIGINT, stopHandler);
     signal(SIGTERM, stopHandler);
 
+    if (gpioInitialise() < 0) return 1;
+
     UA_Server *server = UA_Server_new();
     UA_ServerConfig_setDefault(UA_Server_getConfig(server));
 
+    addWaterControlMethod(server);
+    addGpioControlMethod(server);
     addHellWorldMethod(server);
     addIncInt32ArrayMethod(server);
 
     UA_StatusCode retval = UA_Server_run(server, &running);
 
     UA_Server_delete(server);
+    gpioTerminate();
+
     return retval == UA_STATUSCODE_GOOD ? EXIT_SUCCESS : EXIT_FAILURE;
 }
