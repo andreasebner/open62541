@@ -41,6 +41,8 @@ jobs:
         run: |
           rm -r -f ./static/doc/${{ steps.myref.outputs.branch }} || true # ignore result
           mkdir ./doc/${{ steps.myref.outputs.branch }} || true # ignore result
+          ls ../
+          ls ../../
           cp -r ../../doc/* ./static/doc/${{ steps.myref.outputs.branch }}/
           cp -r ../../doc_latex/open62541.pdf ./static/doc/open62541-${target_dir}.pdf
           git add -A ./static/doc
