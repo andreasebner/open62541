@@ -51,6 +51,6 @@ jobs:
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          reposiotry: andreasebner/open62541-www-staging
+          repository: andreasebner/open62541-www-staging
           branch: test_doc/${{ steps.myref.outputs.branch }}
           force: true
