@@ -32,7 +32,7 @@ jobs:
       - name: Checkout Website Repository
         uses: actions/checkout@v2
         with:
-          name: andreasebner/open62541-www-staging
+          repository: andreasebner/open62541-www-staging
       - name: Get the current branch name
         shell: bash
         run: echo "::set-output name=branch::${GITHUB_REF##*/}"
