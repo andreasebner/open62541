@@ -17,14 +17,12 @@ jobs:
         with:
           python-version: '3.x' # Version range or exact version of a Python version to use, using SemVer's version range syntax
           architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
-
       - name: Install Dependencies
-      -   run: |
-            sudo apt-get update
-            sudo apt-get install -y -qq python3-sphinx graphviz check
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y -qq python3-sphinx graphviz check
       - name: Build Documentation
-      - run: source tools/ci.sh && build_docs
-
+        run: source tools/ci.sh && build_docs
       - run: git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
       - run: git config --local user.name "github-actions[bot]"
       - run: git config --global push.default simple
