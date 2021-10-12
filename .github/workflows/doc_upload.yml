@@ -51,5 +51,6 @@ jobs:
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          directory: open62541-www
           branch: test_doc/${{ steps.myref.outputs.branch }}
           force: true
