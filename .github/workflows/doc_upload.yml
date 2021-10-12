@@ -20,7 +20,7 @@ jobs:
       - name: Install Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y -qq python3-sphinx graphviz check sphinx-rtd-theme
+          sudo apt-get install -y -qq python3-sphinx graphviz check sphinx-rtd-theme-common
       - name: Build Documentation
         run: source tools/ci.sh && build_docs
       - run: git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
