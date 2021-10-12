@@ -39,10 +39,9 @@ jobs:
           mkdir ./open62541-www/static/doc/${{ steps.myref.outputs.branch }} || true # ignore result
           cp -r /home/runner/work/open62541/open62541/build/doc/* ./open62541-www/static/doc/${{ steps.myref.outputs.branch }}
           cp -r /home/runner/work/open62541/open62541/build/doc_latex/open62541.pdf ./open62541-www/static/doc/open62541-${{ steps.myref.outputs.branch }}.pdf
-          cd ./open62541-www
       - name: Setup Git-Config Mail
         run: |
-          ls
+          cd ./open62541-www
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git config --global push.default simple
