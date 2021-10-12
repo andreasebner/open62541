@@ -23,7 +23,7 @@ jobs:
           sudo apt-get install -y -qq python3-sphinx graphviz python-six
           pip install sphinx-rtd-theme
       - name: Build Documentation
-        run: source tools/ci.sh && build_docs
+        run: source tools/ci.sh && build_docs_pdf
       - name: Setup Git-Config Mail
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
