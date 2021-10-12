@@ -25,10 +25,10 @@ jobs:
       - name: Build Documentation
         run: source tools/ci.sh && build_docs
       - name: Setup Git-Config Mail
-        run: git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-      - name: Setup Git-Config User
-        run: git config --local user.name "github-actions[bot]"
-      - run: git config --global push.default simple
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git config --global push.default simple
       - run: git commit -am "updated generated documentation on webpage by github-action [ci skip]"
 
 
