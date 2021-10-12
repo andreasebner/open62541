@@ -33,12 +33,15 @@ jobs:
         uses: actions/checkout@v2
         with:
           name: andreasebner/open62541-www-staging
+      - name: Get the current branch name
+        shell: bash
+        run: echo "::set-output name=branch::${GITHUB_REF##*/}"
+        id: myref
       - name: Copy Documentation Files to Website repository
         run: |
-          echo "Hello World"
-      #rm -r -f ./doc/${target_dir} || true # ignore result
-      #mkdir ./doc/${target_dir} || true # ignore result
-      #cp -r ../../doc/* ./doc/${target_dir}/
-      #cp -r ../../doc_latex/open62541.pdf ./doc/open62541-${target_dir}.pdf
-      #git add -A ./doc
-      #git commit -am "updated generated documentation on webpage by github-action [ci skip]"
+          rm -r -f ./static/doc/${{ steps.myref.outputs.branch }} || true # ignore result
+          mkdir ./doc/${{ steps.myref.outputs.branch }} || true # ignore result
+          cp -r ../../doc/* ./static/doc/${{ steps.myref.outputs.branch }}/
+          cp -r ../../doc_latex/open62541.pdf ./static/doc/open62541-${target_dir}.pdf
+          git add -A ./static/doc
+          git commit -am "updated generated documentation on webpage by github-action [ci skip]"
