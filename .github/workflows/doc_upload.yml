@@ -13,8 +13,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        with:
-          persist-credentials: false
       - uses: actions/setup-python@v2
         with:
           python-version: '3.x' # Version range or exact version of a Python version to use, using SemVer's version range syntax
@@ -53,6 +51,6 @@ jobs:
         uses: ad-m/github-push-action@master
         with:
           repository: andreasebner/open62541-www-staging
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.PAT }}
           branch: test_doc/${{ steps.myref.outputs.branch }}
           force: true
