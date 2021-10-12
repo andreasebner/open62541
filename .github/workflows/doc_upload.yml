@@ -33,7 +33,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: andreasebner/open62541-www-staging
-          path: './open62541-www'
+          path: open62541-www
       - name: Get the current branch name
         shell: bash
         run: echo "::set-output name=branch::${GITHUB_REF##*/}"
@@ -44,6 +44,8 @@ jobs:
           mkdir ./doc/${{ steps.myref.outputs.branch }} || true # ignore result
           pwd
           ls ../../
+          pwd
+          ls
           cp -r ../../doc/* ./static/doc/${{ steps.myref.outputs.branch }}/
           cp -r ../../doc_latex/open62541.pdf ./static/doc/open62541-${{ steps.myref.outputs.branch }}.pdf
           git add -A ./static/doc
