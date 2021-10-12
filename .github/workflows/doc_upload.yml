@@ -48,9 +48,10 @@ jobs:
           pwd
           ls /home/runner/work/open62541/open62541/build/doc
           rm -r -f ./open62541-www/static/doc/${{ steps.myref.outputs.branch }} || true # ignore result
-          mkdir open62541-www/static/doc/${{ steps.myref.outputs.branch }} || true # ignore result
+          mkdir ./open62541-www/static/doc/${{ steps.myref.outputs.branch }} || true # ignore result
           ls ./doc
-          #cp -r ../../doc/* ./open62541-www/static/doc/${{ steps.myref.outputs.branch }}/
+          cp -r /home/runner/work/open62541/open62541/build/doc/* ./open62541-www/static/doc/${{ steps.myref.outputs.branch }}
+          ls ./open62541-www/static/doc/${{ steps.myref.outputs.branch }}/
           #cp -r ../../doc_latex/open62541.pdf ./open62541-www/static/doc/open62541-${{ steps.myref.outputs.branch }}.pdf
           #git add -A ./static/doc
           #git commit -am "updated generated documentation on webpage by github-action [ci skip]"
