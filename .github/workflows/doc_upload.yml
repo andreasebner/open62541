@@ -20,7 +20,7 @@ jobs:
       - name: Install Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y -qq python3-sphinx graphviz check sphinx-rtd-theme-common
+          sudo apt-get install -y -qq python3-sphinx graphviz python-six
       - name: Build Documentation
         run: source tools/ci.sh && build_docs
       - name: Setup Git-Config Mail
