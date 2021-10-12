@@ -40,6 +40,11 @@ jobs:
         id: myref
       - name: Copy Documentation Files to Website repository
         run: |
+          ls ./open62541-www
+          pwd
+          ls open62541-www
+          pwd
+          ls /home/runner/work/open62541/open62541/build/
           rm -r -f ./open62541-www/static/doc/${{ steps.myref.outputs.branch }} || true # ignore result
           mkdir ./open62541-www/static/doc/${{ steps.myref.outputs.branch }} || true # ignore result
           ls ./doc
