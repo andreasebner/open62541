@@ -29,6 +29,9 @@ jobs:
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git config --global push.default simple
-      - run: git commit -am "updated generated documentation on webpage by github-action [ci skip]"
-
+      #- run: git commit -am "updated generated documentation on webpage by github-action [ci skip]"
+      - name: Checkout Website Repository
+      - uses: actions/checkout@v2
+        with:
+          name: andreasebner/open62541-www-staging
 
