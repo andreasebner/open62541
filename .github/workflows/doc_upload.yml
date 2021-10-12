@@ -24,11 +24,6 @@ jobs:
           pip install sphinx-rtd-theme
       - name: Build Documentation
         run: source tools/ci.sh && build_docs_pdf
-      - name: Setup Git-Config Mail
-        run: |
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git config --global push.default simple
       - name: Checkout Website Repository
         uses: actions/checkout@v2
         with:
@@ -40,14 +35,16 @@ jobs:
         id: myref
       - name: Copy Documentation Files to Website repository
         run: |
-          ls /home/runner/work/open62541/open62541/build/
-          pwd
-          ls /home/runner/work/open62541/open62541/build/doc
           rm -r -f ./open62541-www/static/doc/${{ steps.myref.outputs.branch }} || true # ignore result
           mkdir ./open62541-www/static/doc/${{ steps.myref.outputs.branch }} || true # ignore result
           cp -r /home/runner/work/open62541/open62541/build/doc/* ./open62541-www/static/doc/${{ steps.myref.outputs.branch }}
-          #cp -r ../../doc_latex/open62541.pdf ./open62541-www/static/doc/open62541-${{ steps.myref.outputs.branch }}.pdf
+          cp -r /home/runner/work/open62541/open62541/build/doc_latex/open62541.pdf ./open62541-www/static/doc/open62541-${{ steps.myref.outputs.branch }}.pdf
           cd ./open62541-www
+      - name: Setup Git-Config Mail
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git config --global push.default simple
           git add -A ./static/doc
           git commit -am "updated generated documentation on webpage by github-action [ci skip]"
       - name: Push changes
