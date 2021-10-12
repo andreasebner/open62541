@@ -41,9 +41,8 @@ jobs:
         run: |
           rm -r -f ./static/doc/${{ steps.myref.outputs.branch }} || true # ignore result
           mkdir ./doc/${{ steps.myref.outputs.branch }} || true # ignore result
-          ls ../
-          ls ../../
+          ls ../open62541/
           cp -r ../../doc/* ./static/doc/${{ steps.myref.outputs.branch }}/
-          cp -r ../../doc_latex/open62541.pdf ./static/doc/open62541-${target_dir}.pdf
+          cp -r ../../doc_latex/open62541.pdf ./static/doc/open62541-${{ steps.myref.outputs.branch }}.pdf
           git add -A ./static/doc
           git commit -am "updated generated documentation on webpage by github-action [ci skip]"
