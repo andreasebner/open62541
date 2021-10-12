@@ -23,8 +23,10 @@ jobs:
           sudo apt-get install -y -qq python3-sphinx graphviz check sphinx-rtd-theme-common
       - name: Build Documentation
         run: source tools/ci.sh && build_docs
-      - run: git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-      - run: git config --local user.name "github-actions[bot]"
+      - name: Setup Git-Config Mail
+        run: git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      - name: Setup Git-Config User
+        run: git config --local user.name "github-actions[bot]"
       - run: git config --global push.default simple
       - run: git commit -am "updated generated documentation on webpage by github-action [ci skip]"
 
