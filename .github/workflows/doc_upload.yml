@@ -55,7 +55,7 @@ jobs:
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
-          github_token: ${{ secrets.PAT }}
+          github_token: ${{ secrets.AR }}
           directory: open62541-www
           repository: andreasebner/open62541-www-staging
           branch: test_doc/${{ steps.myref.outputs.branch }}
