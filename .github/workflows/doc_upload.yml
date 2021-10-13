@@ -50,7 +50,7 @@ jobs:
           git config --global push.default simple
           git add -A ./static/doc
           git commit -am "updated generated documentation on webpage by github-action [ci skip]"
-          git push https:://$USERNAME:$REPO_KEY@github.com/andreasebner/open62541-www-staging.git                                                                        .git
+          git push https:://$USERNAME:$REPO_KEY@github.com/andreasebner/open62541-www-staging.git
           env:
             REPO_KEY: ${{secrets.PAT}}
             USERNAME: github-actions[bot]
