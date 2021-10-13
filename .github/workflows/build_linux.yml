@@ -8,31 +8,31 @@ jobs:
       fail-fast: false
       matrix:
         include: 
-          - name: "Debug Build & Unit Tests (gcc)"
+          - name: "Debug Build & Unit Tests (gcc)",
             cmd_deps: ""
             cmd_action: unit_tests
-          - name: "Debug Build & Unit Tests with multithreading (gcc)"
+          - name: "Debug Build & Unit Tests with multithreading (gcc)",
             cmd_deps: ""
             cmd_action: unit_tests_mt
-          - name: "Debug Build & Unit Tests with Alarms&Conditions (gcc)"
+          - name: "Debug Build & Unit Tests with Alarms&Conditions (gcc)",
             cmd_deps: ""
             cmd_action: unit_tests_alarms
-          - name: "Debug Build & Unit Tests (clang)"
+          - name: "Debug Build & Unit Tests (clang)",
             cmd_deps: sudo apt-get install -y -qq clang-11 clang-tools-11
             cmd_action: CC=clang-11 CXX=clang++-11 unit_tests
-          - name: "Debug Build & Unit Tests (tcc)"
+          - name: "Debug Build & Unit Tests (tcc)",
             cmd_deps: sudo apt-get install -y -qq tcc
             cmd_action: CC=tcc unit_tests
-          - name: "Encryption (MbedTLS) Build & Unit Tests (gcc)"
+          - name: "Encryption (MbedTLS) Build & Unit Tests (gcc)",
             cmd_deps: sudo apt-get install -y -qq libmbedtls-dev
             cmd_action: unit_tests_encryption MBEDTLS
-          - name: "PubSub Encryption (MbedTLS) Build & Unit Tests (gcc)"
+          - name: "PubSub Encryption (MbedTLS) Build & Unit Tests (gcc)",
             cmd_deps: sudo apt-get install -y -qq libmbedtls-dev
             cmd_action: unit_tests_encryption_mbedtls_pubsub
-          - name: "Encryption (OpenSSL) Build & Unit Tests (gcc)"
+          - name: "Encryption (OpenSSL) Build & Unit Tests (gcc)",
             cmd_deps: sudo apt-get install -y -qq openssl
             cmd_action: unit_tests_encryption OPENSSL
-          - name: "Encryption (LibreSSL) Build & Unit Tests (gcc)"
+          - name: "Encryption (LibreSSL) Build & Unit Tests (gcc)",
             cmd_deps: |
                 sudo apt-get install -y -qq curl
                 curl https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-3.3.3.tar.gz --output libressl.tar.gz
