@@ -50,12 +50,17 @@ jobs:
           git config --global push.default simple
           git add -A ./static/doc
           git commit -am "updated generated documentation on webpage by github-action [ci skip]"
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        env: # Or as an environment variable
-          super_secret: ${{ secrets.PAT }}
-        with:
-          github_token: $super_secret
-          repository: andreasebner/open62541-www-staging
-          branch: test_doc/${{ steps.myref.outputs.branch }}
-          force: true
+          git push https:://$USERNAME:$REPO_KEY@github.com/andreasebner/open62541-www-staging.git                                                                        .git
+          env:
+            REPO_KEY: ${{secrets.PAT}}
+            USERNAME: github-actions[bot]
+
+     # - name: Push changes
+      #  uses: ad-m/github-push-action@master
+     #   env: # Or as an environment variable
+     #     super_secret: ${{ secrets.PAT }}
+        #with:
+        #  github_token: $super_secret
+        #  repository: andreasebner/open62541-www-staging
+        #  branch: test_doc/${{ steps.myref.outputs.branch }}
+        #  force: true
