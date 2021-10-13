@@ -49,6 +49,9 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git add -A ./static/doc
           git commit -am "updated generated documentation on webpage by github-action [ci skip]"
+      - name: Location
+        run: |
+          ls
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
