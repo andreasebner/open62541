@@ -30,7 +30,6 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: andreasebner/open62541-www-staging
-          persist-credentials: false
           path: open62541-www
           token: ${{secrets.PAT}}
       - name: Get the current branch name
