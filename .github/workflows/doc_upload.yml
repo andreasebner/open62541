@@ -32,6 +32,7 @@ jobs:
           repository: andreasebner/open62541-www-staging
           persist-credentials: false
           path: open62541-www
+          token: ${{secrets.PAT}}
       - name: Get the current branch name
         shell: bash
         run: echo "::set-output name=branch::${GITHUB_REF##*/}"
