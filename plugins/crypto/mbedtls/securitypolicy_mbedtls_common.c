@@ -134,18 +134,18 @@ mbedtls_sign_sha1(mbedtls_pk_context *localPrivateKey,
                   const UA_ByteString *message,
                   UA_ByteString *signature) {
     unsigned char hash[UA_SHA1_LENGTH];
-#if MBEDTLS_VERSION_NUMBER >= 0x02070000
-    mbedtls_sha1_ret(message->data, message->length, hash);
-#else
     mbedtls_sha1(message->data, message->length, hash);
-#endif
 
     mbedtls_rsa_context *rsaContext = mbedtls_pk_rsa(*localPrivateKey);
     mbedtls_rsa_set_padding(rsaContext, MBEDTLS_RSA_PKCS_V15, 0);
 
     size_t sigLen = 0;
     int mbedErr = mbedtls_pk_sign(localPrivateKey, MBEDTLS_MD_SHA1, hash,
-                                  UA_SHA1_LENGTH, signature->data, &sigLen,
+                                  UA_SHA1_LENGTH, signature->data,
+#if MBEDTLS_VERSION_NUMBER >= 0x03000000
+                                  signature->length,
+#endif
+                                  &sigLen,
                                   mbedtls_ctr_drbg_random, drbgContext);
     if(mbedErr)
         return UA_STATUSCODE_BADINTERNALERROR;

@@ -132,6 +132,9 @@ asym_sign_sp_basic256sha256(Basic256Sha256_ChannelContext *cc,
     int mbedErr = mbedtls_pk_sign(&pc->localPrivateKey,
                                   MBEDTLS_MD_SHA256, hash,
                                   UA_SHA256_LENGTH, signature->data,
+#if MBEDTLS_VERSION_NUMBER >= 0x03000000
+                                  signature->length,
+#endif
                                   &sigLen, mbedtls_ctr_drbg_random,
                                   &pc->drbgContext);
     if(mbedErr)
