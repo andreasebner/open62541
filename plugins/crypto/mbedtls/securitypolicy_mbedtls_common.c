@@ -107,7 +107,7 @@ mbedtls_verifySig_sha1(mbedtls_x509_crt *certificate, const UA_ByteString *messa
                        const UA_ByteString *signature) {
     /* Compute the sha1 hash */
     unsigned char hash[UA_SHA1_LENGTH];
-#if MBEDTLS_VERSION_NUMBER >= 0x02070000
+#if MBEDTLS_VERSION_NUMBER >= 0x02070000 || MBEDTLS_VERSION_NUMBER < 0x03000000
     mbedtls_sha1_ret(message->data, message->length, hash);
 #else
     mbedtls_sha1(message->data, message->length, hash);
@@ -162,7 +162,7 @@ mbedtls_thumbprint_sha1(const UA_ByteString *certificate,
         return UA_STATUSCODE_BADINTERNALERROR;
 
     /* The certificate thumbprint is always a 20 bit sha1 hash, see Part 4 of the Specification. */
-#if MBEDTLS_VERSION_NUMBER >= 0x02070000
+#if MBEDTLS_VERSION_NUMBER >= 0x02070000 || MBEDTLS_VERSION_NUMBER < 0x03000000
     mbedtls_sha1_ret(certificate->data, certificate->length, thumbprint->data);
 #else
     mbedtls_sha1(certificate->data, certificate->length, thumbprint->data);

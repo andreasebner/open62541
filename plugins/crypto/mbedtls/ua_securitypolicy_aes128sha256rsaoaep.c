@@ -78,7 +78,7 @@ asym_verify_sp_aes128sha256rsaoaep(Aes128Sha256PsaOaep_ChannelContext *cc,
         return UA_STATUSCODE_BADINTERNALERROR;
 
     unsigned char hash[UA_SHA256_LENGTH];
-#if MBEDTLS_VERSION_NUMBER >= 0x02070000
+#if MBEDTLS_VERSION_NUMBER >= 0x02070000 || MBEDTLS_VERSION_NUMBER < 0x03000000
     // TODO check return status
     mbedtls_sha256_ret(message->data, message->length, hash, 0);
 #else
@@ -113,7 +113,7 @@ asym_sign_sp_aes128sha256rsaoaep(Aes128Sha256PsaOaep_ChannelContext *cc,
         return UA_STATUSCODE_BADINTERNALERROR;
 
     unsigned char hash[UA_SHA256_LENGTH];
-#if MBEDTLS_VERSION_NUMBER >= 0x02070000
+#if MBEDTLS_VERSION_NUMBER >= 0x02070000 || MBEDTLS_VERSION_NUMBER < 0x03000000
     // TODO check return status
     mbedtls_sha256_ret(message->data, message->length, hash, 0);
 #else
