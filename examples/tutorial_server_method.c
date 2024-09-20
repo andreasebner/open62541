@@ -96,7 +96,7 @@ IncInt32ArrayMethodCallback(UA_Server *server,
                             const UA_NodeId *objectId, void *objectContext,
                             size_t inputSize, const UA_Variant *input,
                             size_t outputSize, UA_Variant *output) {
-    UA_Int32 *inputArray = (UA_Int32*)input[0].data;
+    UA_Duration *inputArray = (UA_Duration* ) input[0].data;
     UA_Int32 delta = *(UA_Int32*)input[1].data;
 
     /* Copy the input array */
@@ -118,9 +118,9 @@ addIncInt32ArrayMethod(UA_Server *server) {
     /* Two input arguments */
     UA_Argument inputArguments[2];
     UA_Argument_init(&inputArguments[0]);
-    inputArguments[0].description = UA_LOCALIZEDTEXT("en-US", "int32[5] array");
+    inputArguments[0].description = UA_LOCALIZEDTEXT("en-US", "duration[5] array");
     inputArguments[0].name = UA_STRING("int32 array");
-    inputArguments[0].dataType = UA_TYPES[UA_TYPES_INT32].typeId;
+    inputArguments[0].dataType = UA_TYPES[UA_TYPES_DURATION].typeId;
     inputArguments[0].valueRank = UA_VALUERANK_ONE_DIMENSION;
     UA_UInt32 pInputDimension = 5;
     inputArguments[0].arrayDimensionsSize = 1;
