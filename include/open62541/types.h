@@ -198,8 +198,12 @@ typedef struct {
 UA_String UA_EXPORT
 UA_String_fromChars(const char *src) UA_FUNC_ATTR_WARN_UNUSED_RESULT;
 
+/* Generate a null terminated char array from a UA_String.
+ * If the inner char pointer is not NULL the pre-allocated memory
+ * will be used. If the pointer is NULL, the function will alloc
+ * the memory for the char array. */
 UA_StatusCode UA_EXPORT
-UA_String_toCharArray(UA_String *s, char * c, size_t maxLength);
+UA_String_toCharArray(UA_String *s, char ** c, size_t maxLength);
 
 UA_Boolean UA_EXPORT
 UA_String_equal(const UA_String *s1, const UA_String *s2);
@@ -227,6 +231,9 @@ UA_INLINABLE(UA_String
 
 /* Define strings at compile time (in ROM) */
 #define UA_STRING_STATIC(CHARS) {sizeof(CHARS)-1, (UA_Byte*)CHARS}
+
+#define UA_STRING2CHAR(STRING, CHARS, LEN)  UA_String_toCharArray(STRING, &CHARS, LEN)
+#define UA_STRING2CHAR_ALLOC(STRING, CHARS) UA_String_toCharArray(STRING, )
 
 /**
  * .. _datetime:

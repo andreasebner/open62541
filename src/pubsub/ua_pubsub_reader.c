@@ -1086,8 +1086,9 @@ DataSetReader_processRaw(UA_Server *server, UA_ReaderGroup *rg,
                 type->typeKind == UA_DATATYPEKIND_BYTESTRING) {
                 UA_ByteString *bs = (UA_ByteString *) value;
                 //check if length < maxStringLength, The types ByteString and String are equal in their base definition
-                size_t lengthDifference = dsr->config.dataSetMetaData.fields[i].maxStringLength - bs->length;
-                offset += lengthDifference;
+                size_t lengthDifference;
+                if(bs->length < dsr->config.dataSetMetaData.fields[i].maxStringLength){
+                    lengthDifference = dsr->config.dataSetMetaData.fields[i].maxStringLength - bs->length;
             }
         }
         if(res != UA_STATUSCODE_GOOD) {

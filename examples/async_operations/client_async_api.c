@@ -1,9 +1,9 @@
 /* This work is licensed under a Creative Commons CCZero 1.0 Universal License.
  * See http://creativecommons.org/publicdomain/zero/1.0/ for more information. */
 
-#include "open62541/client_config_default.h"
-#include "open62541/client_highlevel_async.h"
-#include "open62541/plugin/log_stdout.h"
+#include <open62541/client_config_default.h>
+#include <open62541/client_highlevel_async.h>
+#include <open62541/plugin/log_stdout.h>
 
 #define NODES_EXIST
 /* async connection callback, it only gets called after the completion of the whole
@@ -21,8 +21,20 @@ fileBrowsedCallback(UA_Client *client, void *userdata, UA_UInt32 requestId,
                     UA_BrowseResponse *response) {
     UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
                 "Received BrowseResponse for request %u", requestId);
+    char chr[512];
+    UA_STRING2CHAR((UA_String *) userdata, chr, 512);
+    UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
+                "%s passed safely ", chr);
+
+    char *chr1;
+    UA_STRING2CHAR_ALLOC((UA_String *) userdata, chr1);
+    UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
+                "%s passed safely ", chr1);
+
     char us_chr[512];
-    UA_String_toCharArray((UA_String *) userdata, us_chr, 512);
+    char **handle;
+    *handle = us_chr;
+    UA_String_toCharArray((UA_String *) userdata, handle, 512);
     UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
                 "%s passed safely ", us_chr);
 }

@@ -127,11 +127,15 @@ UA_String_fromChars(const char *src) {
 }
 
 UA_StatusCode
-UA_String_toCharArray(UA_String *s, char *c, size_t maxLength) {
+UA_String_toCharArray(UA_String *s, char **c, size_t maxLength) {
     if(s->length+1 > maxLength)
         return UA_STATUSCODE_BADINVALIDARGUMENT;
-    memcpy(c, s->data, s->length);
-    c[s->length] = '\0';
+    if(*c == NULL)
+        *c = (char *) UA_calloc(s->length+1, sizeof(char));
+    if(!c)
+        return UA_STATUSCODE_BADOUTOFMEMORY;
+    memcpy(*c, s->data, s->length);
+    *c[s->length] = '\0';
     return UA_STATUSCODE_GOOD;
 }
 
