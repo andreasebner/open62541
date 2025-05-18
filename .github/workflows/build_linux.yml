@@ -228,6 +228,8 @@ jobs:
           IPV6="$(cat /proc/sys/net/ipv6/conf/eth0/disable_ipv6)"
           echo "New IPv6 status on eth0: $IPV6"
           [ "$IPV6" = "0" ] || { echo "Failed to enable IPv6 on eth0"; exit 1; }
+      - name: Check environment variable
+        run: echo "Matrix build var: ${{ matrix.build.runs_on }}"
       - uses: actions/checkout@v4
         if: matrix.build.runs_on == '' || matrix.build.runs_on == matrix.os
         with:
