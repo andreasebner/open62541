@@ -32,17 +32,17 @@ jobs:
             cmd_action: unit_tests_alarms
 
           - name: "Debug Build & Unit Tests (clang-11)"
-            runs_on: "ubuntu-20.04"
+            os: "ubuntu-20.04"
             cmd_deps: sudo apt-get install -y -qq clang-11 clang-tools-11
             cmd_action: CC=clang-11 CXX=clang++-11 unit_tests
 
           - name: "Debug Build & Unit Tests (clang-15)"
-            runs_on: "ubuntu-22.04"
+            os: "ubuntu-22.04"
             cmd_deps: sudo apt-get install -y -qq clang-15 clang-tools-15 && sudo sysctl -w vm.mmap_rnd_bits=28
             cmd_action: CC=clang-15 CXX=clang++-15 unit_tests
 
           - name: "Debug Build & Unit Tests (clang-18)"
-            runs_on: "ubuntu-24.04"
+            os: "ubuntu-24.04"
             cmd_deps: sudo apt-get install -y -qq clang-18 clang-tools-18 && sudo sysctl -w vm.mmap_rnd_bits=28
             cmd_action: CC=clang-18 CXX=clang++-18 unit_tests
 
@@ -77,7 +77,7 @@ jobs:
             cmd_action: unit_tests_encryption LIBRESSL
 
           - name: "TPM Tool Build ubuntu-20.04"
-            runs_on: "ubuntu-20.04"
+            os: "ubuntu-20.04"
             cmd_deps: |
               sudo apt-get install -y -qq acl autoconf autoconf-archive automake build-essential cmake doxygen gcc git iproute2 libcurl4-openssl-dev libjson-c-dev libcmocka0 libcmocka-dev libgcrypt20-dev libglib2.0-dev libini-config-dev libmbedtls-dev libssl-dev libsqlite3-dev libtool libyaml-dev pkg-config procps python3-pip sqlite3 udev uthash-dev
               cd ${HOME}
@@ -105,7 +105,7 @@ jobs:
             cmd_action: build_tpm_tool
 
           - name: "TPM Tool Build ubuntu-22.04"
-            runs_on: "ubuntu-22.04"
+            os: "ubuntu-22.04"
             cmd_deps: |
               sudo apt-get install -y -qq acl autoconf autoconf-archive automake build-essential cmake doxygen gcc git iproute2 libcurl4-openssl-dev libjson-c-dev libcmocka0 libcmocka-dev libgcrypt20-dev libglib2.0-dev libini-config-dev libmbedtls-dev libssl-dev libsqlite3-dev libtool libyaml-dev pkg-config procps python3-pip sqlite3 udev uthash-dev
               cd ${HOME}
@@ -133,7 +133,7 @@ jobs:
             cmd_action: build_tpm_tool
 
           - name: "TPM Tool Build ubuntu-24.04"
-            runs_on: "ubuntu-24.04"
+            os: "ubuntu-24.04"
             cmd_deps: |
               sudo apt-get install -y -qq acl autoconf autoconf-archive automake build-essential cmake doxygen gcc git iproute2 libcurl4-openssl-dev libjson-c-dev libcmocka0 libcmocka-dev libgcrypt20-dev libglib2.0-dev libini-config-dev libmbedtls-dev libssl-dev libsqlite3-dev libtool libyaml-dev pkg-config procps python3-pip sqlite3 udev uthash-dev libltdl-dev python3-pyasn1-modules
               cd ${HOME}
@@ -170,37 +170,37 @@ jobs:
             cmd_action: build_amalgamation_mt
 
           - name: "Valgrind Build & Unit Tests with MbedTLS (gcc)"
-            runs_on: "ubuntu-24.04"
+            os: "ubuntu-24.04"
             cmd_deps: sudo apt-get install -y -qq valgrind libmbedtls-dev
             cmd_action: unit_tests_valgrind MBEDTLS
 
           - name: "Valgrind Build & Unit Tests with OpenSSL (gcc)"
-            runs_on: "ubuntu-24.04"
+            os: "ubuntu-24.04"
             cmd_deps: sudo apt-get install -y -qq valgrind openssl
             cmd_action: unit_tests_valgrind OPENSSL
 
           - name: "Valgrind Examples with MbedTLS and mDNSD (gcc)"
-            runs_on: "ubuntu-24.04"
+            os: "ubuntu-24.04"
             cmd_deps: sudo apt-get install -y -qq valgrind libmbedtls-dev python3-netifaces
             cmd_action: examples_valgrind MBEDTLS MDNSD
 
           - name: "Valgrind Examples with OpenSSL and avahi-mdns(gcc)"
-            runs_on: "ubuntu-24.04"
+            os: "ubuntu-24.04"
             cmd_deps: sudo apt-get install -y -qq valgrind openssl libmbedtls-dev python3-netifaces libavahi-client-dev libavahi-common-dev
             cmd_action: examples_valgrind OPENSSL AVAHI
 
           - name: "Clang Static Analyzer (clang11)"
-            runs_on: "ubuntu-20.04"
+            os: "ubuntu-20.04"
             cmd_deps: sudo apt-get install -y -qq clang-11 clang-tools-11 libmbedtls-dev
             cmd_action: CC=clang-11 CXX=clang++-11 build_clang_analyzer 11
 
           - name: "Clang Static Analyzer (clang15)"
-            runs_on: "ubuntu-22.04"
+            os: "ubuntu-22.04"
             cmd_deps: sudo apt-get install -y -qq clang-15 clang-tools-15 libmbedtls-dev
             cmd_action: CC=clang-15 CXX=clang++-15 build_clang_analyzer 15
 
           - name: "Clang Static Analyzer (clang18)"
-            runs_on: "ubuntu-24.04"
+            os: "ubuntu-24.04"
             cmd_deps: sudo apt-get install -y -qq clang-18 clang-tools-18 libmbedtls-dev
             cmd_action: CC=clang-18 CXX=clang++-18 build_clang_analyzer 18
 
