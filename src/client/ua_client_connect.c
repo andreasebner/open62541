@@ -2178,11 +2178,12 @@ initConnect(UA_Client *client) {
     UA_String path = UA_STRING_NULL;
     UA_UInt16 port = 4840;
 
+    UA_String endpointUrl = getEndpointUrl(client);
     client->connectStatus =
-        UA_parseEndpointUrl(&client->config.endpointUrl, &hostname, &port, &path);
+        UA_parseEndpointUrl(&endpointUrl, &hostname, &port, &path);
     if(client->connectStatus != UA_STATUSCODE_GOOD) {
         UA_LOG_WARNING(client->config.logging, UA_LOGCATEGORY_NETWORK,
-                       "Endpoint URL is invalid: %S", client->config.endpointUrl);
+                       "Endpoint URL is invalid: %S", endpointUrl);
         return;
     }
 
