@@ -746,14 +746,29 @@ if((CMAKE_COMPILER_IS_GNUCC OR CMAKE_C_COMPILER_ID MATCHES "Clang") AND
     if(UA_ENABLE_DEBUG_SANITIZER AND BUILD_TYPE_LOWER_CASE STREQUAL "debug" AND UNIX AND NOT UA_BUILD_OSS_FUZZ AND
        CMAKE_C_COMPILER_ID MATCHES "Clang" AND NOT UA_ENABLE_UNIT_TESTS_MEMCHECK)
         # Add default sanitizer settings when using clang and Debug build.
-        # This allows e.g. CLion to find memory locations for SegFaults
+        # This allows e.g. CLion to find memory locations for SegFaults.
+        # Probe each flag individually so that a sanitizer unsupported by the
+        # toolchain is dropped instead of breaking the whole debug build. In
+        # particular -fsanitize=undefined fails to link with clang on OpenBSD,
+        # so it is additionally guarded out there.
         message(STATUS "Sanitizer enabled")
-        set(SANITIZER_FLAGS "-g -fno-omit-frame-pointer -fsanitize=address,undefined")
-        if(CMAKE_CXX_COMPILER_VERSION AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 10.0)
-            set(SANITIZER_FLAGS "${SANITIZER_FLAGS} -fsanitize-coverage=trace-pc-guard")
+        set(SANITIZER_FLAGS "-g" "-fno-omit-frame-pointer" "-fsanitize=address")
+        if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "OpenBSD")
+            list(APPEND SANITIZER_FLAGS "-fsanitize=undefined")
         endif()
-        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${SANITIZER_FLAGS}")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${SANITIZER_FLAGS}")
+        if(CMAKE_CXX_COMPILER_VERSION AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 10.0)
+            list(APPEND SANITIZER_FLAGS "-fsanitize-coverage=trace-pc-guard")
+        endif()
+        foreach(SANITIZER_FLAG ${SANITIZER_FLAGS})
+            string(REGEX REPLACE "[^A-Za-z0-9]" "_" SANITIZER_FLAG_VAR "HAS${SANITIZER_FLAG}")
+            check_c_compiler_flag("${SANITIZER_FLAG}" ${SANITIZER_FLAG_VAR})
+            if(${SANITIZER_FLAG_VAR})
+                # Sanitizers must be passed to both the C and C++ compilers
+                set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${SANITIZER_FLAG}")
+                set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${SANITIZER_FLAG}")
+            endif()
+            unset(${SANITIZER_FLAG_VAR} CACHE)
+        endforeach()
     endif()
 
     # Strip release builds
